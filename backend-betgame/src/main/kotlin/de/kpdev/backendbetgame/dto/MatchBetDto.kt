@@ -1,0 +1,31 @@
+package de.kpdev.backendbetgame.dto
+
+import de.kpdev.backendbetgame.model.MatchBet
+import de.kpdev.backendbetgame.model.MatchDuration
+import java.util.UUID
+
+
+data class MatchBetDto(
+    val id: Long,
+    val matchId: Long,
+    val userId: UUID,
+
+    val predictedHomeGoals: Int,
+    val predictedAwayGoals: Int,
+    val predictedDuration: MatchDuration,
+
+    val awardedPoints: Int?
+)
+
+fun MatchBet.toDto(): MatchBetDto =
+    MatchBetDto(
+        id = this.id,
+        matchId = this.match.id,
+        userId = this.user.id,
+
+        predictedHomeGoals = this.predictedHomeGoals,
+        predictedAwayGoals = this.predictedAwayGoals,
+        predictedDuration = this.predictedDuration,
+
+        awardedPoints = this.awardedPoints
+    )

@@ -15,8 +15,9 @@ const MENU_ICONS = {
 function MenuItem({ destination, displayName }) {
     const location = useLocation()
     const { state } = useLocation();
-    console.log(location.pathname)
-    const currPath = location.pathname.split("/")[1] ?? "stats";
+    let currPath = location.pathname.split("/")[1]
+    if (!currPath)
+        currPath = "stats";
 
     const iconStyle = {
         'color': currPath === destination ? 'var(--base-text)' : 'var(--base-text-secondary)',

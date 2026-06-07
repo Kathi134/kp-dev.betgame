@@ -15,7 +15,7 @@ export default function MainLayout({ children }) {
 
         <footer>
             <nav className='horizontal-container space-evenly'>
-                <MenuItem destination="stats" displayName="Ranking" />
+                <MenuItem destination="stats" displayName="Statistik" />
                 <MenuItem destination="bets" displayName="Tippen" />
                 <MenuItem destination="results" displayName="Ergebnisse" />
             </nav>

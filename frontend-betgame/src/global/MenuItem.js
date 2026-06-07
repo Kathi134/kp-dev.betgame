@@ -3,7 +3,6 @@ import { GiNetworkBars, GiSoccerBall, GiSoccerField } from "react-icons/gi";
 import { NavLink, useLocation } from 'react-router-dom';
 import './mainlayout.css'
 import '../base.css'
-import { useParams } from 'react-router-dom';
 
 
 const MENU_ICONS = {

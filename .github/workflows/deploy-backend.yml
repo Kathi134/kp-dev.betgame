@@ -2,7 +2,7 @@ name: Deploy betgame Backend
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, main ]
 
 jobs:
   build-and-deploy:

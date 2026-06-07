@@ -4,7 +4,7 @@ import de.kpdev.backendbetgame.integration.service.SyncMatchesService
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/admin/sync")
+@RequestMapping("/api/admin/sync")
 class SyncController(
     private val syncService: SyncMatchesService
 ) {

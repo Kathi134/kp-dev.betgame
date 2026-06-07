@@ -6,7 +6,7 @@ import de.kpdev.backendbetgame.service.MatchBetService
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/bets/matches")
+@RequestMapping("/api/bets/matches")
 class MatchBetController(
     private val matchBetService: MatchBetService
 ) {

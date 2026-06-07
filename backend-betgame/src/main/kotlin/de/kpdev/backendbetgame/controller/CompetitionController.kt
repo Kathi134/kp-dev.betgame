@@ -6,7 +6,7 @@ import de.kpdev.backendbetgame.service.CompetitionService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/competition")
+@RequestMapping("/api/competition")
 class CompetitionController(
     private val competitionService: CompetitionService
 ) {

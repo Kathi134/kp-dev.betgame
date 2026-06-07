@@ -7,7 +7,7 @@ import java.util.*
 
 
 @RestController
-@RequestMapping("/matches")
+@RequestMapping("/api/matches")
 class MatchController(
     private val matchService: MatchService
 ) {

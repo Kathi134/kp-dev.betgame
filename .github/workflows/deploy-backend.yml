@@ -1,0 +1,63 @@
+name: Deploy betgame Backend
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Make Gradle wrapper executable
+        working-directory: ./backend/betgame
+        run: chmod +x ./gradlew
+
+      - name: Build with Gradle
+        working-directory: ./backend/betgame
+        run: ./gradlew clean build -x test
+
+      - name: Deploy to server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SERVER_USER: ${{ vars.SERVER_USER }}
+          SERVER_HOST: ${{ vars.SERVER_HOST }}
+          SERVER_PATH: "/home/kathi/kp-dev/betgame"
+        run: |
+          echo "$SSH_PRIVATE_KEY" > private_key.pem
+          chmod 600 private_key.pem
+          scp -i private_key.pem -o StrictHostKeyChecking=no ./backend/betgame/build/libs/betgame-0.0.1-SNAPSHOT.jar $SERVER_USER@$SERVER_HOST:$SERVER_PATH/betgame.jar
+          
+          ssh -i private_key.pem -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << EOF
+          cd $SERVER_PATH
+          pkill -f "java.*betgame.jar" || true
+          nohup java -jar betgame.jar > backend.log 2>&1 &
+          EOF
+      
+      - name: Health check backend
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SERVER_USER: ${{ vars.SERVER_USER }}
+          SERVER_HOST: ${{ vars.SERVER_HOST }}
+          SERVER_PATH: "/home/kathi/kp-dev/betgame"
+        run: |
+          echo "$SSH_PRIVATE_KEY" > private_key.pem
+          chmod 600 private_key.pem
+
+          # Give the app a few seconds to start
+          sleep 10
+
+          ssh -i private_key.pem -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << EOF
+            echo "=== Checking backend.log ==="
+            tail -n 30 $SERVER_PATH/backend.log
+            echo "=== Testing health endpoint ==="
+            curl -f http://api.localhost:8060/health || exit 1
+          EOF

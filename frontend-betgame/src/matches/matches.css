@@ -1,0 +1,27 @@
+.match-container {
+    padding: 0.65rem;
+    margin: 0.3rem 0;
+    border: 1px solid #eaeaea;
+    border-radius: 0.5rem;
+    background-color: white;
+}
+
+.flag-img {
+    width: 20px;
+    height: 20px;
+}
+
+.date-container {
+    color: grey;
+    font-size: small;
+    text-align: center;
+}
+
+.country-name-container {
+    width: 6rem;
+    overflow: auto;
+}
+
+.vertical-center {
+    align-items: center;
+}

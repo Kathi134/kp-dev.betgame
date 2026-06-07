@@ -23,8 +23,8 @@ class SecurityConfig
             }
             .authorizeHttpRequests {
                 // TOOD: die user spezifischen anpassen
-                it.requestMatchers("/auth/**").permitAll()
-                it.anyRequest().authenticated()
+//                it.requestMatchers("/auth/**").permitAll()
+                it.anyRequest().permitAll()
             }
             .oauth2ResourceServer {
                 it.jwt { }

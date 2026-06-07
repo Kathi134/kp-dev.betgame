@@ -8,6 +8,7 @@ data class MatchResponse (
     val utcDate: String,
     val status: String,
     val stage: String,
+    val group: String?,
     val homeTeam: TeamRef?,
     val awayTeam: TeamRef?,
     val score: ScoreDto?
@@ -37,6 +38,7 @@ fun MatchResponse.toEntity(
         else -> MatchStatus.SCHEDULED
     },
     stage = CompetitionStage.entries.find { it.name == this.stage } ?: CompetitionStage.CHAMPIONSHIP,
+    group = this.group?.last(),
 
     homeGoals = this.score?.fullTime?.home,
     awayGoals = this.score?.fullTime?.away,
@@ -54,6 +56,7 @@ fun Match.updateFrom(dto: MatchResponse) {
         else -> this.status
     }
     this.stage = CompetitionStage.entries.find { it.name == dto.stage } ?: CompetitionStage.CHAMPIONSHIP
+    this.group = dto.group?.last()
 
     this.utcDate = Instant.parse(dto.utcDate)
 

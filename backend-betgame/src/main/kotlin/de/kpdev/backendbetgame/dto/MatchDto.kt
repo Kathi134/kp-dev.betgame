@@ -13,6 +13,7 @@ data class MatchDto(
     val utcDate: Instant,
     val status: MatchStatus,
     val stage: CompetitionStage,
+    val group: Char?,
 
     val homeTeam: TeamDto?,
     val awayTeam: TeamDto?,
@@ -30,6 +31,7 @@ fun Match.toDto(): MatchDto =
         utcDate = this.utcDate,
         status = this.status,
         stage = this.stage,
+        group = this.group,
 
         homeTeam = this.homeTeam?.toDto(),
         awayTeam = this.awayTeam?.toDto(),

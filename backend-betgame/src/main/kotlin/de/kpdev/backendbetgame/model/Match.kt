@@ -14,6 +14,9 @@ class Match(
     @Enumerated(EnumType.STRING)
     var stage: CompetitionStage,
 
+    @Column(name = "group_identifier", nullable = true)
+    var group: Char?,
+
     @ManyToOne
     var homeTeam: Team?,
     @ManyToOne

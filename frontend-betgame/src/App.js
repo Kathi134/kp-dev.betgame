@@ -12,6 +12,9 @@ function App() {
 
           <Route element={<MainLayout />}>
             <Route path="/" element={<Matches />} />
+            <Route path="/results" element={<Matches />} />
+            <Route path="/bets" element={<Matches />} />
+            <Route path="/stats" element={<Matches />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -32,6 +32,7 @@
     padding: 8px 12px;
     background: var(--base);
     cursor: pointer;
+    font-size: 0.7rem;
 }
 
 .tab.active {
@@ -65,9 +66,10 @@ footer {
 .menu-item-text {
     all: unset;
     color: var(--base-text-secondary);
-    font-size: smaller;
+    font-size: 0.7rem;
 }
 
 .menu-item-text.active {
     color: var(--base-text);
+    font-weight: bold;
 }

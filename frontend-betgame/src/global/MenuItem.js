@@ -1,25 +1,22 @@
 import { IconContext } from 'react-icons';
-import { BiFoodMenu, BiSolidMessageAltAdd } from "react-icons/bi";
+import { GiNetworkBars, GiSoccerBall, GiSoccerField } from "react-icons/gi";
 import { NavLink, useLocation } from 'react-router-dom';
 import './mainlayout.css'
 import '../base.css'
-import { BsStars } from "react-icons/bs";
-import { IoMdStats } from "react-icons/io";
 import { useParams } from 'react-router-dom';
 
 
 const MENU_ICONS = {
-    'play': <BsStars />,
-    'stats': <IoMdStats />,
-    'games': <BiFoodMenu />,
-    'new': <BiSolidMessageAltAdd />
+    'results': <GiSoccerBall />,
+    'bets': <GiSoccerField />,
+    'stats': <GiNetworkBars />
 }
 
 function MenuItem({ destination, displayName }) {
     const location = useLocation()
-    const { userId } = useParams();
     const { state } = useLocation();
-    const currPath = location.pathname.split("/")[3] ?? "play";
+    console.log(location.pathname)
+    const currPath = location.pathname.split("/")[1] ?? "stats";
 
     const iconStyle = {
         'color': currPath === destination ? 'var(--base-text)' : 'var(--base-text-secondary)',
@@ -27,7 +24,7 @@ function MenuItem({ destination, displayName }) {
     }
 
     return (<>
-        <NavLink to={`/account/${userId}/${destination}`} state={state} className="unset">
+        <NavLink to={`${destination}`} state={state} className="unset">
             <div className='vertical-container center'>
                 <IconContext.Provider value={iconStyle}>
                     {MENU_ICONS[destination]}

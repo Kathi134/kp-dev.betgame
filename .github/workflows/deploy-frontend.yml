@@ -20,11 +20,11 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        working-directory: frontend/betgame
+        working-directory: frontend-betgame
         run: npm install
 
       - name: Build React app
-        working-directory: frontend/betgame
+        working-directory: frontend-betgame
         run: npm run build
 
       - name: Deploy to server
@@ -36,4 +36,4 @@ jobs:
         run: |
           echo "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
-          rsync -e "ssh -i private_key.pem -o StrictHostKeyChecking=no" -avz --delete frontend/betgame/build/ $SERVER_USER@$SERVER_HOST:$SERVER_PATH
+          rsync -e "ssh -i private_key.pem -o StrictHostKeyChecking=no" -avz --delete frontend-betgame/build/ $SERVER_USER@$SERVER_HOST:$SERVER_PATH

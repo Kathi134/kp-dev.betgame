@@ -18,11 +18,11 @@ jobs:
           java-version: 17
 
       - name: Make Gradle wrapper executable
-        working-directory: ./backend/betgame
+        working-directory: ./backend-betgame
         run: chmod +x ./gradlew
 
       - name: Build with Gradle
-        working-directory: ./backend/betgame
+        working-directory: ./backend-betgame
         run: ./gradlew clean build -x test
 
       - name: Deploy to server
@@ -34,7 +34,7 @@ jobs:
         run: |
           echo "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
-          scp -i private_key.pem -o StrictHostKeyChecking=no ./backend/betgame/build/libs/betgame-0.0.1-SNAPSHOT.jar $SERVER_USER@$SERVER_HOST:$SERVER_PATH/betgame.jar
+          scp -i private_key.pem -o StrictHostKeyChecking=no ./backend-betgame/build/libs/betgame-0.0.1-SNAPSHOT.jar $SERVER_USER@$SERVER_HOST:$SERVER_PATH/betgame.jar
           
           ssh -i private_key.pem -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << EOF
           cd $SERVER_PATH

@@ -3,14 +3,17 @@ import { useEffect, useState, useMemo } from "react";
 import { API_BASE } from "../api/base";
 import { groupByStage, groupByGroup } from "../util/reformat-api-data";
 import './matches.css'
-import MatchList from "./matchList";
+import MatchList from "./MatchList";
+import { stageToString } from "../util/enums";
+import { useHeader } from "../global/HeaderContext";
 
 
 export default function Matches() {
+    const { setHeader } = useHeader();
+    const [activeStage, setActiveStage] = useState(null);
+
     const [matches, setMatches] = useState([]);
     const [loading, setLoading] = useState(true);
-
-    const [activeStage, setActiveStage] = useState(null);
 
     useEffect(() => {
         fetch(`${API_BASE}/matches`)
@@ -20,7 +23,7 @@ export default function Matches() {
 
                 const grouped = groupByStage(data);
                 const firstStage = Object.keys(grouped)[0];
-                setActiveStage(firstStage);
+                setActiveStage(firstStage); // TODO: set default stage to competition status
 
                 setLoading(false);
             })
@@ -32,40 +35,36 @@ export default function Matches() {
 
     const grouped = useMemo(() => groupByStage(matches), [matches]);
 
+    useEffect(() => {
+        setHeader({
+            title: "Ergebnisse",
+            values: Object.keys(grouped),
+            activeValue: activeStage,
+            onValueChange: setActiveStage,
+            displayValue: stageToString
+        });
+    }, [activeStage, grouped, setHeader, setActiveStage]);
 
 
     return (
         <div>
-            <div className="header">
-                <h1>Matches</h1>
-                <div className="tabs-container">
-                    {Object.keys(grouped).map((stage) => (
-                        <button key={stage} className={`tab ${activeStage === stage ? "active" : ""}`} onClick={() => setActiveStage(stage)} >
-                            {stage}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            <div className="main">
-                {loading
-                    ? <div>Lade Spiele…</div>
-                    : <>
-                        {activeStage && grouped[activeStage] !== null &&
-                            activeStage !== "GROUP_STAGE"
-                            ? <MatchList data={grouped[activeStage]} />
-                            : <>
-                                {Object.entries(groupByGroup(grouped[activeStage])).map(([group, matches]) => (
-                                    <div key={group} className="bottom-margin">
-                                        <h2 className="group-title">Gruppe {group}</h2>
-                                        <MatchList data={matches} />
-                                    </div>
-                                ))}
-                            </>
-                        }
-                    </>
-                }
-            </div>
+            {loading
+                ? <div>Lade Spiele…</div>
+                : <>
+                    {activeStage && grouped[activeStage] !== null &&
+                        activeStage !== "GROUP_STAGE"
+                        ? <MatchList data={grouped[activeStage]} />
+                        : <>
+                            {Object.entries(groupByGroup(grouped[activeStage])).map(([group, matches]) => (
+                                <div key={group} className="bottom-margin">
+                                    <h2 className="group-title">Gruppe {group}</h2>
+                                    <MatchList data={matches} />
+                                </div>
+                            ))}
+                        </>
+                    }
+                </>
+            }
         </div>
     );
 }

@@ -1,18 +1,21 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Matches from "./matches/matches";
-// import MainLayout from "./global/mainlayout/MainLayout"
+import Matches from "./matches/Matches";
+import MainLayout from "./global/MainLayout"
+import { HeaderProvider } from "./global/HeaderContext";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* <Route path="/" element={<SomeOutsideComponent/>} /> */}
+    <HeaderProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* <Route path="/" element={<SomeOutsideComponent/>} /> */}
 
-        {/* <Route element={<MainLayout/>}> */}
-        <Route path="/" element={<Matches />} />
-        {/* </Route> */}
-      </Routes>
-    </BrowserRouter>
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<Matches />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </HeaderProvider>
   );
 }
 

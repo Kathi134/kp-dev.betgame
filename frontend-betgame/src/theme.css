@@ -1,0 +1,8 @@
+:root {
+    --background: #f2f2f2;
+    --base: white;
+    --base-text: black;
+    --base-text-secondary: grey;
+    --base-highlight: #ddd;
+    --base-highlight-secondary: #eaeaea;
+}

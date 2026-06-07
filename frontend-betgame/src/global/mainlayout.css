@@ -1,0 +1,73 @@
+.header {
+    background-color: var(--base);
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    flex: 0 1 auto;
+    padding: 1rem;
+    padding-bottom: 0rem;
+    width: 100%;
+}
+
+.tabs-container {
+    background-color: var(--base);
+
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    border-left: 0.5px solid var(--base);
+    margin-top: 0.5rem;
+    padding-right: 2rem;
+
+    /* optional nicer scrolling */
+    scrollbar-width: none;
+}
+
+.tab {
+    border: none;
+    /* border-left: 0.5px solid var(--base-highlight);
+    border-right: 0.5px solid var(--base-highlight); */
+    color: var(--base-text-secondary);
+    flex: 0 0 auto;
+    padding: 8px 12px;
+    background: var(--base);
+    cursor: pointer;
+}
+
+.tab.active {
+    color: var(--base-text);
+    border-bottom: 2px solid var(--base-text);
+    font-weight: bold;
+}
+
+main {
+    flex: 1 1 auto;
+    position: relative;
+    padding: 0.7rem;
+    padding-top: 6.4rem;
+    margin-bottom: 4rem;
+}
+
+footer {
+    /* border-top: 1px solid var(--base-highlight); */
+    background-color: var(--base);
+    padding: 0.3rem 0 1rem 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 2;
+}
+
+.unset {
+    all: unset;
+}
+
+.menu-item-text {
+    all: unset;
+    color: var(--base-text-secondary);
+    font-size: smaller;
+}
+
+.menu-item-text.active {
+    color: var(--base-text);
+}

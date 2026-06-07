@@ -1,20 +1,21 @@
 import { formatDate } from "../util/date-util";
 import { useMemo } from "react";
-import MatchContender from "./matchContender";
+import MatchContender from "./MatchContender";
 
 
 export default function MatchList({ data }) {
-    const matchesByDate = useMemo(() => data.sort((a, b) => new Date(a.utcDate) - new Date(b.utcDate)).map(x => ({ ...x, awayGoals: 1, homeGoals: 2 })), [data]);
+    const matchesByDate = useMemo(() => data.sort((a, b) => new Date(a.utcDate) - new Date(b.utcDate)).map(x => ({ ...x, awayGoals: x.awayTeam?.id % 4, homeGoals: x.awayTeam?.id % 2, status: x.id % 4 === 0 ? "LIVE" : x.status })), [data]);
 
     const hasGoals = (m) => m.homeGoals && m.awayGoals;
 
     return <>
         {matchesByDate?.map((m) => (
             <div key={m.id} className="vertical-container match-container">
-
-                <div className={"date-container"}>
-                    {formatDate(m.utcDate)}
+                <div className="horizontal-container center">
+                    {m.status === "LIVE" && <div className="live-dot-container vertical-center"> <span className="live-dot vertical-center" /> </div>}
+                    <div className="date"> {formatDate(m.utcDate)} </div>
                 </div>
+
 
                 <div className="horizontal-container space-around vertical-center">
                     <MatchContender team={m.homeTeam} />

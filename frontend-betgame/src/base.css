@@ -6,7 +6,7 @@ body {
         sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #f2f2f2;
+    background-color: var(--background);
 
 }
 
@@ -31,7 +31,7 @@ h2 {
     margin-top: 0.9rem;
     font-size: medium;
     font-weight: normal;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid var(--base-highlight);
     padding-bottom: 0.3rem;
 }
 

@@ -1,5 +1,6 @@
 package de.kpdev.backendbetgame.config
 
+import de.kpdev.backendbetgame.security.JwtConfig
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -10,7 +11,9 @@ import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig
+class SecurityConfig(
+    private val jwt : JwtConfig
+)
 {
 
     @Bean
@@ -27,7 +30,7 @@ class SecurityConfig
                 it.anyRequest().permitAll()
             }
             .oauth2ResourceServer {
-                it.jwt { }
+                it.jwt { x -> x.jwtAuthenticationConverter(jwt.jwtAuthenticationConverter()) }
             }
             .exceptionHandling {
                 it.authenticationEntryPoint { _, response, _ ->

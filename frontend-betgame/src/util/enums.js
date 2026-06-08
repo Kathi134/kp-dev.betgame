@@ -19,4 +19,14 @@ function stageToString(stage) {
     }
 }
 
-export { stageToString };
+const STAGE_ORDER = {
+    GROUP_STAGE: 0,
+    LAST_32: 1,
+    LAST_16: 2,
+    QUARTER_FINALS: 3,
+    SEMI_FINALS: 4,
+    THIRD_PLACE: 5,
+    FINAL: 6,
+};
+
+export { stageToString, STAGE_ORDER };

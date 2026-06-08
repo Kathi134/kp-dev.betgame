@@ -1,10 +1,18 @@
+import { STAGE_ORDER } from "./enums";
+
 function groupByStage(matches) {
-    return matches.reduce((acc, match) => {
+    const grouped = matches.reduce((acc, match) => {
         const key = match.stage ?? "UNKNOWN";
         if (!acc[key]) acc[key] = [];
         acc[key].push(match);
         return acc;
     }, {});
+
+    return Object.fromEntries(
+        Object.keys(grouped)
+            .sort((a, b) => (STAGE_ORDER[a] ?? Number.POSITIVE_INFINITY) - (STAGE_ORDER[b] ?? Number.POSITIVE_INFINITY))
+            .map(key => [key, grouped[key]])
+    );
 }
 
 function groupByGroup(matches) {

@@ -1,1 +1,2 @@
-export const API_BASE = "/api"; // ggf. anpassen
+export const API_BASE = "http://192.168.178.26:8060/api"; // ggf. anpassen
+export const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMDIyYjhjOC1jMTA4LTRjNGQtYjE4ZC1hZWIxMTM0ZmUyNTAiLCJ1c2VybmFtZSI6IjIwMjJiOGM4LWMxMDgtNGM0ZC1iMThkLWFlYjExMzRmZTI1MCIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTc4MDkyMDQ0MCwiZXhwIjoxNzgwOTI0MDM5fQ.lCU7Qx0a59hlz2XL6ilrUEwnt2CH61LGOR5q8B95do8"

@@ -3,10 +3,11 @@ import { useEffect, useState, useMemo } from "react";
 import { API_BASE } from "../api/base";
 import { groupByStage, groupByGroup } from "../util/reformat-api-data";
 import '../results/matches.css'
-import MatchList from "../results//MatchList";
+import './bets.css'
 import { stageToString } from "../util/enums";
 import { useHeader } from "../global/HeaderContext";
-
+import { fetchMatchBets } from "../api/bet";
+import BetList from "./BetList";
 
 export default function Bets() {
     const { setHeader } = useHeader();
@@ -16,18 +17,22 @@ export default function Bets() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`${API_BASE}/matches`)
-            .then((res) => res.json())
-            .then((data) => {
-                setMatches(data);
+        Promise.all([
+            fetch(`${API_BASE}/matches`).then(r => r.json()),
+            fetchMatchBets()
+        ])
+            .then(([matches, bets]) => {
+                const betMap = new Map(bets.map(b => [b.matchId, b]));
+                const enriched = matches.map(m => ({ ...m, bet: betMap.get(m.id) }));
+                setMatches(enriched);
 
-                const grouped = groupByStage(data);
+                const grouped = groupByStage(enriched);
                 const firstStage = Object.keys(grouped)[0];
-                setActiveStage(firstStage); // TODO: set default stage to competition status
+                setActiveStage(firstStage);
 
                 setLoading(false);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.error(err);
                 setLoading(false);
             });
@@ -36,8 +41,12 @@ export default function Bets() {
     const grouped = useMemo(() => groupByStage(matches), [matches]);
 
     useEffect(() => {
+        console.log(grouped)
+    }, [grouped])
+
+    useEffect(() => {
         setHeader({
-            title: "Tippabgabe",
+            title: "Meine Tipps",
             values: Object.keys(grouped),
             activeValue: activeStage,
             onValueChange: setActiveStage,
@@ -52,16 +61,18 @@ export default function Bets() {
                 ? <div>Lade Spiele…</div>
                 : <>
                     {activeStage && grouped[activeStage] !== null &&
-                        activeStage !== "GROUP_STAGE"
-                        ? <MatchList data={grouped[activeStage]} />
-                        : <>
-                            {Object.entries(groupByGroup(grouped[activeStage])).map(([group, matches]) => (
-                                <div key={group} className="bottom-margin">
-                                    <h2 className="group-title">Gruppe {group}</h2>
-                                    <MatchList data={matches} />
-                                </div>
-                            ))}
-                        </>
+                        activeStage === "SPECIAL"
+                        ? <></>
+                        : (activeStage !== "GROUP_STAGE"
+                            ? <BetList data={grouped[activeStage]} />
+                            : <>
+                                {Object.entries(groupByGroup(grouped[activeStage])).map(([group, matches]) => (
+                                    <div key={group} className="bottom-margin">
+                                        <h2 className="group-title">Gruppe {group}</h2>
+                                        <BetList data={matches} />
+                                    </div>
+                                ))}
+                            </>)
                     }
                 </>
             }

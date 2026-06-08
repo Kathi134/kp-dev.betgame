@@ -37,7 +37,7 @@ export default function Matches() {
 
     useEffect(() => {
         setHeader({
-            title: "Ergebnisse",
+            title: "Spiele & Ergebnisse",
             values: Object.keys(grouped),
             activeValue: activeStage,
             onValueChange: setActiveStage,
@@ -51,7 +51,7 @@ export default function Matches() {
             {loading
                 ? <div>Lade Spiele…</div>
                 : <>
-                    {activeStage && grouped[activeStage] !== null &&
+                    {activeStage && grouped[activeStage] !== undefined &&
                         activeStage !== "GROUP_STAGE"
                         ? <MatchList data={grouped[activeStage]} />
                         : <>

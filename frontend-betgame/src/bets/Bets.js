@@ -1,12 +1,12 @@
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import { API_BASE } from "../api/base";
 import { groupByStage, groupByGroup } from "../util/reformat-api-data";
 import '../results/matches.css'
 import './bets.css'
 import { stageToString } from "../util/enums";
 import { useHeader } from "../global/HeaderContext";
-import { fetchMatchBets } from "../api/bet";
+import { fetchMatchBets, putMatchBet, saveMatchBet } from "../api/bet";
 import BetList from "./BetList";
 
 export default function Bets() {
@@ -22,8 +22,8 @@ export default function Bets() {
             fetchMatchBets()
         ])
             .then(([matches, bets]) => {
-                const betMap = new Map(bets.map(b => [b.matchId, b]));
-                const enriched = matches.map(m => ({ ...m, bet: betMap.get(m.id) }));
+                const betMap = Object.fromEntries((bets.map(b => [b.matchId, b])));
+                const enriched = matches.map(m => ({ ...m, bet: betMap[m.id] }));
                 setMatches(enriched);
 
                 const grouped = groupByStage(enriched);
@@ -41,10 +41,6 @@ export default function Bets() {
     const grouped = useMemo(() => groupByStage(matches), [matches]);
 
     useEffect(() => {
-        console.log(grouped)
-    }, [grouped])
-
-    useEffect(() => {
         setHeader({
             title: "Meine Tipps",
             values: Object.keys(grouped),
@@ -53,6 +49,24 @@ export default function Bets() {
             displayValue: stageToString
         });
     }, [activeStage, grouped, setHeader, setActiveStage]);
+
+    // update timed
+
+    const updateBet = useCallback((matchId, patch) => {
+        console.log(matchId, patch)
+        const prev = matches.find(x => x.id === matchId).bet
+        setMatches(prev =>
+            prev.map(match => match.id === matchId
+                ? { ...match, bet: { ...(match.bet ?? {}), matchId, ...patch } }
+                : match
+            )
+        )
+        if (prev?.id) {
+            putMatchBet(prev.id, patch)
+        } else {
+            saveMatchBet({ ...patch, matchId: matchId })
+        }
+    }, [matches]);
 
 
     return (
@@ -64,12 +78,12 @@ export default function Bets() {
                         activeStage === "SPECIAL"
                         ? <></>
                         : (activeStage !== "GROUP_STAGE"
-                            ? <BetList data={grouped[activeStage]} />
+                            ? <BetList data={grouped[activeStage]} onBetChange={updateBet} />
                             : <>
                                 {Object.entries(groupByGroup(grouped[activeStage])).map(([group, matches]) => (
                                     <div key={group} className="bottom-margin">
                                         <h2 className="group-title">Gruppe {group}</h2>
-                                        <BetList data={matches} />
+                                        <BetList data={matches} onBetChange={updateBet} />
                                     </div>
                                 ))}
                             </>)

@@ -1,9 +1,8 @@
 package de.kpdev.backendbetgame.service
 
-import de.kpdev.backendbetgame.dto.MatchBetDto
-import de.kpdev.backendbetgame.dto.MatchBetRequest
-import de.kpdev.backendbetgame.dto.toDto
+import de.kpdev.backendbetgame.dto.*
 import de.kpdev.backendbetgame.model.MatchBet
+import de.kpdev.backendbetgame.model.MatchDuration
 import de.kpdev.backendbetgame.repository.MatchBetRepository
 import de.kpdev.backendbetgame.repository.MatchRepository
 import de.kpdev.backendbetgame.repository.UserRepository
@@ -31,23 +30,25 @@ class MatchBetService(
         val match = matchRepository.findById(req.matchId)
             .orElseThrow()
 
-        val existing = matchBetRepository
-            .findByUserIdAndMatchId(userId, req.matchId)
-
         val user = userRepository.findById(userId)
-            .orElseThrow { RuntimeException("User not found") }
+            .orElseThrow()
 
-        val bet = existing?.apply {
-            predictedHomeGoals = req.homeGoals
-            predictedAwayGoals = req.awayGoals
-            predictedDuration = req.duration
-        } ?: MatchBet(
-            user = user,
-            match = match,
-            predictedHomeGoals = req.homeGoals,
-            predictedAwayGoals = req.awayGoals,
-            predictedDuration = req.duration
-        )
+        val bet = matchBetRepository.findByUserIdAndMatchId(userId, req.matchId)
+            ?: MatchBet(user = user, match = match)
+
+        return applyPatch(bet, req.toPatchRequest())
+    }
+
+    fun patch(id: Long, req: PatchMatchBetRequest): MatchBetDto {
+        val bet = matchBetRepository.findById(id)
+            .orElseThrow()
+        return applyPatch(bet, req)
+    }
+
+    private fun applyPatch(bet: MatchBet, req: PatchMatchBetRequest): MatchBetDto {
+        req.predictedHomeGoals?.let { bet.predictedHomeGoals = it }
+        req.predictedAwayGoals?.let { bet.predictedAwayGoals = it }
+        req.predictedDuration?.let { bet.predictedDuration = it }
 
         return matchBetRepository.save(bet).toDto()
     }

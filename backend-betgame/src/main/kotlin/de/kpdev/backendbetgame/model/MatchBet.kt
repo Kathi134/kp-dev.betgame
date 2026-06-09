@@ -4,7 +4,6 @@ import jakarta.persistence.*
 
 @Entity
 class MatchBet(
-
     @Id
     @GeneratedValue
     val id: Long = 0,
@@ -15,12 +14,12 @@ class MatchBet(
     @ManyToOne
     val match: Match,
 
-    var predictedHomeGoals: Int,
+    var predictedHomeGoals: Int = 0,
 
-    var predictedAwayGoals: Int,
+    var predictedAwayGoals: Int = 0,
 
     @Enumerated(EnumType.STRING)
-    var predictedDuration: MatchDuration,
+    var predictedDuration: MatchDuration = MatchDuration.REGULAR,
 
     var awardedPoints: Int? = null
 )

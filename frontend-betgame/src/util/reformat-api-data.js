@@ -1,4 +1,4 @@
-import { STAGE_ORDER } from "./enums";
+import { STAGE_ORDER, SPECIAL_BET_GROUP_ORDER } from "./enums";
 
 function groupByStage(matches) {
     const grouped = matches.reduce((acc, match) => {
@@ -27,4 +27,18 @@ function groupByGroup(matches) {
     return sortedGrouped;
 }
 
-export { groupByGroup, groupByStage };
+function groupBySpecialBetGroup(definitions) {
+    const grouped = definitions.reduce((acc, def) => {
+        const groupType = def.type.includes("GROUP") ? "GROUP" : (def.type.includes("PLACE") ? "PLACE" : "OTHER")
+        acc[groupType] = acc[groupType] || [];
+        acc[groupType].push(def);
+        return acc;
+    }, {});
+    return Object.fromEntries(
+        Object.keys(grouped)
+            .sort((a, b) => (SPECIAL_BET_GROUP_ORDER[a] ?? Number.POSITIVE_INFINITY) - (SPECIAL_BET_GROUP_ORDER[b] ?? Number.POSITIVE_INFINITY))
+            .map(key => [key, grouped[key]])
+    );
+}
+
+export { groupByGroup, groupByStage, groupBySpecialBetGroup };

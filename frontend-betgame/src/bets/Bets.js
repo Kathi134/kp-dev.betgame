@@ -8,6 +8,7 @@ import { stageToString } from "../util/enums";
 import { useHeader } from "../global/HeaderContext";
 import { fetchMatchBets, putMatchBet, saveMatchBet } from "../api/bet";
 import BetList from "./BetList";
+import SpecialBets from "./SpecialBets";
 
 export default function Bets() {
     const { setHeader } = useHeader();
@@ -43,7 +44,7 @@ export default function Bets() {
     useEffect(() => {
         setHeader({
             title: "Meine Tipps",
-            values: Object.keys(grouped),
+            values: ["SPECIAL", ...(Object.keys(grouped))],
             activeValue: activeStage,
             onValueChange: setActiveStage,
             displayValue: stageToString
@@ -53,7 +54,6 @@ export default function Bets() {
     // update timed
 
     const updateBet = useCallback((matchId, patch) => {
-        console.log(matchId, patch)
         const prev = matches.find(x => x.id === matchId).bet
         setMatches(prev =>
             prev.map(match => match.id === matchId
@@ -76,7 +76,7 @@ export default function Bets() {
                 : <>
                     {activeStage && grouped[activeStage] !== null &&
                         activeStage === "SPECIAL"
-                        ? <></>
+                        ? <SpecialBets />
                         : (activeStage !== "GROUP_STAGE"
                             ? <BetList data={grouped[activeStage]} onBetChange={updateBet} />
                             : <>

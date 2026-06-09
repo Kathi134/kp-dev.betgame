@@ -1,9 +1,6 @@
 package de.kpdev.backendbetgame.model
 
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.Id
-import jakarta.persistence.ManyToOne
+import jakarta.persistence.*
 
 @Entity
 class SpecialBet(
@@ -18,7 +15,10 @@ class SpecialBet(
     val definition: SpecialBetDefinition,
 
     @ManyToOne
-    var selectedTeam: Team,
+    var selectedTeam: Team? = null,
+
+    @Enumerated(EnumType.STRING)
+    var stage: CompetitionStage? = null,
 
     var awardedPoints: Int? = null
 )

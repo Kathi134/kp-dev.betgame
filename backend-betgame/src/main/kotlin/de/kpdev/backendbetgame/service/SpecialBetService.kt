@@ -1,15 +1,17 @@
 package de.kpdev.backendbetgame.service
 
-import de.kpdev.backendbetgame.dto.SpecialBetDto
-import de.kpdev.backendbetgame.dto.SpecialBetRequest
-import de.kpdev.backendbetgame.dto.toDto
+import de.kpdev.backendbetgame.dto.*
+import de.kpdev.backendbetgame.model.CompetitionStage
 import de.kpdev.backendbetgame.model.SpecialBet
+import de.kpdev.backendbetgame.model.Team
 import de.kpdev.backendbetgame.repository.SpecialBetDefinitionRepository
 import de.kpdev.backendbetgame.repository.SpecialBetRepository
 import de.kpdev.backendbetgame.repository.TeamRepository
 import de.kpdev.backendbetgame.repository.UserRepository
 import de.kpdev.backendbetgame.security.usercontext.AuthFacade
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import org.springframework.web.server.ResponseStatusException
 
 @Service
 class SpecialBetService(
@@ -28,27 +30,39 @@ class SpecialBetService(
     }
 
     fun createOrUpdate(req: SpecialBetRequest): SpecialBetDto {
+        if(req.selectedTeam == null && req.stage == null)
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST)
+
         val userId = auth.userId()
 
         val def = definitionRepository.findById(req.definitionId)
             .orElseThrow()
 
-        val team = teamRepository.findById(req.teamId)
-            .orElseThrow()
-
-        val existing = specialBetRepository
-            .findByUserIdAndDefinitionId(userId, req.definitionId)
+        val team = req.selectedTeam?.let { teamRepository.findById(it).orElseThrow() }
+        val stage = req.stage
 
         val user = userRepository.findById(userId)
             .orElseThrow { RuntimeException("User not found") }
 
-        val bet = existing?.apply {
-            selectedTeam = team
-        } ?: SpecialBet(
-            user = user,
-            definition = def,
-            selectedTeam = team
-        )
+        val bet = specialBetRepository.findByUserIdAndDefinitionId(userId, req.definitionId)
+            ?: SpecialBet(
+                user = user,
+                definition = def
+            )
+
+        return applyPatch(bet, team, stage)
+    }
+
+    fun patch(id: Long, req: PatchSpecialBetRequest): SpecialBetDto {
+        val bet = specialBetRepository.findById(id)
+            .orElseThrow()
+        val team = req.selectedTeam?.let { teamRepository.findById(it).orElseThrow() }
+        return applyPatch(bet, team, req.stage)
+    }
+
+    private fun applyPatch(bet: SpecialBet, team: Team?, stage: CompetitionStage?): SpecialBetDto {
+        team?.let { bet.selectedTeam = it }
+        stage?.let { bet.stage = it }
 
         return specialBetRepository.save(bet).toDto()
     }

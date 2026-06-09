@@ -27,9 +27,4 @@ enum class CompetitionStage {
     CHAMPIONSHIP,
     RELEGATION,
     RELEGATION_ROUND;
-
-    object foo {
-        fun fromString(str: String): CompetitionStage =
-            entries.find { it.name.equals(str, true) } ?: CHAMPIONSHIP
-    }
 }

@@ -25,12 +25,20 @@ export const putMatchBet = (betId, payload) =>
         body: JSON.stringify(payload),
     })).then(r => r.json());
 
+
 export const fetchSpecialBets = () =>
     fetch(`${API_BASE}/bets/special`, auhtorizedOptions()).then(r => r.json());
 
 export const saveSpecialBet = (payload) =>
     fetch(`${API_BASE}/bets/special`, auhtorizedOptions({
         method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+    })).then(r => r.json());
+
+export const putSpecialBet = (betId, payload) =>
+    fetch(`${API_BASE}/bets/special/${betId}`, auhtorizedOptions({
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
     })).then(r => r.json());

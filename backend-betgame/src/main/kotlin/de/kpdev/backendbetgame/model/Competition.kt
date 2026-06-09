@@ -2,6 +2,7 @@ package de.kpdev.backendbetgame.model
 
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
+import java.time.Instant
 
 @Entity
 class Competition(
@@ -13,6 +14,10 @@ class Competition(
     val name: String,
 
     val season: Int,
+
+    val startDate: Instant,
+
+    val endDate: Instant,
 
     var active: Boolean
 )

@@ -12,8 +12,6 @@ class SpecialBetDefinition(
     @ManyToOne
     val competition: Competition,
 
-    val title: String,
-
     val deadline: Instant,
 
     @Enumerated(EnumType.STRING)

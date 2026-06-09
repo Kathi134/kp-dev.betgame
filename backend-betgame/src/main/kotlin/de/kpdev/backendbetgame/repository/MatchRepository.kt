@@ -3,6 +3,7 @@ package de.kpdev.backendbetgame.repository
 import de.kpdev.backendbetgame.model.*
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
 import java.util.*
 
 interface MatchRepository : JpaRepository<Match, Long> {
@@ -24,4 +25,12 @@ interface MatchRepository : JpaRepository<Match, Long> {
         WHERE m.status = "LIVE"
     """)
     fun findLiveMatches(): List<Match>
+
+    @Query("""
+    SELECT m
+    FROM Match m
+    WHERE m.homeTeam.id = :teamId
+       OR m.awayTeam.id = :teamId
+""")
+    fun findByTeamInMatch(@Param("teamId") teamId: Long): List<Match>
 }

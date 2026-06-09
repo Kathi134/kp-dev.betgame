@@ -5,7 +5,7 @@ import java.time.Instant
 
 data class MatchResponse (
     val id: Long,
-    val utcDate: String,
+    val utcDate: Instant,
     val status: String,
     val stage: String,
     val group: String?,
@@ -29,7 +29,7 @@ fun MatchResponse.toEntity(
     homeTeam = homeTeam,
     awayTeam = awayTeam,
 
-    utcDate = Instant.parse(this.utcDate),
+    utcDate = utcDate,
 
     status = when (this.status) {
         "SCHEDULED" -> MatchStatus.SCHEDULED
@@ -58,7 +58,7 @@ fun Match.updateFrom(dto: MatchResponse) {
     this.stage = CompetitionStage.entries.find { it.name == dto.stage } ?: CompetitionStage.CHAMPIONSHIP
     this.group = dto.group?.last()
 
-    this.utcDate = Instant.parse(dto.utcDate)
+    this.utcDate = dto.utcDate
 
     this.homeGoals = dto.score?.fullTime?.home
     this.awayGoals = dto.score?.fullTime?.away

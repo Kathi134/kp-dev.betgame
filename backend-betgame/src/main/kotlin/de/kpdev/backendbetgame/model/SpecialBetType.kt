@@ -15,12 +15,12 @@ enum class SpecialBetType {
     GROUP_K_WINNER,
     GROUP_L_WINNER,
 
-    WORLD_CHAMPION,
-
     PLACE_1,
     PLACE_2,
     PLACE_3,
     PLACE_4,
 
-    TOP_SCORER_TEAM
+    TOP_SCORER_TEAM,
+
+    GERMANY_FINAL_STAGE
 }

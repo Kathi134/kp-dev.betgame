@@ -11,11 +11,4 @@ class User(
 
     @Column(unique = true)
     val username: String,
-
-    val passwordHash: String,
-
-    val enabled: Boolean = true,
-
-    @Enumerated(EnumType.STRING)
-    val role: UserRole = UserRole.DEFAULT
 )

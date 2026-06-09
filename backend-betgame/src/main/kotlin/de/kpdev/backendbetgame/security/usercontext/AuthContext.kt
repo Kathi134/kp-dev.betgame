@@ -25,16 +25,4 @@ class AuthContext {
         val raw = jwt().getClaim<List<*>>("roles")
         return raw.map { it.toString() }
     }
-
-    fun toUser(): AuthUser {
-        return AuthUser(
-            userId = userId(),
-            username = username(),
-            roles = roles()
-        )
-    }
-
-    fun requireUser(): AuthUser {
-        return toUser()
-    }
 }

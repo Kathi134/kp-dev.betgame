@@ -7,13 +7,11 @@ import java.util.UUID
 
 data class UserDto(
     val id: UUID,
-    val username: String,
-    val role: UserRole
+    val username: String
 )
 
 fun User.toDto(): UserDto =
     UserDto(
         id = this.id,
-        username = this.username,
-        role = this.role
+        username = this.username
     )

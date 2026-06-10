@@ -28,8 +28,7 @@ export default function Bets() {
                 const enriched = matches.map(m => ({
                     ...m,
                     deadline: m.utcDate,
-                    // isPast: new Date() - new Date(m.utcDate) > 0,
-                    isPast: new Date("2026-06-13T23:00:00Z") - new Date(m.utcDate) > 0,
+                    isPast: new Date() - new Date(m.utcDate) > 0,
                     isBlocked: !(m.homeTeam && m.awayTeam),
                     bet: (betMap[m.id]),
                 }));

@@ -52,4 +52,14 @@ class MatchBetService(
 
         return matchBetRepository.save(bet).toDto()
     }
+
+    fun globalMatchBets(): List<MatchBetGroupDto> =
+        matchBetRepository.findAll()
+            .groupBy { it.match.id }
+            .map { (matchId, betsForMatch) ->
+                MatchBetGroupDto(
+                    matchId = matchId,
+                    bets = betsForMatch.map { it.toDto() }
+                )
+            }
 }

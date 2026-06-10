@@ -8,6 +8,8 @@ import java.util.*
 
 interface MatchBetRepository : JpaRepository<MatchBet, Long> {
 
+    fun findAllBy(): List<MatchBet>
+
     fun findByMatchId(matchId: Long): List<MatchBet>
 
     fun findByUserId(userId: UUID): List<MatchBet>

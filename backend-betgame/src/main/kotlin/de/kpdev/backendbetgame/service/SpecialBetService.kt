@@ -66,4 +66,14 @@ class SpecialBetService(
 
         return specialBetRepository.save(bet).toDto()
     }
+
+    fun globalSpecialBets(): List<SpecialBetGroupDto> =
+         specialBetRepository.findAll()
+            .groupBy { it.definition.id }
+            .map { (definitionId, betsForDef) ->
+                SpecialBetGroupDto(
+                    definitionId = definitionId,
+                    bets = betsForDef.map { it.toDto() }
+                )
+            }
 }

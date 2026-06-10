@@ -13,12 +13,6 @@
     background-color: var(--background);
 }
 
-.bet-select.empty-bet {
-    border: 1px solid var(--warn);
-    border-radius: 0.3rem;
-    padding: 0.15rem 0.3rem;
-}
-
 .bet-input {
     width: 1rem;
     zoom: none;
@@ -39,6 +33,6 @@
     -moz-appearance: textfield;
 }
 
-.duration-bet-input {
-    text-align: center;
+.empty-bet {
+    border: 1px solid var(--warn);
 }

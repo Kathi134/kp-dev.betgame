@@ -11,6 +11,6 @@ class SafetySyncJob(
 
     @Scheduled(fixedDelay = 3600000) // jede Stunde
     fun run() {
-//        syncService.safetySync()
+        syncService.safetySync()
     }
 }

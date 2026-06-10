@@ -53,11 +53,11 @@ jobs:
           chmod 600 private_key.pem
 
           # Give the app a few seconds to start
-          sleep 10
+          sleep 120
 
           ssh -i private_key.pem -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << EOF
             echo "=== Checking backend.log ==="
             tail -n 30 $SERVER_PATH/backend.log
             echo "=== Testing health endpoint ==="
-            curl -f http://185.249.198.58:8060/api/health || exit 1
+            curl -f http://kp-dev.de:8060/api/health || exit 1
           EOF

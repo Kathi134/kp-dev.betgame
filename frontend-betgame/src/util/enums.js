@@ -14,8 +14,16 @@ function stageToString(stage) {
             return "Spiel um Platz 3";
         case "FINAL":
             return "Finale";
-        case "SPECIAL":
-            return "Spezialwetten";
+        default:
+            break;
+    }
+}
+
+function betGroupKeyToString(key) {
+    switch (key) {
+        case "URGENT": return "Nächste Spiele"
+        case "SPECIAL": return "Spezialwetten"
+        case "PAST": return "Vergangene Spiele"
         default:
             break;
     }
@@ -32,25 +40,25 @@ const STAGE_ORDER = {
 };
 
 const specialBetTypeLabel = {
-    GROUP_A_WINNER: "Welches Team gewinnt Gruppe A?",
-    GROUP_B_WINNER: "Welches Team gewinnt Gruppe B?",
-    GROUP_C_WINNER: "Welches Team gewinnt Gruppe C?",
-    GROUP_D_WINNER: "Welches Team gewinnt Gruppe D?",
-    GROUP_E_WINNER: "Welches Team gewinnt Gruppe E?",
-    GROUP_F_WINNER: "Welches Team gewinnt Gruppe F?",
-    GROUP_G_WINNER: "Welches Team gewinnt Gruppe G?",
-    GROUP_H_WINNER: "Welches Team gewinnt Gruppe H?",
-    GROUP_I_WINNER: "Welches Team gewinnt Gruppe I?",
-    GROUP_J_WINNER: "Welches Team gewinnt Gruppe J?",
-    GROUP_K_WINNER: "Welches Team gewinnt Gruppe K?",
-    GROUP_L_WINNER: "Welches Team gewinnt Gruppe L?",
+    GROUP_A_WINNER: "Wer gewinnt Gruppe A?",
+    GROUP_B_WINNER: "Wer gewinnt Gruppe B?",
+    GROUP_C_WINNER: "Wer gewinnt Gruppe C?",
+    GROUP_D_WINNER: "Wer gewinnt Gruppe D?",
+    GROUP_E_WINNER: "Wer gewinnt Gruppe E?",
+    GROUP_F_WINNER: "Wer gewinnt Gruppe F?",
+    GROUP_G_WINNER: "Wer gewinnt Gruppe G?",
+    GROUP_H_WINNER: "Wer gewinnt Gruppe H?",
+    GROUP_I_WINNER: "Wer gewinnt Gruppe I?",
+    GROUP_J_WINNER: "Wer gewinnt Gruppe J?",
+    GROUP_K_WINNER: "Wer gewinnt Gruppe K?",
+    GROUP_L_WINNER: "Wer gewinnt Gruppe L?",
 
-    PLACE_1: "Welches Team wird Weltmeister?",
-    PLACE_2: "Welches Team wird Platz 2?",
-    PLACE_3: "Welches Team wird Platz 3?",
-    PLACE_4: "Welches Team wird Platz 4?",
+    PLACE_1: "Wer wird Weltmeister?",
+    PLACE_2: "Wer wird Platz 2?",
+    PLACE_3: "Wer wird Platz 3?",
+    PLACE_4: "Wer wird Platz 4?",
 
-    TOP_SCORER_TEAM: "Welches Team stellt den Torschützenkönig?",
+    TOP_SCORER_TEAM: "Wer stellt den Torschützenkönig?",
     GERMANY_FINAL_STAGE: "Wie weit kommt Deutschland?"
 };
 
@@ -66,4 +74,4 @@ const SPECIAL_BET_GROUP_ORDER = {
     OTEHR: 2
 };
 
-export { stageToString, STAGE_ORDER, specialBetTypeLabel, specialBetGroupLabel, SPECIAL_BET_GROUP_ORDER };
+export { stageToString, STAGE_ORDER, specialBetTypeLabel, specialBetGroupLabel, SPECIAL_BET_GROUP_ORDER, betGroupKeyToString };

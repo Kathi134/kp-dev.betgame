@@ -36,3 +36,8 @@
 .empty-bet {
     border: 1px solid var(--warn);
 }
+
+.secondary {
+    color: var(--base-text-secondary);
+    font-size: small;
+}

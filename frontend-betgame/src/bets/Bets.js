@@ -1,14 +1,15 @@
 
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { API_BASE } from "../api/base";
-import { groupByStage, groupByGroup } from "../util/reformat-api-data";
+import { groupByStage, groupByDate } from "../util/reformat-api-data";
 import '../results/matches.css'
 import './bets.css'
-import { stageToString } from "../util/enums";
+import { betGroupKeyToString } from "../util/enums";
 import { useHeader } from "../global/HeaderContext";
 import { fetchMatchBets, putMatchBet, saveMatchBet } from "../api/bet";
-import BetList from "./BetList";
 import SpecialBets from "./SpecialBets";
+import UrgentBets from "./UrgentBets";
+import PastBets from "./PastBets";
 
 export default function Bets() {
     const { setHeader } = useHeader();
@@ -24,13 +25,16 @@ export default function Bets() {
         ])
             .then(([matches, bets]) => {
                 const betMap = Object.fromEntries((bets.map(b => [b.matchId, b])));
-                const enriched = matches.map(m => ({ ...m, bet: betMap[m.id] }));
+                const enriched = matches.map(m => ({
+                    ...m,
+                    deadline: m.utcDate,
+                    // isPast: new Date() - new Date(m.utcDate) > 0,
+                    isPast: new Date("2026-06-13T23:00:00Z") - new Date(m.utcDate) > 0,
+                    isBlocked: !(m.homeTeam && m.awayTeam),
+                    bet: (betMap[m.id]),
+                }));
                 setMatches(enriched);
-
-                const grouped = groupByStage(enriched);
-                const firstStage = Object.keys(grouped)[0];
-                setActiveStage(firstStage);
-
+                setActiveStage("URGENT");
                 setLoading(false);
             })
             .catch(err => {
@@ -42,12 +46,16 @@ export default function Bets() {
     const grouped = useMemo(() => groupByStage(matches), [matches]);
 
     useEffect(() => {
+        console.log(matches)
+    }, [matches])
+
+    useEffect(() => {
         setHeader({
             title: "Meine Tipps",
-            values: ["SPECIAL", ...(Object.keys(grouped))],
+            values: ["URGENT", "SPECIAL", "PAST"],
             activeValue: activeStage,
             onValueChange: setActiveStage,
-            displayValue: stageToString
+            displayValue: betGroupKeyToString
         });
     }, [activeStage, grouped, setHeader, setActiveStage]);
 
@@ -78,16 +86,10 @@ export default function Bets() {
                     {activeStage && grouped[activeStage] !== null &&
                         activeStage === "SPECIAL"
                         ? <SpecialBets />
-                        : (activeStage !== "GROUP_STAGE"
-                            ? <BetList data={grouped[activeStage]} onBetChange={updateBet} />
-                            : <>
-                                {Object.entries(groupByGroup(grouped[activeStage])).map(([group, matches]) => (
-                                    <div key={group} className="bottom-margin">
-                                        <h2 className="group-title">Gruppe {group}</h2>
-                                        <BetList data={matches} onBetChange={updateBet} />
-                                    </div>
-                                ))}
-                            </>)
+                        : (activeStage === "URGENT"
+                            ? <UrgentBets data={groupByDate(matches.filter(m => !m.isPast && !m.isBlocked))} onBetChange={updateBet} />
+                            : <PastBets data={matches.filter(m => m.isPast)} />
+                        )
                     }
                 </>
             }

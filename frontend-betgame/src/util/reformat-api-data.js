@@ -27,6 +27,18 @@ function groupByGroup(matches) {
     return sortedGrouped;
 }
 
+function groupByDate(matches) {
+    const grouped = matches.reduce((acc, match) => {
+        const key = match.deadline.split("T")[0];
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(match);
+        return acc;
+    }, {});
+    const sortedKeys = Object.keys(grouped).sort((a, b) => new Date(a) - new Date(b));
+    const sortedGrouped = Object.fromEntries(sortedKeys.map((key) => [key, grouped[key]]));
+    return sortedGrouped;
+}
+
 function groupBySpecialBetGroup(definitions) {
     const grouped = definitions.reduce((acc, def) => {
         const groupType = def.type.includes("GROUP") ? "GROUP" : (def.type.includes("PLACE") ? "PLACE" : "OTHER")
@@ -41,4 +53,4 @@ function groupBySpecialBetGroup(definitions) {
     );
 }
 
-export { groupByGroup, groupByStage, groupBySpecialBetGroup };
+export { groupByGroup, groupByStage, groupBySpecialBetGroup, groupByDate };

@@ -1,5 +1,5 @@
 
-export const AUTH_API_BASE = "http://185.249.198.58:8081"
+export const AUTH_API_BASE = "https://auth.kp-dev.de"
 
 export const loginUser = (loginData) =>
     fetch(`${AUTH_API_BASE}/auth`, {

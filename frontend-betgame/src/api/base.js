@@ -1,6 +1,6 @@
 import { refreshAccessToken, tokenStore } from "../auth/api/token";
 
-export const API_BASE = "https://tipp.kp-dev.de/api/api/"; // ggf. anpassen
+export const API_BASE = "https://tipp.kp-dev.de/api/api"; // ggf. anpassen
 
 let authFailureHandler = null;
 

@@ -35,4 +35,9 @@
     padding: 1rem;
     border-radius: 8px;
     overflow-x: auto;
+    margin-bottom: 0.5rem;
+}
+
+.copy-btn {
+    float: center;
 }

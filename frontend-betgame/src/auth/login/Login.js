@@ -4,6 +4,7 @@ import "./login.css";
 
 import { loginUser, registerUser } from "../api/auth";
 import { tokenStore } from "../api/token";
+import { FaRegCopy } from "react-icons/fa";
 
 export default function Login() {
     const navigate = useNavigate();
@@ -28,15 +29,16 @@ export default function Login() {
 
         apiCall()
             .then((data) => {
+                // console.log(JSON.stringify(data))
                 if (!data || data.error)
-                    throw new Error(errorMessage);
+                    throw new Error(data?.message || JSON.stringify(data));
                 tokenStore.setTokens({ accessToken: data.accessToken, refreshToken: data.refreshToken, });
                 setResponse(data);
                 navigate("/stats");
             })
             .catch((err) => {
                 console.error(err);
-                setResponse({ error: errorMessage });
+                setResponse({ error: errorMessage, raw: err.message, stack: err.stack, });
             })
             .finally(() => {
                 setLoading(false);
@@ -90,7 +92,10 @@ export default function Login() {
                 </button>
 
                 {response &&
-                    <pre className="response">{JSON.stringify(response, null, 2)}</pre>
+                    <div className="vertical-container">
+                        <pre className="response">{JSON.stringify(response, null, 2)}</pre>
+                        <button className="copy-btn" onClick={() => navigator.clipboard.writeText(JSON.stringify(response, null, 2))}><FaRegCopy /></button>
+                    </div>
                 }
             </div>
         </div>

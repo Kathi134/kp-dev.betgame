@@ -1,8 +1,10 @@
 package de.kpdev.backendbetgame.security.usercontext
 
+import org.springframework.http.HttpStatus
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Component
+import org.springframework.web.server.ResponseStatusException
 import java.util.UUID
 
 
@@ -10,7 +12,11 @@ import java.util.UUID
 class AuthContext {
 
     fun jwt(): Jwt {
-        return SecurityContextHolder.getContext().authentication.principal as Jwt
+        return try {
+            SecurityContextHolder.getContext().authentication.principal as Jwt
+        } catch (e:Exception) {
+            throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
+        }
     }
 
     fun userId(): UUID {

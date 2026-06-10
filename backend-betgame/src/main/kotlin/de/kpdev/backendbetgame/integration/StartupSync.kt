@@ -16,8 +16,8 @@ class StartupSync(
 ) {
     @EventListener(ApplicationReadyEvent::class)
     fun init() {
-//        competitionSyncService.syncCompetition()
-//        teamSyncService.syncTeams()
-//        matchesSyncService.syncMatches()
+        competitionSyncService.syncCompetition()
+        teamSyncService.syncTeams()
+        matchesSyncService.syncMatches()
     }
 }

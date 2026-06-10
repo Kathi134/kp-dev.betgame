@@ -1,0 +1,38 @@
+.full-height {
+    height: 70vh;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    max-width: 300px;
+    width: 60%;
+    padding: 2rem;
+    background: white;
+    border-radius: 0.8rem;
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.1);
+}
+
+.form {
+    padding-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.switchButton {
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.response {
+    margin-top: 1rem;
+    background: #eee;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+}

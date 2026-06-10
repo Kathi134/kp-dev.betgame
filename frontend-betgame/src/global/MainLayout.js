@@ -5,7 +5,7 @@ import MenuItem from "./MenuItem";
 import Header from "./Header";
 import { useHeader } from "./HeaderContext";
 
-export default function MainLayout({ children }) {
+export default function MainLayout({ children, showNavigation = true }) {
     const { title, values, activeValue, onValueChange, displayValue } = useHeader();
 
     return (<>
@@ -13,13 +13,16 @@ export default function MainLayout({ children }) {
 
         <main><div id="children-container"><Outlet /></div></main>
 
-        <footer>
-            <nav className='horizontal-container space-evenly'>
-                <MenuItem destination="stats" displayName="Statistik" />
-                <MenuItem destination="bets" displayName="Tippen" />
-                <MenuItem destination="results" displayName="Ergebnisse" />
-            </nav>
-        </footer>
+        {showNavigation &&
+            <footer>
+                <nav className='horizontal-container space-evenly'>
+                    <MenuItem destination="stats" displayName="Statistik" />
+                    <MenuItem destination="bets" displayName="Tippen" />
+                    <MenuItem destination="results" displayName="Ergebnisse" />
+                    {/* <MenuItem destination="account" displayName="Account" /> */}
+                </nav>
+            </footer>
+        }
     </>);
 }
 

@@ -9,6 +9,14 @@
     width: 100%;
 }
 
+.floating-header-btn {
+    margin-right: 2rem;
+    background-color: transparent;
+    fill: 👤;
+    border: none;
+
+}
+
 .tabs-container {
     background-color: var(--base);
 

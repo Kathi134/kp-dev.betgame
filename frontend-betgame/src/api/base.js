@@ -1,2 +1,40 @@
+import { refreshAccessToken, tokenStore } from "../auth/api/token";
+
 export const API_BASE = "http://192.168.178.26:8060/api"; // ggf. anpassen
-export const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMDIyYjhjOC1jMTA4LTRjNGQtYjE4ZC1hZWIxMTM0ZmUyNTAiLCJ1c2VybmFtZSI6IjIwMjJiOGM4LWMxMDgtNGM0ZC1iMThkLWFlYjExMzRmZTI1MCIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTc4MTAyNjg3NCwiZXhwIjoxNzgxMDMwNDc0fQ.OUvgA8n39rtdMJAHum5jBHRpSBv6ghFjRA98AYS2d34"
+
+let authFailureHandler = null;
+
+export const setAuthFailureHandler = (fn) => {
+    authFailureHandler = fn;
+};
+
+const handleAuthFailure = () => {
+    if (authFailureHandler) authFailureHandler();
+};
+
+export const authFetch = async (url, options = {}, retry = true) => {
+    let accessToken = tokenStore.getAccess();
+
+    const res = await fetch(url, {
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...(options.headers || {}),
+            ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+        },
+    });
+
+    if ((res.status === 401 || res.status === 403) && retry) {
+        const newToken = await refreshAccessToken();
+
+        if (!newToken) {
+            tokenStore.clear();
+            handleAuthFailure();
+            throw new Error("Session expired");
+        }
+
+        return authFetch(url, options, false);
+    }
+
+    return res;
+};

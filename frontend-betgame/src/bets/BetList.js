@@ -30,7 +30,7 @@ export default function BetList({ data = [], onBetChange = () => { } }) {
                                 <input type="number" className={`bet-input  ${!hasBet(m) && "empty-bet"}`} value={m.bet?.predictedAwayGoals} onChange={(e) => handleChange(e, m, "predictedAwayGoals")} />
                             </span>
                             {m.stage !== "GROUP_STAGE" &&
-                                <select className="duration-bet-input" value={m.bet?.predictedDuration ?? "REGULAR"} onChange={(e) => handleChange(e, m, "predictedDuration")}>
+                                <select className="bet-select" value={m.bet?.predictedDuration ?? "REGULAR"} onChange={(e) => handleChange(e, m, "predictedDuration")}>
                                     <option value="REGULAR">90 min</option>
                                     <option value="OVERTIME">Verlängerung</option>
                                     <option value="PENALTY">Elfmeter</option>

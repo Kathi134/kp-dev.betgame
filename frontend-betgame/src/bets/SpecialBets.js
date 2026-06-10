@@ -87,23 +87,24 @@ export default function SpecialBets() {
         return res;
     }, [])
 
+    const hasBet = useCallback((def) => determineVAlue(def) !== "", [determineVAlue]);
 
     if (loading) return <div>Lade Spezialwetten…</div>;
 
     return (
         <div >
             {Object.entries(grouped).map(([type, defs]) => (
-                <div key={type} className="special-section">
+                <div key={type}>
                     <h2> {specialBetGroupLabel[type] ?? type} </h2>
 
                     {defs.map(def =>
                         <div key={def.id} className="vertical-container match-container">
-                            <div className="special-card-title"> {specialBetTypeLabel[def.type] ?? def.type}  </div>
+                            <div> {specialBetTypeLabel[def.type] ?? def.type}  </div>
 
-                            <select className="special-select" value={determineVAlue(def)} onChange={(e) => updateBet(def.id, e.target.value, def.type)}>
-                                <option value="">Bitte wählen</option>
+                            <select className={`bet-select ${!hasBet(def) && "empty-bet"}`} value={determineVAlue(def)} onChange={(e) => updateBet(def.id, e.target.value, def.type)}>
+                                <option className={`bet-select ${!hasBet(def) && "empty-bet"}`} value="">Bitte wählen</option>
                                 {selectionOptions(type, def.type, teams).map(data =>
-                                    <option key={data.value} value={data.value}> {data.displayValue} </option>
+                                    <option className={`bet-select ${!hasBet(def) && "empty-bet"}`} key={data.value} value={data.value}> {data.displayValue} </option>
                                 )}
                             </select>
                         </div>

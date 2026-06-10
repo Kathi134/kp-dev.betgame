@@ -1,13 +1,12 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { fetchSpecialBets, putSpecialBet, saveSpecialBet } from "../api/bet";
 import { API_BASE } from "../api/base";
-import { specialBetTypeLabel, specialBetGroupLabel, STAGE_ORDER, stageToString } from "../util/enums";
+import { specialBetTypeLabel, specialBetGroupLabel, stageToString } from "../util/enums";
 import "./bets.css";
 import { groupBySpecialBetGroup } from "../util/reformat-api-data";
 
 export default function SpecialBets() {
     const [definitions, setDefinitions] = useState([]);
-    const [bets, setBets] = useState([]);
     const [teams, setTeams] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -18,8 +17,9 @@ export default function SpecialBets() {
             fetch(`${API_BASE}/competition/teams`).then(r => r.json())
         ])
             .then(([defs, bets, teams]) => {
-                setDefinitions(defs);
-                setBets(bets);
+                const betMap = Object.fromEntries((bets.map(b => [b.definitionId, b])));
+                const enriched = defs.map(m => ({ ...m, bet: betMap[m.id] }));
+                setDefinitions(enriched);
                 setTeams(teams)
                 setLoading(false);
             })
@@ -29,31 +29,35 @@ export default function SpecialBets() {
             });
     }, []);
 
-    const betMap = useMemo(() => Object.fromEntries(bets.map(b => [b.definitionId, b])), [bets]);
-
-    useEffect(() => console.log(betMap, bets), [betMap, bets])
-
     const grouped = useMemo(() => groupBySpecialBetGroup(definitions), [definitions]);
 
+    // TODO: make more redable
     const updateBet = useCallback((definitionId, value, betType) => {
-        const patch = betType === "GERMANY_FINAL_STAGE" ? { stage: value } : { selectedTeam: Number(value) }
-        const prev = bets.find(x => x.id === definitionId)?.bet
-        setBets(prev => {
-
-            const updated = prev.map(bet =>
-                bet.definitionId === definitionId
-                    ? { ...bet, ...patch }
-                    : bet
-            );
-
-            return updated;
-        });
-        if (prev?.id) {
-            putSpecialBet(prev.id, patch)
+        let patch;
+        if (betType === "GERMANY_FINAL_STAGE") {
+            patch = { stage: value }
         } else {
-            saveSpecialBet({ ...patch, definitionId: definitionId })
+            const teamId = Number(value);
+            patch = { selectedTeam: { id: teamId, name: teams.find(x => x.id === teamId)?.name } }
         }
-    }, [bets]);
+        const prev = definitions.find(x => x.id === definitionId).bet
+        setDefinitions(prev =>
+            prev.map(betDefiniton => betDefiniton.id === definitionId
+                ? { ...betDefiniton, bet: { ...(betDefiniton.bet ?? {}), definitionId, ...patch } }
+                : betDefiniton
+            )
+        )
+
+        let patchDto = patch;
+        if (betType !== "GERMANY_FINAL_STAGE")
+            patchDto = { selectedTeam: Number(value) }
+
+        if (prev?.id) {
+            putSpecialBet(prev.id, patchDto)
+        } else {
+            saveSpecialBet({ ...patchDto, definitionId: definitionId })
+        }
+    }, [definitions, teams]);
 
     const selectionOptions = (groupKey, type, teams) => {
         if (groupKey === "GROUP") {
@@ -76,6 +80,14 @@ export default function SpecialBets() {
         }
     }
 
+    const determineVAlue = useCallback((def) => {
+        const res = def.type === "GERMANY_FINAL_STAGE"
+            ? def.bet?.stage ?? ""
+            : def.bet?.selectedTeam?.id ?? ""
+        return res;
+    }, [])
+
+
     if (loading) return <div>Lade Spezialwetten…</div>;
 
     return (
@@ -88,7 +100,7 @@ export default function SpecialBets() {
                         <div key={def.id} className="vertical-container match-container">
                             <div className="special-card-title"> {specialBetTypeLabel[def.type] ?? def.type}  </div>
 
-                            <select className="special-select" value={betMap[def.id]?.selectedTeam?.id ?? ""} onChange={(e) => updateBet(def.id, e.target.value, def.type)}>
+                            <select className="special-select" value={determineVAlue(def)} onChange={(e) => updateBet(def.id, e.target.value, def.type)}>
                                 <option value="">Bitte wählen</option>
                                 {selectionOptions(type, def.type, teams).map(data =>
                                     <option key={data.value} value={data.value}> {data.displayValue} </option>

@@ -1,5 +1,5 @@
 
-import { useEffect, useState, useMemo, useCallback, useRef } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { API_BASE } from "../api/base";
 import { groupByStage, groupByGroup } from "../util/reformat-api-data";
 import '../results/matches.css'
@@ -51,7 +51,8 @@ export default function Bets() {
         });
     }, [activeStage, grouped, setHeader, setActiveStage]);
 
-    // update timed
+
+    // update 
 
     const updateBet = useCallback((matchId, patch) => {
         const prev = matches.find(x => x.id === matchId).bet

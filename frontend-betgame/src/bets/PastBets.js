@@ -5,7 +5,7 @@ import { formatDate } from "../util/date-util";
 export default function PastBets({ data, onBetChange }) {
     return <>
         {data?.map((m) => (
-            <div key={m.id} className={`vertical-container match-container  ""}`}>
+            <div key={m.id} className="card">
 
                 <div className="horizontal-container gap-05 secondary">
                     <div>Gruppe {m.group} -</div>

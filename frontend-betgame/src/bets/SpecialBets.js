@@ -99,7 +99,7 @@ export default function SpecialBets() {
                     <h2> {specialBetGroupLabel[type] ?? type} </h2>
 
                     {defs.map(def =>
-                        <div key={def.id} className="vertical-container match-container gap-05">
+                        <div key={def.id} className="card gap-05">
                             <div className="horizontal-container space-between">
                                 <div> {specialBetTypeLabel[def.type] ?? def.type}  </div>
                                 <div className="date">{formatDate(def.deadline)}</div>

@@ -10,7 +10,7 @@ export default function MatchList({ data }) {
 
     return <>
         {matchesByDate?.map((m) => (
-            <div key={m.id} className="vertical-container match-container">
+            <div key={m.id} className="card">
                 <div className="horizontal-container center">
                     {m.status === "LIVE" && <div className="live-dot-container vertical-center"> <span className="live-dot vertical-center" /> </div>}
                     <div className="date"> {formatDate(m.utcDate)} </div>

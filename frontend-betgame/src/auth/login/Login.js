@@ -53,7 +53,7 @@ export default function Login() {
 
     return (
         <div className="container full-height">
-            <div className="card">
+            <div className="login-card">
                 <h2>{isLogin ? "Einloggen" : "Registrieren"}</h2>
 
                 {isLogin ? (

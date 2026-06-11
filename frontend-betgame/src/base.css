@@ -400,3 +400,13 @@ dialog::backdrop {
     z-index: 2;
     background-color: var(--default-light-transparent);
 }
+
+.card {
+    display: flex;
+    flex-direction: column;
+    padding: 0.65rem;
+    margin: 0.3rem 0;
+    border: 1px solid var(--base-highlight-secondary);
+    border-radius: 0.5rem;
+    background-color: var(--base);
+}

@@ -26,7 +26,7 @@ export default function UrgentBets({ data, onBetChange }) {
                 <h2 className="group-title">{formatDateWithoutTime(group)}</h2>
 
                 {matchesByDate(matches)?.map((m) => (
-                    <div key={m.id} className={`vertical-container match-container ${!hasBet(m) && ""}`}>
+                    <div key={m.id} className={`card ${!hasBet(m) && ""}`}>
 
                         <div className="horizontal-container gap-05">
                             <div className="date">Gruppe {m.group} -</div>

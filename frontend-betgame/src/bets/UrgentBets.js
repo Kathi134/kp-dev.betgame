@@ -1,7 +1,7 @@
 
 import { useCallback } from "react";
 import MatchContender from "../results/MatchContender";
-import { formatDateForTimeOnly } from "../util/date-util";
+import { calculateTimeLeft, formatDateForTimeOnly } from "../util/date-util";
 import { formatDateWithoutTime } from "../util/date-util";
 
 export default function UrgentBets({ data, onBetChange }) {
@@ -28,25 +28,27 @@ export default function UrgentBets({ data, onBetChange }) {
                 {matchesByDate(matches)?.map((m) => (
                     <div key={m.id} className={`card ${!hasBet(m) && ""}`}>
 
-                        <div className="horizontal-container gap-05">
-                            <div className="date">Gruppe {m.group} -</div>
-                            <div className="date">{formatDateForTimeOnly(m.deadline)}</div>
+                        <div className="horizontal-container space-between">
+                            <div className="horizontal-container gap-05">
+                                <div className="date">Gruppe {m.group} -</div>
+                                <div className="date">{formatDateForTimeOnly(m.deadline)}</div>
+                            </div>
+                            <div className="date right">noch {calculateTimeLeft(m.deadline)}</div>
                         </div>
-
                         <div className="horizontal-container space-around vertical-center">
                             <MatchContender team={m.homeTeam} />
                             {!hasResult(m) &&
                                 <div className="vertical-container">
                                     <div className="vertical-container center gap-05">
                                         <span className="horizontal-container gap-1">
-                                            <input type="number" className={`bet-input  ${!hasBet(m) && "empty-bet"}`}
+                                            <input type="number" className={`bet-input  ${!hasBet(m) && "empty-bet"}`} disabled={m.isBlocked || m.isPast}
                                                 value={m.bet?.predictedHomeGoals} onChange={(e) => handleChange(e, m, "predictedHomeGoals")} />
                                             :
-                                            <input type="number" className={`bet-input  ${!hasBet(m) && "empty-bet"}`}
+                                            <input type="number" className={`bet-input  ${!hasBet(m) && "empty-bet"}`} disabled={m.isBlocked || m.isPast}
                                                 value={m.bet?.predictedAwayGoals} onChange={(e) => handleChange(e, m, "predictedAwayGoals")} />
                                         </span>
                                         {m.stage !== "GROUP_STAGE" &&
-                                            <select className="bet-select" value={m.bet?.predictedDuration ?? "REGULAR"} onChange={(e) => handleChange(e, m, "predictedDuration")}>
+                                            <select className="bet-select" value={m.bet?.predictedDuration ?? "REGULAR"} onChange={(e) => handleChange(e, m, "predictedDuration")} disabled={m.isBlocked || m.isPast}>
                                                 <option value="REGULAR">90 min</option>
                                                 <option value="OVERTIME">Verlängerung</option>
                                                 <option value="PENALTY">Elfmeter</option>

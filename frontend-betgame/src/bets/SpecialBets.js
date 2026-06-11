@@ -4,7 +4,7 @@ import { API_BASE } from "../api/base";
 import { specialBetTypeLabel, specialBetGroupLabel, stageToString } from "../util/enums";
 import "./bets.css";
 import { groupBySpecialBetGroup } from "../util/reformat-api-data";
-import { formatDate } from "../util/date-util";
+import { calculateTimeLeft } from "../util/date-util";
 
 export default function SpecialBets() {
     const [definitions, setDefinitions] = useState([]);
@@ -19,7 +19,7 @@ export default function SpecialBets() {
         ])
             .then(([defs, bets, teams]) => {
                 const betMap = Object.fromEntries((bets.map(b => [b.definitionId, b])));
-                const enriched = defs.map(m => ({ ...m, bet: betMap[m.id], deadline: m.deadline }));
+                const enriched = defs.map(m => ({ ...m, bet: betMap[m.id], deadline: m.deadline, isBlocked: new Date() - new Date(m.deadline) > 0 }));
                 setDefinitions(enriched);
                 setTeams(teams)
                 setLoading(false);
@@ -90,6 +90,8 @@ export default function SpecialBets() {
 
     const hasBet = useCallback((def) => determineVAlue(def) !== "", [determineVAlue]);
 
+    // const isBlocked = 
+
     if (loading) return <div>Lade Spezialwetten…</div>;
 
     return (
@@ -102,10 +104,12 @@ export default function SpecialBets() {
                         <div key={def.id} className="card gap-05">
                             <div className="horizontal-container space-between">
                                 <div> {specialBetTypeLabel[def.type] ?? def.type}  </div>
-                                <div className="date">{formatDate(def.deadline)}</div>
+                                <div className="date">noch {calculateTimeLeft(def.deadline)}</div>
                             </div>
 
-                            <select className={`bet-select ${!hasBet(def) && "empty-bet"}`} value={determineVAlue(def)} onChange={(e) => updateBet(def.id, e.target.value, def.type)}>
+                            <select className={`bet-select ${!hasBet(def) && "empty-bet"}`} disabled={def.isBlocked}
+                                value={determineVAlue(def)} onChange={(e) => updateBet(def.id, e.target.value, def.type)}
+                            >
                                 <option className={`bet-select ${!hasBet(def) && "empty-bet"}`} value="">Bitte wählen</option>
                                 {selectionOptions(type, def.type, teams).map(data =>
                                     <option className={`bet-select ${!hasBet(def) && "empty-bet"}`} key={data.value} value={data.value}> {data.displayValue} </option>

@@ -1,10 +1,13 @@
 
+import { useMemo } from "react";
 import MatchContender from "../results/MatchContender";
 import { formatDate } from "../util/date-util";
 
 export default function PastBets({ data, onBetChange }) {
+    const sortedByDate = useMemo(() => data.sort((a, b) => new Date(b.utcDate) - new Date(a.utcDate)), [data]);
+
     return <>
-        {data?.map((m) => (
+        {sortedByDate?.map((m) => (
             <div key={m.id} className="card">
 
                 <div className="horizontal-container gap-05 secondary">

@@ -27,6 +27,12 @@ interface MatchRepository : JpaRepository<Match, Long> {
     fun findLiveMatches(): List<Match>
 
     @Query("""
+        SELECT m FROM Match m
+        WHERE m.status = "LIVE" OR m.status = "FINISHED"
+    """)
+    fun findMatchesWithResult(): List<Match>
+
+    @Query("""
     SELECT m
     FROM Match m
     WHERE m.homeTeam.id = :teamId

@@ -19,15 +19,17 @@ export default function PastBets({ data, onBetChange }) {
                     <span>{m.homeGoals ?? 0} : {m.awayGoals ?? 0}</span>
                     <MatchContender team={m.awayTeam} />
                 </div>
-                <div className="horizontal-container secondary gap-1 end ">
-                    mein Tipp:
-                    {m.bet
-                        ? <>
-                            <span>{m.bet?.predictedHomeGoals ?? "-"} : {m.bet?.predictedAwayGoals ?? "-"}</span>
-                            <span>({m.bet?.awardedPoints ?? "-"} Pkt.)</span>
-                        </>
-                        : <div>nicht abgegeben.</div>
-                    }
+                <div k className="horizontal-container space-between secondary small" >
+                    <div className="vertical-container"> mein Tipp </div>
+                    <div className="horizontal-container result">
+                        {m.bet
+                            ? <span>{m.bet?.predictedHomeGoals ?? "-"} : {m.bet?.predictedAwayGoals ?? "-"}</span>
+                            : <span>nicht abgegeben.</span>
+                        }
+                    </div>
+                    <div className="vertical-container right">
+                        ({m.bet?.awardedPoints ?? "-"} Pkt.)
+                    </div>
                 </div>
             </div>
         ))}

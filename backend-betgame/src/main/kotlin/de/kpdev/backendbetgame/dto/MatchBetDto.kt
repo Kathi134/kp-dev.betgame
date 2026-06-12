@@ -9,6 +9,7 @@ data class MatchBetDto(
     val id: Long,
     val matchId: Long,
     val userId: UUID,
+    val username: String,
 
     val predictedHomeGoals: Int,
     val predictedAwayGoals: Int,
@@ -22,6 +23,7 @@ fun MatchBet.toDto(): MatchBetDto =
         id = this.id,
         matchId = this.match.id,
         userId = this.user.id,
+        username = this.user.username,
 
         predictedHomeGoals = this.predictedHomeGoals,
         predictedAwayGoals = this.predictedAwayGoals,

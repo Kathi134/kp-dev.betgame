@@ -2,11 +2,11 @@ package de.kpdev.backendbetgame.dto
 
 
 data class MatchBetGroupDto(
-    val matchId: Long,
+    val match: MatchDto,
     val bets: List<MatchBetDto>
 )
 
 data class SpecialBetGroupDto(
-    val definitionId: Long,
+    val definition: SpecialBetDefinitionDto,
     val bets: List<SpecialBetDto>
 )

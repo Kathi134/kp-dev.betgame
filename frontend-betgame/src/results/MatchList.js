@@ -6,7 +6,7 @@ import MatchContender from "./MatchContender";
 export default function MatchList({ data }) {
     const matchesByDate = useMemo(() => data.sort((a, b) => new Date(a.utcDate) - new Date(b.utcDate)), [data]);
 
-    const hasGoals = (m) => m.homeGoals && m.awayGoals;
+    const hasGoals = (m) => m.homeGoals !== undefined && m.awayGoals !== undefined;
 
     return <>
         {matchesByDate?.map((m) => (

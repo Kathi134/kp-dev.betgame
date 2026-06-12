@@ -11,6 +11,6 @@ class LiveSyncJob(
 
     @Scheduled(fixedDelay = 60000) // jede Minute
     fun run() {
-        syncService.syncLiveMatches()
+        syncService.syncMatches()
     }
 }

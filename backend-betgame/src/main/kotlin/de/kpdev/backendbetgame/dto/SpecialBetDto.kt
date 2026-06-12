@@ -8,6 +8,7 @@ data class SpecialBetDto(
     val id: Long,
     val definitionId: Long,
     val userId: UUID,
+    val username: String,
 
     val selectedTeam: TeamDto?,
     val stage: CompetitionStage?,
@@ -20,6 +21,7 @@ fun SpecialBet.toDto(): SpecialBetDto =
         id = this.id,
         definitionId = this.definition.id,
         userId = this.user.id,
+        username = this.user.username,
 
         selectedTeam = this.selectedTeam?.toDto(),
         stage = this.stage,

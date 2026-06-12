@@ -16,7 +16,7 @@ export default function MainLayout({ children, showNavigation = true }) {
         {showNavigation &&
             <footer>
                 <nav className='horizontal-container space-evenly'>
-                    <MenuItem destination="stats" displayName="Statistik" />
+                    <MenuItem destination="stats" displayName="Daten" />
                     <MenuItem destination="bets" displayName="Tippen" />
                     <MenuItem destination="results" displayName="Spielplan" />
                     {/* <MenuItem destination="account" displayName="Account" /> */}

@@ -2,3 +2,7 @@
     color: var(--base-text-secondary);
     width: 2rem;
 }
+
+.first-column {
+    width: 140px;
+}

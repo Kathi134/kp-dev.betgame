@@ -46,6 +46,7 @@ function groupBySpecialBetGroup(definitions) {
         acc[groupType].push(def);
         return acc;
     }, {});
+    console.log(grouped)
     return Object.fromEntries(
         Object.keys(grouped)
             .sort((a, b) => (SPECIAL_BET_GROUP_ORDER[a] ?? Number.POSITIVE_INFINITY) - (SPECIAL_BET_GROUP_ORDER[b] ?? Number.POSITIVE_INFINITY))
@@ -53,4 +54,19 @@ function groupBySpecialBetGroup(definitions) {
     );
 }
 
-export { groupByGroup, groupByStage, groupBySpecialBetGroup, groupByDate };
+function groupBySpecialBetGroupWithMultipleBets(definitions) {
+    const grouped = definitions.reduce((acc, def) => {
+        const groupType = def.definition.type.includes("GROUP") ? "GROUP" : (def.definition.type.includes("PLACE") ? "PLACE" : "OTHER")
+        acc[groupType] = acc[groupType] || [];
+        acc[groupType].push(def);
+        return acc;
+    }, {});
+    console.log(grouped)
+    return Object.fromEntries(
+        Object.keys(grouped)
+            .sort((a, b) => (SPECIAL_BET_GROUP_ORDER[a] ?? Number.POSITIVE_INFINITY) - (SPECIAL_BET_GROUP_ORDER[b] ?? Number.POSITIVE_INFINITY))
+            .map(key => [key, grouped[key]])
+    );
+}
+
+export { groupByGroup, groupByStage, groupBySpecialBetGroup, groupByDate, groupBySpecialBetGroupWithMultipleBets };

@@ -1,0 +1,5 @@
+- mark self in ranking list / global bet lists
+- refactor login page (style)
+- force login on every page -> /self fetch
+- fix live match udpate
+- stats

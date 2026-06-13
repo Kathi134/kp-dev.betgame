@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { fetchGlobalRanking } from "../api/ranking";
+import { useAuth } from "../auth/global/AuthContext";
 
 export default function Ranking() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const { self } = useAuth();
 
     useEffect(() => {
         fetchGlobalRanking()
@@ -22,11 +24,11 @@ export default function Ranking() {
     return (
         <div>
             {data.map((user, index) => (
-                <div key={user.userId} className="card">
+                <div key={user.userId} className={`card ${index === 0 ? "gold" : (index === 1 ? "silver" : (index === 2 ? "bronze" : ""))}`}>
                     <div className="horizontal-container space-between center ">
                         <div className="horizontal-container gap-1 left">
-                            <div className="ranking-position">  #{index + 1} </div>
-                            <div> {user.username}</div>
+                            <div className="ranking-position">#{index + 1}</div>
+                            <div className={user.userId === self?.id ? "strong" : ""}> {user.username}</div>
                         </div>
 
                         <div className="horizontal-container gap-1 right">

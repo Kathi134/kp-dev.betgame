@@ -6,3 +6,15 @@
 .first-column {
     width: 140px;
 }
+
+.gold {
+    border-color: #ffd700;
+}
+
+.silver {
+    border-color: #c0c0c0;
+}
+
+.bronze {
+    border-color: #CD7F32;
+}

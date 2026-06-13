@@ -3,6 +3,7 @@ package de.kpdev.backendbetgame.service
 import de.kpdev.backendbetgame.dto.*
 import de.kpdev.backendbetgame.model.MatchBet
 import de.kpdev.backendbetgame.model.MatchDuration
+import de.kpdev.backendbetgame.model.MatchStatus
 import de.kpdev.backendbetgame.repository.MatchBetRepository
 import de.kpdev.backendbetgame.repository.MatchRepository
 import de.kpdev.backendbetgame.repository.UserRepository
@@ -55,10 +56,11 @@ class MatchBetService(
 
     fun globalMatchBets(): List<MatchBetGroupDto> =
         matchBetRepository.findAll()
+            .filter { it.match.status == MatchStatus.FINISHED || it.match.status == MatchStatus.LIVE }
             .groupBy { it.match.id }
-            .map { (matchId, betsForMatch) ->
+            .map { (_, betsForMatch) ->
                 MatchBetGroupDto(
-                    matchId = matchId,
+                    match = betsForMatch.first().match.toDto(),
                     bets = betsForMatch.map { it.toDto() }
                 )
             }

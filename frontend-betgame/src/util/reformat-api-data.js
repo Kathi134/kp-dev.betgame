@@ -46,7 +46,6 @@ function groupBySpecialBetGroup(definitions) {
         acc[groupType].push(def);
         return acc;
     }, {});
-    console.log(grouped)
     return Object.fromEntries(
         Object.keys(grouped)
             .sort((a, b) => (SPECIAL_BET_GROUP_ORDER[a] ?? Number.POSITIVE_INFINITY) - (SPECIAL_BET_GROUP_ORDER[b] ?? Number.POSITIVE_INFINITY))
@@ -61,7 +60,6 @@ function groupBySpecialBetGroupWithMultipleBets(definitions) {
         acc[groupType].push(def);
         return acc;
     }, {});
-    console.log(grouped)
     return Object.fromEntries(
         Object.keys(grouped)
             .sort((a, b) => (SPECIAL_BET_GROUP_ORDER[a] ?? Number.POSITIVE_INFINITY) - (SPECIAL_BET_GROUP_ORDER[b] ?? Number.POSITIVE_INFINITY))

@@ -45,7 +45,6 @@ export default function AllSpecialBets() {
                 result[userId].total += bet.awardedPoints ?? 0;
             });
         });
-        console.log(result)
         return Object.values(result)
             .sort((a, b) => a.PLACE_4.name.localeCompare(b.PLACE_4.name))
             .sort((a, b) => a.PLACE_3.name.localeCompare(b.PLACE_3.name))

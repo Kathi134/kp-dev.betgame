@@ -34,4 +34,8 @@ class Match(
     var winnerDuration: MatchDuration?,
 
     var lastExternalUpdate: Instant?
-)
+) {
+    override fun toString(): String {
+        return "${homeTeam?.name ?: "UNKNOWN"} vs ${awayTeam?.name ?: "UNKNOWN"}"
+    }
+}

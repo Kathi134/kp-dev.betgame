@@ -45,10 +45,6 @@ export default function Bets() {
     const grouped = useMemo(() => groupByStage(matches), [matches]);
 
     useEffect(() => {
-        console.log(matches)
-    }, [matches])
-
-    useEffect(() => {
         setHeader({
             title: "Meine Tipps",
             values: ["URGENT", "SPECIAL", "PAST"],

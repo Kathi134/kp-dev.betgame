@@ -1,4 +1,4 @@
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Matches from "./results/Matches";
 import MainLayout from "./global/MainLayout"
 import { HeaderProvider } from "./global/HeaderContext";
@@ -9,32 +9,31 @@ import { useAuth } from "./auth/global/AuthContext";
 import { useEffect } from "react";
 import { setAuthFailureHandler } from "./api/base";
 import Account from "./account/Account";
+import ProtectedRoute from "./auth/global/ProtectedRoute";
 
 function App() {
-  const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { handleAuthFailure, isAuthenticated } = useAuth();
 
   useEffect(() => {
-    setAuthFailureHandler(() => {
-      logout();
-      navigate("/login", { replace: true });
-    });
-  }, [navigate, logout]);
+    setAuthFailureHandler(handleAuthFailure);
+  }, [handleAuthFailure]);
 
   return (
     <HeaderProvider>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
 
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<Stats />} />
-          <Route path="/stats" element={<Stats />} />
-          <Route path="/bets" element={<Bets />} />
-          <Route path="/results" element={<Matches />} />
-          <Route path="/account" element={<Account />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<Stats />} />
+            <Route path="/stats" element={<Stats />} />
+            <Route path="/bets" element={<Bets />} />
+            <Route path="/results" element={<Matches />} />
+            <Route path="/account" element={<Account />} />
+          </Route>
         </Route>
       </Routes>
-    </HeaderProvider>
+    </HeaderProvider >
   );
 }
 

@@ -1,15 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
 
 import { loginUser, registerUser } from "../api/auth";
-import { tokenStore } from "../api/token";
 import { FaRegCopy } from "react-icons/fa";
+import { useAuth } from "../global/AuthContext";
 
 export default function Login() {
     const navigate = useNavigate();
+    const { isAuthenticated, loading, login } = useAuth();
+
+    useEffect(() => {
+        if (!loading && isAuthenticated) {
+            navigate("/", { replace: true });
+        }
+    }, [isAuthenticated, loading, navigate]);
+
     const [isLogin, setIsLogin] = useState(true);
-    const [loading, setLoading] = useState(false);
+    const [internalLoading, setInternalLoading] = useState(false);
     const [response, setResponse] = useState(null);
 
     const [loginData, setLoginData] = useState({
@@ -25,23 +33,24 @@ export default function Login() {
 
     const handleAuth = (e, apiCall, errorMessage) => {
         e.preventDefault();
-        setLoading(true);
+        setInternalLoading(true);
 
         apiCall()
             .then((data) => {
                 // console.log(JSON.stringify(data))
                 if (!data || data.error)
                     throw new Error(data?.message || JSON.stringify(data));
-                tokenStore.setTokens({ accessToken: data.accessToken, refreshToken: data.refreshToken, });
-                setResponse(data);
-                navigate("/stats");
+                login({
+                    accessToken: data.accessToken,
+                    refreshToken: data.refreshToken,
+                });
             })
             .catch((err) => {
                 console.error(err);
                 setResponse({ error: errorMessage, raw: err.message, stack: err.stack, });
             })
             .finally(() => {
-                setLoading(false);
+                setInternalLoading(false);
             });
     };
 
@@ -50,6 +59,10 @@ export default function Login() {
 
     const handleRegister = (e) =>
         handleAuth(e, () => registerUser(registerData), "Registrierung fehlgeschlagen");
+
+    if (loading) {
+        return <div>Logging in...</div>;
+    }
 
     return (
         <div className="container full-height">
@@ -64,8 +77,8 @@ export default function Login() {
                         <input type="password" placeholder="Passwort" value={loginData.password}
                             onChange={(e) => setLoginData({ ...loginData, password: e.target.value, })} />
 
-                        <button type="submit" disabled={loading}>
-                            {loading ? "Lädt..." : "Login"}
+                        <button type="submit" disabled={internalLoading}>
+                            {internalLoading ? "Lädt..." : "Login"}
                         </button>
                     </form>
                 ) : (
@@ -79,8 +92,8 @@ export default function Login() {
                         <input type="password" placeholder="Passwort" value={registerData.password}
                             onChange={(e) => setRegisterData({ ...registerData, password: e.target.value, })} />
 
-                        <button type="submit" disabled={loading}>
-                            {loading ? "Lädt..." : "Registrieren"}
+                        <button type="submit" disabled={internalLoading}>
+                            {internalLoading ? "Lädt..." : "Registrieren"}
                         </button>
                     </form>
                 )}

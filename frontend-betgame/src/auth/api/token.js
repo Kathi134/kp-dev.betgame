@@ -28,7 +28,7 @@ export const refreshAccessToken = async () => {
     const res = await fetch(`${AUTH_API_BASE}/auth/refresh`, {
         method: "POST",
         headers: { "Content-Type": "application/json", },
-        body: JSON.stringify({ refreshToken }),
+        body: JSON.stringify({ "token": refreshToken }),
     });
 
     if (!res.ok) {
@@ -39,9 +39,9 @@ export const refreshAccessToken = async () => {
     const data = await res.json();
 
     tokenStore.setTokens({
-        accessToken: data.accessToken,
+        accessToken: data.token,
         refreshToken: data.refreshToken ?? refreshToken,
     });
 
-    return data.accessToken;
+    return data.token;
 };

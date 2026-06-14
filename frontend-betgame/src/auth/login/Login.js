@@ -47,7 +47,7 @@ export default function Login() {
             })
             .catch((err) => {
                 console.error(err);
-                setResponse({ error: errorMessage, raw: err.message, stack: err.stack, });
+                setResponse({ error: errorMessage, data: errorMessage?.includes("Login") ? loginData : registerData, raw: err.message, stack: err.stack });
             })
             .finally(() => {
                 setInternalLoading(false);

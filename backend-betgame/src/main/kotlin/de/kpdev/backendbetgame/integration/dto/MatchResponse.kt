@@ -43,7 +43,7 @@ fun MatchResponse.toEntity(
     homeGoals = this.score?.fullTime?.home,
     awayGoals = this.score?.fullTime?.away,
 
-    winnerDuration = null,
+    duration = null,
     lastExternalUpdate = Instant.now()
 )
 
@@ -67,11 +67,11 @@ fun Match.updateFrom(dto: MatchResponse) {
     val hasExtra = dto.score?.extraTime != null
     val hasPenalties = dto.score?.penalties != null
 
-    this.winnerDuration = when {
+    this.duration = when {
         hasPenalties -> MatchDuration.PENALTY_SHOOTOUT
         hasExtra -> MatchDuration.EXTRA_TIME
         this.status == MatchStatus.FINISHED -> MatchDuration.REGULAR
-        else -> this.winnerDuration
+        else -> this.duration
     }
 
     this.lastExternalUpdate = Instant.now()

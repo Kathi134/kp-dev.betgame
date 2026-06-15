@@ -41,7 +41,7 @@ fun Match.toDto(): MatchDto =
         homeGoals = this.homeGoals,
         awayGoals = this.awayGoals,
 
-        duration = this.winnerDuration,
+        duration = this.duration,
 
         lastUpdate = this.lastExternalUpdate
     )

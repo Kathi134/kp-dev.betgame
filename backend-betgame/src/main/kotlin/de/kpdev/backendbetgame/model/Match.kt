@@ -31,9 +31,9 @@ class Match(
     var awayGoals: Int?,
 
     @Enumerated(EnumType.STRING)
-    var winnerDuration: MatchDuration?,
+    var duration: MatchDuration?,
 
-    var lastExternalUpdate: Instant?
+    var lastExternalUpdate: Instant?,
 ) {
     override fun toString(): String {
         return "${homeTeam?.name ?: "UNKNOWN"} vs ${awayTeam?.name ?: "UNKNOWN"}"

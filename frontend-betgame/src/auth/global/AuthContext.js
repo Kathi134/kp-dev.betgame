@@ -10,10 +10,12 @@ export const AuthProvider = ({ children }) => {
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(null);
 
     const logout = useCallback(() => {
         tokenStore.clear();
         setIsAuthenticated(false);
+        setUser(null);
     }, []);
 
     const login = useCallback((tokens) => {
@@ -29,13 +31,16 @@ export const AuthProvider = ({ children }) => {
 
     const getAccessToken = () => tokenStore.getAccess();
 
-    const verifySession = useCallback(() => {
-        return fetchSelf()
-            .then(() => true)
-            .catch(() => false);
+    const verifySession = useCallback(async () => {
+        try {
+            const user = await fetchSelf();
+            return { ok: true, user };
+        } catch {
+            return { ok: false, user: null };
+        }
     }, []);
 
-    const refreshSession = useCallback(() => {
+    const refreshSession = useCallback(async () => {
         return refreshAccessToken().then((token) => {
             if (!token) {
                 return false;
@@ -44,8 +49,9 @@ export const AuthProvider = ({ children }) => {
         });
     }, []);
 
-    const finalize = useCallback((isAuth) => {
+    const finalize = useCallback((isAuth, userData = null) => {
         setIsAuthenticated(isAuth);
+        setUser(userData)
         setLoading(false);
     }, []);
 
@@ -61,9 +67,9 @@ export const AuthProvider = ({ children }) => {
         // ---- CASE 1: access exists → verify it
         if (access) {
             verifySession()
-                .then((ok) => {
+                .then(({ ok, user }) => {
                     if (ok) {
-                        finalize(true);
+                        finalize(true, user);
                         return true;
                     }
 
@@ -81,8 +87,8 @@ export const AuthProvider = ({ children }) => {
                             }
 
                             return verifySession()
-                                .then((ok2) => {
-                                    finalize(ok2);
+                                .then(({ ok2, user2 }) => {
+                                    finalize(ok2, user2);
                                     return ok2;
                                 });
                         });
@@ -101,8 +107,8 @@ export const AuthProvider = ({ children }) => {
                     }
 
                     return verifySession()
-                        .then((ok) => {
-                            finalize(ok);
+                        .then(({ ok, user }) => {
+                            finalize(ok, ok ? user : null);
                             return ok;
                         });
                 });
@@ -120,6 +126,7 @@ export const AuthProvider = ({ children }) => {
     const value = {
         isAuthenticated,
         loading,
+        user,
         getAccessToken,
         login,
         logout,

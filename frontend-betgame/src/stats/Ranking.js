@@ -6,7 +6,7 @@ export default function Ranking() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { self } = useAuth();
+    const { user } = useAuth();
 
     useEffect(() => {
         fetchGlobalRanking()
@@ -23,33 +23,35 @@ export default function Ranking() {
 
     return (
         <div>
-            {data.map((user, index) => (
-                <div key={user.userId} className={`card ${index === 0 ? "gold" : (index === 1 ? "silver" : (index === 2 ? "bronze" : ""))}`}>
+            {data.map((u, index) => (
+                <div key={u.userId} className={`card ${index === 0 ? "gold" : (index === 1 ? "silver" : (index === 2 ? "bronze" : ""))}`}>
+
                     <div className="horizontal-container space-between center ">
-                        <div className="horizontal-container gap-1 left">
+                        <div className={`${u.userId === user?.userId ? "bold " : ""} horizontal-container gap-1 left`}>
                             <div className="ranking-position">#{index + 1}</div>
-                            <div className={user.userId === self?.id ? "strong" : ""}> {user.username}</div>
+                            <div> {u.username}</div>
                         </div>
 
                         <div className="horizontal-container gap-1 right">
                             <div className="vertical-container right">
                                 <span className="secondary">Punkte</span>
-                                <span className="small">{user.totalPoints}</span>
+                                <span className="small">{u.totalPoints}</span>
                             </div>
 
                             <div className="vertical-container right">
                                 <span className="secondary">Tipps</span>
-                                <span className="small">{user.betCount}</span>
+                                <span className="small">{u.betCount}</span>
                             </div>
 
                             <div className="vertical-container right">
                                 <span className="secondary">Ø</span>
-                                <span className="small">{user.averagePoints.toFixed(2)}</span>
+                                <span className="small">{u.averagePoints.toFixed(2)}</span>
                             </div>
                         </div>
                     </div>
                 </div>
-            ))}
-        </div>
+            ))
+            }
+        </div >
     );
 }

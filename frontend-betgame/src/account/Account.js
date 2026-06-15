@@ -1,20 +1,12 @@
-import { useCallback, useEffect, useState } from "react";
-import { fetchSelf } from "../api/user";
+import { useCallback, useEffect } from "react";
 import { useHeader } from "../global/HeaderContext";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/global/AuthContext";
 
 export default function Account() {
-    const { logout } = useAuth();
+    const { logout, user } = useAuth();
     const navigate = useNavigate();
-    const [user, setUser] = useState({});
     const { setHeader } = useHeader();
-
-    useEffect(() => {
-        fetchSelf()
-            .then(setUser)
-            .catch(console.error);
-    }, [])
 
     useEffect(() => {
         setHeader({

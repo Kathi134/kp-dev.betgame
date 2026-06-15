@@ -33,14 +33,40 @@ class SyncMatchesService(
         val liveMatches = footballClient.fetchLiveMatches()
         if(liveMatches.isEmpty()) {
             logger.info("No live matches to sync.")
+            checkForFinalization()
             return
         }
         executeSyncUpdate(liveMatches)
     }
 
+    fun checkForFinalization() {
+        val fetchedMatchUpdatesForNonFinalizedMatches = matchRepository.findMatchByStatusAndIsFinalizedIsFalse(MatchStatus.FINISHED)
+            .map {
+                footballClient.fetchMatch(it.id)
+            }
+        if(fetchedMatchUpdatesForNonFinalizedMatches.isEmpty()) {
+            logger.info("No unfinalized matches to apply scoring for.")
+            return
+        }
+        executeSyncUpdate(fetchedMatchUpdatesForNonFinalizedMatches)
+    }
+
+//    fun syncFinishedMatchesToScore() {
+//        val finishedMatchesWithoutScoring = footballClient.fetchFinishedMatches()
+//            .filter {
+//                it.score?.fullTime?.away != null && it.score.fullTime.home != null
+//            }
+//            .filter {
+//                !matchRepository.findById(it.id).orElse(null).isFinalized
+//            }
+//        if(finishedMatchesWithoutScoring.isEmpty()) {
+//            logger.info("No finished matches without scored points.")
+//            return
+//        }
+//        executeSyncUpdate(finishedMatchesWithoutScoring)
+//    }
+
     private fun executeSyncUpdate(matches: List<MatchResponse>) {
-
-
         val competition = competitionRepository.findByActiveTrue()
             ?: throw RuntimeException("No active competition")
 
@@ -90,6 +116,8 @@ class SyncMatchesService(
 
     private fun finalizeMatch(match: Match) {
         scoringEngine.processMatchFinished(match)
-
+        match.isFinalized = true
     }
+
+
 }

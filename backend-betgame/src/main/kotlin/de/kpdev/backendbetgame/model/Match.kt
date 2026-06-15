@@ -1,6 +1,7 @@
 package de.kpdev.backendbetgame.model
 
 import jakarta.persistence.*
+import org.hibernate.annotations.ColumnDefault
 import java.time.Instant
 
 @Entity
@@ -34,6 +35,9 @@ class Match(
     var duration: MatchDuration?,
 
     var lastExternalUpdate: Instant?,
+
+    @ColumnDefault("false")
+    var isFinalized: Boolean = false,
 ) {
     override fun toString(): String {
         return "${homeTeam?.name ?: "UNKNOWN"} vs ${awayTeam?.name ?: "UNKNOWN"}"

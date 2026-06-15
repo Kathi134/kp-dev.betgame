@@ -54,6 +54,16 @@ class FootballDataClient(
             ?: emptyList()
     }
 
+    fun fetchFinishedMatches(): List<MatchResponse>  {
+        return webClient.get()
+            .uri("/v4/competitions/WC/matches?status=FINISHED")
+            .retrieve()
+            .bodyToMono(MatchListResponse::class.java)
+            .block()
+            ?.matches
+            ?: emptyList()
+    }
+
     fun fetchMatch(id: Long): MatchResponse {
         return webClient.get()
             .uri("/v4/matches/$id")

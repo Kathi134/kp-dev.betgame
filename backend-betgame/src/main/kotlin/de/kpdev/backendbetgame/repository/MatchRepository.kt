@@ -4,7 +4,6 @@ import de.kpdev.backendbetgame.model.*
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
-import java.util.*
 
 interface MatchRepository : JpaRepository<Match, Long> {
 
@@ -39,4 +38,7 @@ interface MatchRepository : JpaRepository<Match, Long> {
        OR m.awayTeam.id = :teamId
 """)
     fun findByTeamInMatch(@Param("teamId") teamId: Long): List<Match>
+
+    fun findMatchByStatusAndIsFinalizedIsFalse(status: MatchStatus): List<Match>
+
 }

@@ -2,11 +2,13 @@ import React, { useEffect, useMemo, useState } from "react";
 import { fetchSpecialBets } from "../api/ranking";
 import { specialBetGroupLabel, specialBetTypeLabel, stageToString } from "../util/enums";
 import { groupBySpecialBetGroupWithMultipleBets } from "../util/reformat-api-data";
+import { useAuth } from "../auth/global/AuthContext";
 
 export default function AllSpecialBets() {
     const [definitions, setDefinitions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const { user } = useAuth();
 
     useEffect(() => {
         fetchSpecialBets()
@@ -67,7 +69,7 @@ export default function AllSpecialBets() {
                             Top 4 Platzierungen
 
                             {placeTable.map((bet) => (
-                                <div key={bet.id} className="horizontal-container space-between secondary small" >
+                                <div key={bet.id} className="horizontal-container space-between secondary small top-margin" >
                                     <div> {bet.username}</div>
                                     <div className="horizontal-container gap-1 result">
                                         <div className="horizontal-container vertical-center">1. <img src={bet.PLACE_1.crestUrl} alt={bet.PLACE_1.tla} className="flag-img" /></div>
@@ -92,7 +94,7 @@ export default function AllSpecialBets() {
                                     .sort((a, b) => (a.selectedTeam?.name ?? "").localeCompare(b.selectedTeam?.name ?? ""))
                                     .sort((a, b) => (a.stage ?? "").localeCompare(b.stage ?? ""))
                                     .map((bet) => (
-                                        <div key={bet.id} className="horizontal-container space-between secondary small" >
+                                        <div key={bet.id} className={`horizontal-container space-between small ${bet.username === user?.username ? "" : "secondary"}`}>
                                             <div className="vertical-container"> {bet.username} </div>
                                             <div className="horizontal-container result">
                                                 {bet.selectedTeam

@@ -18,3 +18,7 @@
 .bronze {
     border-color: #CD7F32;
 }
+
+.line-chart-container {
+    margin-left: -1.5rem;
+}

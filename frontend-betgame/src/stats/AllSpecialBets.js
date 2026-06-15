@@ -68,20 +68,22 @@ export default function AllSpecialBets() {
                         <div className="card">
                             Top 4 Platzierungen
 
-                            {placeTable.map((bet) => (
-                                <div key={bet.id} className="horizontal-container space-between secondary small top-margin" >
-                                    <div> {bet.username}</div>
-                                    <div className="horizontal-container gap-1 result">
-                                        <div className="horizontal-container vertical-center">1. <img src={bet.PLACE_1.crestUrl} alt={bet.PLACE_1.tla} className="flag-img" /></div>
-                                        <div className="horizontal-container vertical-center">2. <img src={bet.PLACE_2.crestUrl} alt={bet.PLACE_2.tla} className="flag-img" /></div>
-                                        <div className="horizontal-container vertical-center">3. <img src={bet.PLACE_3.crestUrl} alt={bet.PLACE_3.tla} className="flag-img" /></div>
-                                        <div className="horizontal-container vertical-center">4. <img src={bet.PLACE_4.crestUrl} alt={bet.PLACE_4.tla} className="flag-img" /></div>
+                            <div className="top-margin">
+                                {placeTable.map((bet) => (
+                                    <div key={bet.id} className="horizontal-container space-between secondary small" >
+                                        <div> {bet.username}</div>
+                                        <div className="horizontal-container gap-1 result">
+                                            <div className="horizontal-container vertical-center">1. <img src={bet.PLACE_1.crestUrl} alt={bet.PLACE_1.tla} className="flag-img" /></div>
+                                            <div className="horizontal-container vertical-center">2. <img src={bet.PLACE_2.crestUrl} alt={bet.PLACE_2.tla} className="flag-img" /></div>
+                                            <div className="horizontal-container vertical-center">3. <img src={bet.PLACE_3.crestUrl} alt={bet.PLACE_3.tla} className="flag-img" /></div>
+                                            <div className="horizontal-container vertical-center">4. <img src={bet.PLACE_4.crestUrl} alt={bet.PLACE_4.tla} className="flag-img" /></div>
+                                        </div>
+                                        <div className="right">
+                                            ({bet.awardedPoints ?? "-"} Pkt.)
+                                        </div>
                                     </div>
-                                    <div className="right">
-                                        ({bet.awardedPoints ?? "-"} Pkt.)
-                                    </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
                     )}
 

@@ -7,7 +7,7 @@ import java.util.UUID
 
 data class MatchBetDto(
     val id: Long,
-    val matchId: Long,
+    val match: MatchDto,
     val userId: UUID,
     val username: String,
 
@@ -21,7 +21,7 @@ data class MatchBetDto(
 fun MatchBet.toDto(): MatchBetDto =
     MatchBetDto(
         id = this.id,
-        matchId = this.match.id,
+        match = this.match.toDto(),
         userId = this.user.id,
         username = this.user.username,
 

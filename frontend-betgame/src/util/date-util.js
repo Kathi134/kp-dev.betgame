@@ -61,3 +61,8 @@ export function formatLastUpdated(lastUpdate) {
     // fallback: show absolute date
     return `${new Date(lastUpdate).toLocaleString()}`;
 }
+
+export const normalizeDate = (utcDate) => {
+    const d = new Date(utcDate);
+    return d.toISOString().split('T')[0]; // YYYY-MM-DD
+};

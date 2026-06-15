@@ -44,6 +44,16 @@ class FootballDataClient(
             ?: emptyList()
     }
 
+    fun fetchLiveMatches(): List<MatchResponse> {
+        return webClient.get()
+            .uri("/v4/competitions/WC/matches?status=LIVE")
+            .retrieve()
+            .bodyToMono(MatchListResponse::class.java)
+            .block()
+            ?.matches
+            ?: emptyList()
+    }
+
     fun fetchMatch(id: Long): MatchResponse {
         return webClient.get()
             .uri("/v4/matches/$id")

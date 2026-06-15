@@ -1,6 +1,7 @@
 package de.kpdev.backendbetgame.integration.service
 
 import de.kpdev.backendbetgame.integration.FootballDataClient
+import de.kpdev.backendbetgame.integration.dto.MatchResponse
 import de.kpdev.backendbetgame.integration.dto.toEntity
 import de.kpdev.backendbetgame.integration.dto.updateFrom
 import de.kpdev.backendbetgame.model.Match
@@ -9,6 +10,8 @@ import de.kpdev.backendbetgame.repository.CompetitionRepository
 import de.kpdev.backendbetgame.repository.MatchRepository
 import de.kpdev.backendbetgame.repository.TeamRepository
 import de.kpdev.backendbetgame.service.scoring.ScoringEngine
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
@@ -17,16 +20,31 @@ class SyncMatchesService(
     private val matchRepository: MatchRepository,
     private val teamRepository: TeamRepository,
     private val competitionRepository: CompetitionRepository,
-    private val scoringEngine: ScoringEngine
+    private val scoringEngine: ScoringEngine,
 ) {
+    private val logger: Logger = LoggerFactory.getLogger(SyncMatchesService::class.java)
 
     fun syncMatches() {
+        val allMatches = footballClient.fetchWorldCupMatches()
+        executeSyncUpdate(allMatches)
+    }
+
+    fun syncLiveMatches() {
+        val liveMatches = footballClient.fetchLiveMatches()
+        if(liveMatches.isEmpty()) {
+            logger.info("No live matches to sync.")
+            return
+        }
+        executeSyncUpdate(liveMatches)
+    }
+
+    private fun executeSyncUpdate(matches: List<MatchResponse>) {
+
+
         val competition = competitionRepository.findByActiveTrue()
             ?: throw RuntimeException("No active competition")
 
-        val externalMatches = footballClient.fetchWorldCupMatches()
-
-        externalMatches.forEach { dto ->
+        matches.forEach { dto ->
             val match = matchRepository.findById(dto.id).orElse(null)
 
             val homeTeam = dto.homeTeam?.id?.let {
@@ -43,26 +61,12 @@ class SyncMatchesService(
                     finalizeMatch(match)
                 }
                 match.updateFrom(dto)
-                match.homeTeam = homeTeam
-                match.awayTeam = awayTeam
+                if(match.homeTeam == null)
+                    match.homeTeam = homeTeam
+                if(match.awayTeam == null)
+                    match.awayTeam = awayTeam
                 matchRepository.save(match)
             }
-        }
-    }
-
-    fun syncLiveMatches() {
-        val liveMatches = matchRepository.findLiveMatches()
-
-        liveMatches.forEach { match ->
-            val updated = footballClient.fetchMatch(match.id)
-
-            match.updateFrom(updated)
-
-            if (updated.status == MatchStatus.FINISHED.name) {
-                finalizeMatch(match)
-            }
-
-            matchRepository.save(match)
         }
     }
 

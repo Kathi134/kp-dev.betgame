@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { fetchMatchBets } from "../api/ranking";
 import MatchContender from "../results/MatchContender";
 import { useAuth } from "../auth/global/AuthContext";
+import { formatLastUpdated } from "../util/date-util";
 
 export default function AllBets() {
     const [matches, setMatches] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { user } = useAuth();
+
+    const matchesSorted = useMemo(() => matches.sort((a, b) => (new Date(b.match.utcDate) - new Date(a.match.utcDate))), [matches])
 
     useEffect(() => {
         fetchMatchBets()
@@ -24,13 +27,16 @@ export default function AllBets() {
 
     return (
         <div>
-            {matches.sort((a, b) => (new Date(b.match.utcDate) - new Date(a.match.utcDate))).map((match) => (
-                <div key={match.matchId} className="card">
+            {matchesSorted.map((match) => (
+                <div key={match.match?.id} className="card">
                     <div className="horizontal-container space-around vertical-center">
                         <MatchContender team={match.match?.homeTeam} />
                         <span>{match.match?.homeGoals} : {match.match?.awayGoals}</span>
                         <MatchContender team={match.match?.awayTeam} />
                     </div>
+                    {(match.match?.status === "LIVE") && <div className="horiztonal-container center secondary small">
+                        zul. aktualisiert: {formatLastUpdated(match.match?.lastUpdate)}
+                    </div>}
 
                     <div className="vertical-container top-margin">
                         {match.bets

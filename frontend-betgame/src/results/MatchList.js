@@ -1,4 +1,4 @@
-import { formatDate } from "../util/date-util";
+import { formatDate, formatLastUpdated } from "../util/date-util";
 import { useMemo } from "react";
 import MatchContender from "./MatchContender";
 import { useAuth } from "../auth/global/AuthContext";
@@ -29,7 +29,7 @@ export default function MatchList({ data }) {
                 </div>
 
                 {(m.status === "LIVE" || user.username === "katyPerry") && <div className="horizontal-container center secondary small">
-                    zuletzt aktualisiert: {formatDate(m.lastUpdate)}
+                    zul. aktualisiert: {formatLastUpdated(m.lastUpdate)}
                 </div>}
             </div>
         ))}

@@ -38,3 +38,26 @@ export function calculateTimeLeft(iso) {
 
     return `${diffMinutes} Minuten`;
 }
+
+export function formatLastUpdated(lastUpdate) {
+    const diffMs = Date.now() - new Date(lastUpdate).getTime();
+
+    const seconds = Math.floor(diffMs / 1000);
+    const minutes = Math.floor(diffMs / (1000 * 60));
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+
+    if (seconds < 60) {
+        return `vor ${seconds} s`;
+    }
+
+    if (minutes < 60) {
+        return `vor ${minutes} min`;
+    }
+
+    if (hours < 24) {
+        return `vor ${hours} h`;
+    }
+
+    // fallback: show absolute date
+    return `${new Date(lastUpdate).toLocaleString()}`;
+}

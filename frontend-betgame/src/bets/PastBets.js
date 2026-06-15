@@ -1,7 +1,7 @@
 
 import { useMemo } from "react";
 import MatchContender from "../results/MatchContender";
-import { formatDate } from "../util/date-util";
+import { formatDate, formatLastUpdated } from "../util/date-util";
 
 export default function PastBets({ data, onBetChange }) {
     const sortedByDate = useMemo(() => data.sort((a, b) => new Date(b.utcDate) - new Date(a.utcDate)), [data]);
@@ -10,10 +10,17 @@ export default function PastBets({ data, onBetChange }) {
         {sortedByDate?.map((m) => (
             <div key={m.id} className="card">
 
-                <div className="horizontal-container gap-05 secondary">
-                    <div>Gruppe {m.group} -</div>
-                    <div>{formatDate(m.deadline)}</div>
+                <div className="horizontal-container gap-05 space-between secondary">
+                    <div>
+                        <span>Gruppe {m.group} - </span>
+                        <span>{formatDate(m.deadline)}</span>
+                    </div>
+
+                    {(m.status === "LIVE") && <div className="horizontal-container secondary small end">
+                        zul. aktualisiert: {formatLastUpdated(m.lastUpdate)}
+                    </div>}
                 </div>
+
                 <div className="horizontal-container space-around vertical-center">
                     <MatchContender team={m.homeTeam} />
                     <span>{m.homeGoals ?? 0} : {m.awayGoals ?? 0}</span>

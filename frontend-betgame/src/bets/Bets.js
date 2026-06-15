@@ -24,7 +24,7 @@ export default function Bets() {
             fetchMatchBets()
         ])
             .then(([matches, bets]) => {
-                const betMap = Object.fromEntries((bets.map(b => [b.matchId, b])));
+                const betMap = Object.fromEntries((bets.map(b => [b.match.id, b])));
                 const enriched = matches.map(m => ({
                     ...m,
                     deadline: m.utcDate,

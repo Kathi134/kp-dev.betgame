@@ -21,7 +21,9 @@ data class MatchDto(
     val homeGoals: Int?,
     val awayGoals: Int?,
 
-    val duration: MatchDuration?
+    val duration: MatchDuration?,
+
+    val lastUpdate: Instant?
 )
 
 fun Match.toDto(): MatchDto =
@@ -39,5 +41,7 @@ fun Match.toDto(): MatchDto =
         homeGoals = this.homeGoals,
         awayGoals = this.awayGoals,
 
-        duration = this.winnerDuration
+        duration = this.winnerDuration,
+
+        lastUpdate = this.lastExternalUpdate
     )

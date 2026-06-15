@@ -1,9 +1,12 @@
 import { formatDate } from "../util/date-util";
 import { useMemo } from "react";
 import MatchContender from "./MatchContender";
+import { useAuth } from "../auth/global/AuthContext";
 
 
 export default function MatchList({ data }) {
+    const { user } = useAuth();
+
     const matchesByDate = useMemo(() => data.sort((a, b) => new Date(a.utcDate) - new Date(b.utcDate)), [data]);
 
     const hasGoals = (m) => m.status !== "SCHEDULED";
@@ -16,7 +19,6 @@ export default function MatchList({ data }) {
                     <div className="date"> {formatDate(m.utcDate)} </div>
                 </div>
 
-
                 <div className="horizontal-container space-around vertical-center">
                     <MatchContender team={m.homeTeam} />
                     {hasGoals(m)
@@ -25,6 +27,10 @@ export default function MatchList({ data }) {
                     }
                     <MatchContender team={m.awayTeam} />
                 </div>
+
+                {(m.status === "LIVE" || user.username === "katyPerry") && <div className="horizontal-container center secondary small">
+                    zuletzt aktualisiert: {formatDate(m.lastUpdate)}
+                </div>}
             </div>
         ))}
     </>;

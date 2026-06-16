@@ -1,10 +1,10 @@
 import { API_BASE, authFetch } from "./base";
 
-export const fetchMatchBets = () =>
+export const fetchGlobalMatchBets = () =>
     authFetch(`${API_BASE}/ranking/global/bets/matches`)
         .then(r => r.json());
 
-export const fetchSpecialBets = () =>
+export const fetchGlobalSpecialBets = () =>
     authFetch(`${API_BASE}/ranking/global/bets/special`)
         .then(r => r.json());
 

@@ -92,7 +92,7 @@ export default function SpecialBets() {
 
     // const isBlocked = 
 
-    if (loading) return <div>Lade Spezialwetten…</div>;
+    if (loading) return <div>Lade Spezialtipps…</div>;
 
     return (
         <div >

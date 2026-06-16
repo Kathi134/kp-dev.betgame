@@ -22,7 +22,7 @@ function stageToString(stage) {
 function betGroupKeyToString(key) {
     switch (key) {
         case "URGENT": return "Nächste Spiele"
-        case "SPECIAL": return "Spezialwetten"
+        case "SPECIAL": return "Spezialtipps"
         case "PAST": return "Vergangene Spiele"
         default:
             break;

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { fetchSpecialBets } from "../api/ranking";
+import { fetchGlobalSpecialBets } from "../api/ranking";
 import { specialBetGroupLabel, specialBetTypeLabel, stageToString } from "../util/enums";
 import { groupBySpecialBetGroupWithMultipleBets } from "../util/reformat-api-data";
 import { useAuth } from "../auth/global/AuthContext";
@@ -11,11 +11,11 @@ export default function AllSpecialBets() {
     const { user } = useAuth();
 
     useEffect(() => {
-        fetchSpecialBets()
+        fetchGlobalSpecialBets()
             .then(setDefinitions)
             .catch((err) => {
                 console.error(err);
-                setError("Fehler beim Laden der Spezialwetten");
+                setError("Fehler beim Laden der Spezialtipps");
             })
             .finally(() => setLoading(false));
     }, []);
@@ -55,7 +55,7 @@ export default function AllSpecialBets() {
     }, [grouped]);
 
 
-    if (loading) return <div>Lade Spezialwetten...</div>;
+    if (loading) return <div>Lade Spezialtipps...</div>;
     if (error) return <div className="warn">{error}</div>;
 
     return (

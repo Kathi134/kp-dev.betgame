@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { fetchMatchBets } from "../api/ranking";
+import { fetchGlobalMatchBets } from "../api/ranking";
 import MatchContender from "../results/MatchContender";
 import { useAuth } from "../auth/global/AuthContext";
 import { formatLastUpdated } from "../util/date-util";
@@ -13,7 +13,7 @@ export default function AllBets() {
     const matchesSorted = useMemo(() => matches.sort((a, b) => (new Date(b.match.utcDate) - new Date(a.match.utcDate))), [matches])
 
     useEffect(() => {
-        fetchMatchBets()
+        fetchGlobalMatchBets()
             .then(setMatches)
             .catch((err) => {
                 console.error(err);

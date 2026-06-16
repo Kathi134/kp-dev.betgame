@@ -12,7 +12,17 @@ export default function TimeSeries({ bets }) {
             const day = normalizeDate(bet.match.utcDate);
             const points = bet.awardedPoints || 0;
 
-            dailyMap.set(day, (dailyMap.get(day) || 0) + points);
+            if (!dailyMap.has(day)) {
+                dailyMap.set(day, {
+                    points: 0,
+                    matches: 0,
+                });
+            }
+
+            const entry = dailyMap.get(day);
+
+            entry.points += points;
+            entry.matches += 1;
         });
 
         const sortedDays = Array.from(dailyMap.keys()).sort(
@@ -30,7 +40,8 @@ export default function TimeSeries({ bets }) {
             const key = d.toISOString().split('T')[0];
             filled.push({
                 day: key,
-                dailyPoints: dailyMap.get(key) || 0,
+                dailyPoints: dailyMap.get(key)?.points || 0,
+                matches: dailyMap.get(key)?.matches || 0,
             });
         }
 
@@ -38,37 +49,71 @@ export default function TimeSeries({ bets }) {
 
         return filled.map(d => {
             cumulative += d.dailyPoints;
+
             return {
                 ...d,
                 cumulativePoints: cumulative,
+
+                pointsPerMatch:
+                    d.matches > 0
+                        ? d.dailyPoints / d.matches
+                        : null,
             };
         });
     }, [bets, todayStr]);
 
     return (
         <div className='card'>
-            Zeitliche Entwicklung deiner Punkte
+            <h3>Zeitliche Entwicklung deiner Punkte</h3>
 
             <div className='small top-margin line-chart-container'>
-                {/* simple dual-line visualization using MUI X Charts */}
                 <LineChart
                     margin={0}
                     height={250}
                     dataset={timeSeries}
-                    xAxis={[{ scaleType: 'band', dataKey: 'day', valueFormatter: formatDateWithoutTime, /*label: "Datum"*/ }]}
-                    // yAxis={[{ label: "Punkte" }]}
+                    xAxis={[
+                        {
+                            scaleType: 'band',
+                            dataKey: 'day',
+                            valueFormatter: formatDateWithoutTime
+                        }
+                    ]}
+                    yAxis={[
+                        {
+                            id: 'absolute',
+                            position: 'left',
+                            tickNumber: 5
+                        },
+                        {
+                            id: 'relative-per-day',
+                            min: 0,
+                            max: 3,
+                            position: 'right',
+                            valueFormatter: (v) => v.toFixed(1),
+                            tickMinStep: 0.5,
+                            tickNumber: 5
+                        }
+                    ]}
                     series={[
                         {
                             dataKey: 'cumulativePoints',
                             label: 'Gesamtpunkte',
                             color: "#CD7F32",
+                            yAxisId: 'absolute',
                         },
                         {
                             dataKey: 'dailyPoints',
-                            label: 'Punkte pro Tag',
-                            color: "#ffd700"
-                        }
-                    ]}
+                            label: 'Punkte / Tag',
+                            color: "#5a5a5a",
+                            yAxisId: 'absolute',
+                        },
+                        {
+                            dataKey: 'pointsPerMatch',
+                            color: "#ffd700",
+                            label: 'Ø-Punkte / Tag',
+                            yAxisId: 'relative-per-day',
+                        },
+                    ]} // TODO: Punkte pro Spiel am Tag
                 />
             </div>
         </div>

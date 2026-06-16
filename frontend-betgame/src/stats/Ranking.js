@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchGlobalRanking } from "../api/ranking";
 import { useAuth } from "../auth/global/AuthContext";
+import RankingStats from "./RankingStats";
 
 export default function Ranking() {
     const [data, setData] = useState([]);
@@ -52,6 +53,7 @@ export default function Ranking() {
                 </div>
             ))
             }
+            <RankingStats />
         </div >
     );
 }

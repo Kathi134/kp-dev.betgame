@@ -37,6 +37,10 @@ h2 {
 
 h3 {
     color: var(--primary-highlight-light);
+    font-size: medium;
+    font-weight: normal;
+    border-bottom: 1px solid var(--base-highlight);
+    padding-bottom: 0.3rem;
 }
 
 h3 {

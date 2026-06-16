@@ -17,7 +17,7 @@ export default function DistributionOfPoints({ bets }) {
 
     return (
         <div className="card">
-            Korrektheits-Verteilung deiner Tipps
+            <h3>Korrektheits-Verteilung deiner Tipps</h3>
             <div className='small top-margin'>
                 <PieChart
                     height={150}

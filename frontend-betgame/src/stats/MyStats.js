@@ -4,7 +4,7 @@ import DistributionOfPoints from './data-analysis/DistributionOfPoints';
 import TimeSeries from './data-analysis/TimeSeries';
 
 
-export default function AllStats() {
+export default function MyStats() {
     const [bets, setBets] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null);
@@ -39,6 +39,26 @@ export default function AllStats() {
         <div className='card'>
             Korrelation
             "Zeit zwischen Spielstart und Tippzeitpunkt"
+            zu
+            "erzielte Punkte"
+            <div className='secondary'>
+                Coming soon...
+            </div>
+        </div>
+
+        <div className='card'>
+            Korrelation
+            "Beteiligtes Land gehört zu Kontinent x"
+            zu
+            "erzielte Punkte"
+            <div className='secondary'>
+                Coming soon...
+            </div>
+        </div>
+
+        <div className='card'>
+            Korrelation
+            "Beteiligtes Land spielt seine 1.WM"
             zu
             "erzielte Punkte"
             <div className='secondary'>

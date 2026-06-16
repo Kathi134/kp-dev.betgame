@@ -4,7 +4,7 @@ import { useHeader } from "../global/HeaderContext";
 import Ranking from "./Ranking";
 import AllBets from "./AllBets";
 import "./stats.css"
-import AllStats from "./AllStats";
+import MyStats from "./MyStats";
 import AllSpecialBets from "./AllSpecialBets";
 
 export default function Stats() {
@@ -15,7 +15,7 @@ export default function Stats() {
     useEffect(() => {
         setHeader({
             title: "Daten & Tabelle",
-            values: ["Ranking", "Statistik", "Tippvergleich", "Vergleich Spezialwetten"],
+            values: ["Ranking", "Meine Statistik", "Tippvergleich", "Spezialtippvergleich"],
             activeValue: activeStage,
             onValueChange: setActiveStage
         });
@@ -24,9 +24,9 @@ export default function Stats() {
 
     switch (activeStage) {
         case "Ranking": return <div><Ranking /></div>
-        case "Statistik": return <div><AllStats /></div>
+        case "Meine Statistik": return <div><MyStats /></div>
         case "Tippvergleich": return <div><AllBets /></div>
-        case "Vergleich Spezialwetten": return <div><AllSpecialBets /></div>
+        case "Spezialtippvergleich": return <div><AllSpecialBets /></div>
         default: return <></>
     }
 }

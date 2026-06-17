@@ -40,7 +40,7 @@ class SyncMatchesService(
     }
 
     fun checkForFinalization() {
-        val fetchedMatchUpdatesForNonFinalizedMatches = matchRepository.findMatchByStatusAndIsFinalizedIsFalse(MatchStatus.FINISHED)
+        val fetchedMatchUpdatesForNonFinalizedMatches = matchRepository.findByStatusNotAndIsFinalizedFalse(MatchStatus.SCHEDULED)
             .map {
                 footballClient.fetchMatch(it.id)
             }

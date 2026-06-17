@@ -39,6 +39,6 @@ interface MatchRepository : JpaRepository<Match, Long> {
 """)
     fun findByTeamInMatch(@Param("teamId") teamId: Long): List<Match>
 
-    fun findMatchByStatusAndIsFinalizedIsFalse(status: MatchStatus): List<Match>
+    fun findByStatusNotAndIsFinalizedFalse(status: MatchStatus): List<Match>
 
 }

@@ -16,7 +16,8 @@ export default function UrgentBets({ data, onBetChange }) {
             return
         let input = e.target.value === "" ? "0" : e.target.value
         const value = field === "predictedDuration" ? input : Number(input);
-        onBetChange(m.id, { [field]: value });
+
+        onBetChange(m.id, { [field]: value.toString() });
     }, [onBetChange]);
 
 

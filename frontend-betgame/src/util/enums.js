@@ -74,4 +74,10 @@ const SPECIAL_BET_GROUP_ORDER = {
     OTEHR: 2
 };
 
-export { stageToString, STAGE_ORDER, specialBetTypeLabel, specialBetGroupLabel, SPECIAL_BET_GROUP_ORDER, betGroupKeyToString };
+const result = {
+    HOME: 0,
+    DRAW: 1,
+    AWAY: 2
+}
+
+export { stageToString, STAGE_ORDER, specialBetTypeLabel, specialBetGroupLabel, SPECIAL_BET_GROUP_ORDER, betGroupKeyToString, result };

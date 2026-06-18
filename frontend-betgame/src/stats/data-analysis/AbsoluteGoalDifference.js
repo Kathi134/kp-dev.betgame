@@ -69,6 +69,9 @@ export default function AbsoluteGoalDifference({ betsPerUser }) {
                 ]}
                 margin={{ left: -20, right: 15 }}
             />
+            <span className="small secondary justify">
+                Die absolute Fehlersumme beschreibt, um wie viele Tore in Summe über alle Spiele hinweg daneben getippt wurde. Eine niedrige Fehlersumme bedeutet Tipps, die in Toren näher am tatsächlichen Ergebnis liegen.
+            </span>
         </div>
     );
 }

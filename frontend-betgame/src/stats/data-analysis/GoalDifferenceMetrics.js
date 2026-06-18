@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { result } from "../../util/enums";
 import { BarChart } from "@mui/x-charts";
 import { palette } from "../colors";
 
@@ -14,9 +13,6 @@ export default function GoalDifferenceMetrics({ betsPerUser }) {
             let loserCount = 0;
 
             bets.forEach(({ bet, match }) => {
-                const homeError = match.homeGoals - bet.predictedHomeGoals;
-                const awayError = match.awayGoals - bet.predictedAwayGoals;
-
                 const actualHome = match.homeGoals;
                 const actualAway = match.awayGoals;
 
@@ -55,12 +51,7 @@ export default function GoalDifferenceMetrics({ betsPerUser }) {
             const winnerBias = winnerBiasSum / (winnerCount || 1);
             const loserBias = loserBiasSum / (loserCount || 1);
 
-            return {
-                username,
-
-                winnerBias,
-                loserBias,
-            };
+            return { username, winnerBias, loserBias, };
         });
     }, [betsPerUser]);
 
@@ -78,43 +69,43 @@ export default function GoalDifferenceMetrics({ betsPerUser }) {
         <div className="card">
             <h3>Durchschnittliche Abweichung gefallener Tore</h3>
 
-            <BarChart
-                dataset={chartData}
-                layout="horizontal"
-                height={450}
-                hideLegend={false}
-                yAxis={[
-                    {
-                        dataKey: "username",
-                        scaleType: "band",
-                        width: 120,
-                        tickLabelStyle: {
-                            fontSize: 11
+            <div className="top-margin">
+                <BarChart
+                    dataset={chartData}
+                    layout="horizontal"
+                    height={450}
+                    yAxis={[
+                        {
+                            dataKey: "username",
+                            scaleType: "band",
+                            width: 120,
+                            tickLabelStyle: { fontSize: 11 }
+                        }
+                    ]}
+                    xAxis={[
+                        {
+                            min: -1.5, max: 1.5, tickNumber: 7,
+                            label: 'Durchschnittliche Abweichung in Toren', labelStyle: { fontSize: 12 },
+                        }
+                    ]}
+                    series={[
+                        {
+                            dataKey: "loserBias",
+                            label: "Verlierertore",
+                            color: palette[1],
                         },
-                        colors: palette
-                    }
-                ]}
-                xAxis={[
-                    {
-                        min: -1.5, max: 1.5, tickNumber: 7,
-                        label: 'Durchschnittliche Abweichung in Toren', labelStyle: { fontSize: 12 },
-                    }
-                ]}
-                series={[
-
-                    {
-                        dataKey: "loserBias",
-                        label: "Abweichung Verlierer",
-                        color: palette[1],
-                    },
-                    {
-                        dataKey: "winnerBias",
-                        label: "Abweichung Gewinner",
-                        color: palette[0],
-                    },
-                ]}
-                margin={{ left: -20, right: 15 }}
-            />
+                        {
+                            dataKey: "winnerBias",
+                            label: "Gewinnertore",
+                            color: palette[0],
+                        },
+                    ]}
+                    margin={{ left: -20, right: 15 }}
+                />
+            </div>
+            <span className="small secondary justify ">
+                Die durchschnittliche Abweichung gefallener Tore beschreibt, um wie viele Tore durchschnittlich daneben getippt wird. Eine negative Quote bedeutet, dass die Mannschaften tendenziell unterschätzt werden, eine positive, dass überschätzt wird.
+            </span>
         </div>
     );
 }

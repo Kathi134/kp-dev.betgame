@@ -49,16 +49,16 @@ export default function AbsoluteGoalDifference({ betsPerUser }) {
                 hideLegend={true}
                 dataset={absoluteDifferences}
                 layout="horizontal"
-                height={400}
+                height={250}
                 yAxis={[{
                     dataKey: 'username',
                     scaleType: 'band',
-                    width: 120,
+                    width: 125,
                     colorMap: {
                         type: 'ordinal',
                         colors: absoluteDifferences.map(x => rankingColors.find(c => c.username === x.username)?.color)
                     }, tickLabelStyle: {
-                        fontSize: 11,
+                        fontSize: 12,
                     },
                 }]}
                 series={[

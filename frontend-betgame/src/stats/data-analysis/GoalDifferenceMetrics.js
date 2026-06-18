@@ -57,7 +57,7 @@ export default function GoalDifferenceMetrics({ betsPerUser }) {
 
     const chartData = useMemo(() => {
         return userMetrics
-            .sort((a, b) => a.winnerBias - b.winnerBias)
+            .sort((a, b) => (Math.abs(a.winnerBias) + Math.abs(a.loserBias)) - (Math.abs(b.winnerBias) + Math.abs(b.loserBias)))
             .map(u => ({
                 username: u.username,
                 winnerBias: u.winnerBias,
@@ -73,19 +73,18 @@ export default function GoalDifferenceMetrics({ betsPerUser }) {
                 <BarChart
                     dataset={chartData}
                     layout="horizontal"
-                    height={450}
+                    height={250}
                     yAxis={[
                         {
                             dataKey: "username",
                             scaleType: "band",
-                            width: 120,
-                            tickLabelStyle: { fontSize: 11 }
+                            width: 125,
+                            tickLabelStyle: { fontSize: 12 }
                         }
                     ]}
                     xAxis={[
                         {
                             min: -1.5, max: 1.5, tickNumber: 7,
-                            label: 'Durchschnittliche Abweichung in Toren', labelStyle: { fontSize: 12 },
                         }
                     ]}
                     series={[

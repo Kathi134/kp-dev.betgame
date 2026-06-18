@@ -8,7 +8,6 @@ export default function RankingTimeSeries({ globalBets }) {
         if (!globalBets?.length) return [];
 
         const userDayMap = new Map();
-
         const allUsers = new Map(); // userId -> username
 
         globalBets.forEach(entry => {
@@ -26,11 +25,7 @@ export default function RankingTimeSeries({ globalBets }) {
                 }
 
                 const perUser = userDayMap.get(day);
-
-                perUser.set(
-                    userId,
-                    (perUser.get(userId) || 0) + points
-                );
+                perUser.set(userId, (perUser.get(userId) || 0) + points);
             });
         });
 
@@ -50,9 +45,7 @@ export default function RankingTimeSeries({ globalBets }) {
 
             for (const [userId] of allUsers) {
                 const daily = perUser.get(userId) || 0;
-
                 cumulative[userId] += daily;
-
                 row[userId] = cumulative[userId];
             }
 
@@ -63,17 +56,14 @@ export default function RankingTimeSeries({ globalBets }) {
     }, [globalBets]);
 
     const sortedUsers = useMemo(() => {
-        if (!userTimeSeries?.data?.length) return [];
+        if (!userTimeSeries?.data?.length)
+            return [];
 
-        const lastRow =
-            userTimeSeries.data[userTimeSeries.data.length - 1];
+        const lastRow = userTimeSeries.data[userTimeSeries.data.length - 1];
 
         const entries = Object.entries(lastRow)
             .filter(([key]) => key !== 'day')
-            .map(([userId, value]) => ({
-                userId,
-                value,
-            }))
+            .map(([userId, value]) => ({ userId, value, }))
             .sort((a, b) => b.value - a.value);
 
         return entries.map(e => e.userId);
@@ -128,7 +118,8 @@ export default function RankingTimeSeries({ globalBets }) {
                     sx={{
                         '& .MuiChartsLegend-root': {
                             paddingLeft: "2rem",
-                            justifyContent: "center"
+                            justifyContent: "center",
+                            rowGap: "0.25rem",
                         },
                     }}
 
@@ -136,5 +127,4 @@ export default function RankingTimeSeries({ globalBets }) {
             </div>
         </div>
     )
-        ;
 }

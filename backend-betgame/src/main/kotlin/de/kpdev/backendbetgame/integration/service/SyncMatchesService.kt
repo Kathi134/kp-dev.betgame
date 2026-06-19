@@ -83,15 +83,15 @@ class SyncMatchesService(
             if (match == null) {
                 matchRepository.save(dto.toEntity(competition, homeTeam, awayTeam))
             } else {
-                if (dto.status == MatchStatus.FINISHED.name) {
-                    finalizeMatch(match)
-                }
                 match.updateFrom(dto)
                 if(match.homeTeam == null)
                     match.homeTeam = homeTeam
                 if(match.awayTeam == null)
                     match.awayTeam = awayTeam
                 matchRepository.save(match)
+                if (dto.status == MatchStatus.FINISHED.name) {
+                    finalizeMatch(match)
+                }
             }
         }
     }

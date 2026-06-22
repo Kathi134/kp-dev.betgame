@@ -18,10 +18,17 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
     }, []);
 
-    const login = useCallback((tokens) => {
+    const login = useCallback(async (tokens) => {
         tokenStore.setTokens(tokens);
-        setIsAuthenticated(true);
-        navigate("/", { replace: true });
+        try {
+            const user = await fetchSelf();
+            setUser(user);
+            setIsAuthenticated(true);
+            navigate("/", { replace: true });
+        } catch (err) {
+            console.error("Failed to fetch user after login:", err);
+            setUser(null);
+        }
     }, [navigate]);
 
     const handleAuthFailure = useCallback(() => {

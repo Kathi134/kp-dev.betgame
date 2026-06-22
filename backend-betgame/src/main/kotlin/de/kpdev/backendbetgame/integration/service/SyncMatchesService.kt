@@ -88,10 +88,10 @@ class SyncMatchesService(
                     match.homeTeam = homeTeam
                 if(match.awayTeam == null)
                     match.awayTeam = awayTeam
-                matchRepository.save(match)
                 if (dto.status == MatchStatus.FINISHED.name) {
                     finalizeMatch(match)
                 }
+                matchRepository.save(match)
             }
         }
     }

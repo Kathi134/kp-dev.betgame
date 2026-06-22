@@ -10,6 +10,7 @@ data class TeamDto(
     val tla: String?,
     val crestUrl: String?,
     val group: Char?,
+    val standing: GroupStandingDto?
 )
 
 fun Team.toDto(group: Char? = null): TeamDto =
@@ -21,3 +22,16 @@ fun Team.toDto(group: Char? = null): TeamDto =
         crestUrl = this.crestUrl,
         group = group
     )
+
+data class GroupStandingDto(
+    val position: Int,
+     val playedGames : Int,
+     val form : Int,
+     val won : Int,
+     val draw : Int,
+     val lost : Int,
+     val points : Int,
+     val goalsFor : Int,
+     val goalsAgainst : Int,
+     val goalDifference : Int
+)

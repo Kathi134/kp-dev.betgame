@@ -38,7 +38,7 @@ export default function Matches() {
     useEffect(() => {
         setHeader({
             title: "Spiele & Ergebnisse",
-            values: Object.keys(grouped),
+            values: ["Tabelle", ...Object.keys(grouped)],
             activeValue: activeStage,
             onValueChange: setActiveStage,
             displayValue: stageToString

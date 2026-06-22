@@ -15,7 +15,7 @@ function stageToString(stage) {
         case "FINAL":
             return "Finale";
         default:
-            break;
+            return stage;
     }
 }
 

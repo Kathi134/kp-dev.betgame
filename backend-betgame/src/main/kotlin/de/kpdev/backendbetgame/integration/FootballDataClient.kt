@@ -72,6 +72,16 @@ class FootballDataClient(
             .block()!!
     }
 
+    fun fetchStandings(): List<StandingResponse> {
+        return webClient.get()
+            .uri("/v4/competitions/WC/standings")
+            .retrieve()
+            .bodyToMono(StandingListResponse::class.java)
+            .block()
+            ?.standings
+            ?: emptyList()
+    }
+
 
 }
 

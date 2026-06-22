@@ -28,7 +28,7 @@ export default function MatchList({ data }) {
                     <MatchContender team={m.awayTeam} />
                 </div>
 
-                {(m.status === "LIVE" || user.username === "katyPerry") && <div className="horizontal-container center secondary small">
+                {(m.status === "LIVE" || user.roles.includes("DEBUG")) && <div className="horizontal-container center secondary small">
                     zul. aktualisiert: {formatLastUpdated(m.lastUpdate)}
                 </div>}
             </div>

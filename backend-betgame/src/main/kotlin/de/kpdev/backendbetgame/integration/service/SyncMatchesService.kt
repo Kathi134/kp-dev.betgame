@@ -8,6 +8,7 @@ import de.kpdev.backendbetgame.model.Match
 import de.kpdev.backendbetgame.model.MatchStatus
 import de.kpdev.backendbetgame.repository.CompetitionRepository
 import de.kpdev.backendbetgame.repository.MatchRepository
+import de.kpdev.backendbetgame.repository.StandingRepository
 import de.kpdev.backendbetgame.repository.TeamRepository
 import de.kpdev.backendbetgame.service.scoring.ScoringEngine
 import org.slf4j.Logger
@@ -21,6 +22,7 @@ class SyncMatchesService(
     private val teamRepository: TeamRepository,
     private val competitionRepository: CompetitionRepository,
     private val scoringEngine: ScoringEngine,
+    private val syncStandingService: SyncStandingService,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(SyncMatchesService::class.java)
 
@@ -50,21 +52,6 @@ class SyncMatchesService(
         }
         executeSyncUpdate(fetchedMatchUpdatesForNonFinalizedMatches)
     }
-
-//    fun syncFinishedMatchesToScore() {
-//        val finishedMatchesWithoutScoring = footballClient.fetchFinishedMatches()
-//            .filter {
-//                it.score?.fullTime?.away != null && it.score.fullTime.home != null
-//            }
-//            .filter {
-//                !matchRepository.findById(it.id).orElse(null).isFinalized
-//            }
-//        if(finishedMatchesWithoutScoring.isEmpty()) {
-//            logger.info("No finished matches without scored points.")
-//            return
-//        }
-//        executeSyncUpdate(finishedMatchesWithoutScoring)
-//    }
 
     private fun executeSyncUpdate(matches: List<MatchResponse>) {
         val competition = competitionRepository.findByActiveTrue()
@@ -97,9 +84,8 @@ class SyncMatchesService(
     }
 
     fun safetySync() {
-        val external = footballClient.fetchWorldCupMatches()
-
-        external.forEach { dto ->
+        val matchResponse = footballClient.fetchWorldCupMatches()
+        matchResponse.forEach { dto ->
             val match = matchRepository.findById(dto.id).orElse(null)
                 ?: return@forEach
 
@@ -112,6 +98,8 @@ class SyncMatchesService(
                 finalizeMatch(match)
             }
         }
+
+        syncStandingService.syncStandings()
     }
 
     private fun finalizeMatch(match: Match) {

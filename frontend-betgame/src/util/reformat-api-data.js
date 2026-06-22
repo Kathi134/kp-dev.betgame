@@ -67,4 +67,16 @@ function groupBySpecialBetGroupWithMultipleBets(definitions) {
     );
 }
 
-export { groupByGroup, groupByStage, groupBySpecialBetGroup, groupByDate, groupBySpecialBetGroupWithMultipleBets };
+function groupStandingsByGroupAndSort(data) {
+    const grouped = data.reduce((acc, item) => {
+        if (!acc[item.group]) acc[item.group] = [];
+        acc[item.group].push(item);
+        return acc;
+    }, {});
+    Object.keys(grouped).forEach((groupKey) => {
+        grouped[groupKey].sort((a, b) => a.position - b.position);
+    });
+    return Object.entries(grouped);
+}
+
+export { groupByGroup, groupByStage, groupBySpecialBetGroup, groupByDate, groupBySpecialBetGroupWithMultipleBets, groupStandingsByGroupAndSort };

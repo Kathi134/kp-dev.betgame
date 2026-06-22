@@ -6,6 +6,7 @@ import './matches.css'
 import MatchList from "./MatchList";
 import { stageToString } from "../util/enums";
 import { useHeader } from "../global/HeaderContext";
+import GroupStandings from "./GroupStandings";
 
 
 export default function Matches() {
@@ -38,30 +39,30 @@ export default function Matches() {
     useEffect(() => {
         setHeader({
             title: "Spiele & Ergebnisse",
-            values: Object.keys(grouped),
+            values: ["Tabelle", ...Object.keys(grouped)],
             activeValue: activeStage,
             onValueChange: setActiveStage,
             displayValue: stageToString
         });
     }, [activeStage, grouped, setHeader, setActiveStage]);
 
-
     return (
         <div>
             {loading
                 ? <div>Lade Spiele…</div>
                 : <>
-                    {activeStage && grouped[activeStage] !== undefined &&
-                        activeStage !== "GROUP_STAGE"
-                        ? <MatchList data={grouped[activeStage]} />
-                        : <>
-                            {Object.entries(groupByGroup(grouped[activeStage])).map(([group, matches]) => (
-                                <div key={group} className="bottom-margin">
-                                    <h2 className="group-title">Gruppe {group}</h2>
-                                    <MatchList data={matches} />
-                                </div>
-                            ))}
-                        </>
+                    {activeStage === "Tabelle"
+                        ? <GroupStandings />
+                        : activeStage && grouped[activeStage] !== undefined && activeStage !== "GROUP_STAGE"
+                            ? <MatchList data={grouped[activeStage]} />
+                            : <>
+                                {Object.entries(groupByGroup(grouped[activeStage])).map(([group, matches]) => (
+                                    <div key={group} className="bottom-margin">
+                                        <h2 className="group-title">Gruppe {group}</h2>
+                                        <MatchList data={matches} />
+                                    </div>
+                                ))}
+                            </>
                     }
                 </>
             }

@@ -53,3 +53,39 @@
         opacity: 1;
     }
 }
+
+
+
+.table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    /* smooth scrolling on iOS */
+}
+
+.standings-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.standings-table tr {
+    padding: 0.4rem;
+    border-bottom: 1px solid var(--base-highlight-secondary);
+    text-align: center;
+}
+
+.standings-table th,
+.standings-table td {
+    padding: 0.4rem;
+    border-bottom: none;
+}
+
+.team-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: left;
+    width: 7rem;
+}

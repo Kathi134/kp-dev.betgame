@@ -21,10 +21,10 @@ class StartupSync(
 
     @EventListener(ApplicationReadyEvent::class)
     fun init() {
-        competitionSyncService.syncCompetition()
-        teamSyncService.syncTeams()
-        matchesSyncService.syncMatches()
-        standingSyncService.syncStandings()
+//        competitionSyncService.syncCompetition()
+//        teamSyncService.syncTeams()
+//        matchesSyncService.syncMatches()
+//        standingSyncService.syncStandings()
         logger.info("startup data integration completed.")
     }
 }

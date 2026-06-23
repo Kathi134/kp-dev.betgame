@@ -58,7 +58,7 @@ export default function BetRegressionChart({ bets }) {
     return (
         <div className='card'>
             <span className="secondary justify">
-                Korrelations-Koeffizient r(Δt, erhaltene Punkte) = <code>{coeff.toFixed(3)}</code>
+                Korrelations-Koeffizient r(Δt, Punkte) = <code>{coeff.toFixed(3)}</code>
             </span>
 
             <Stack sx={{ width: '100%' }}>

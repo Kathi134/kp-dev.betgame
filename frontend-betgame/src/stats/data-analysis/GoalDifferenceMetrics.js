@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { BarChart } from "@mui/x-charts";
+import { BarChart, ChartsReferenceLine } from "@mui/x-charts";
 import { palette } from "../colors";
 
 export default function GoalDifferenceMetrics({ betsPerUser }) {
@@ -100,7 +100,9 @@ export default function GoalDifferenceMetrics({ betsPerUser }) {
                         },
                     ]}
                     margin={{ left: -20, right: 15, top: 5 }}
-                />
+                >
+                    <ChartsReferenceLine x={0} lineStyle={{ stroke: "grey", strokeDasharray: "6 4", }} />
+                </BarChart>
             </div>
             <span className="small secondary justify ">
                 Die durchschnittliche Abweichung gefallener Tore beschreibt, um wie viele Tore durchschnittlich daneben getippt wird. Eine negative Quote bedeutet, dass die Mannschaften tendenziell unterschätzt werden, eine positive, dass überschätzt wird.

@@ -139,9 +139,18 @@
   margin-left: 0.5rem;
 }
 
+.right-margin {
+  margin-right: 0.5rem;
+}
+
 .no-bottom-margin {
   margin-bottom: 0;
 }
+
+.no-padding {
+  padding: 0;
+}
+
 
 .bottom {
   position: absolute;
@@ -171,4 +180,12 @@
 
 .below-top {
   padding-top: 5rem;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.float-right {
+  float: right;
 }

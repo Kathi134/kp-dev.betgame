@@ -1,8 +1,8 @@
-import { BarChart } from "@mui/x-charts"
+import { BarChart, ChartsReferenceLine } from "@mui/x-charts"
 import { useMemo, useState } from "react"
 import { palette } from "../../colors"
 
-export default function DebutantCorrelation({ bets }) {
+export default function DebutantCorrelation({ bets, globalAvg }) {
     const [showDebutants, setShowDebutants] = useState(false)
 
     const { data, debutants } = useMemo(() => {
@@ -75,23 +75,27 @@ export default function DebutantCorrelation({ bets }) {
                 }]}
                 series={[{ dataKey: 'value' }]}
                 margin={{ left: 0, right: 5, bottom: 10 }}
-            />
+            >
+                <ChartsReferenceLine
+                    y={globalAvg}
+                    label={`globale Ø-Punkte: ${globalAvg.toFixed(2)}`}
+                    lineStyle={{
+                        stroke: "grey",
+                        strokeDasharray: "6 4",
+                    }}
+                    labelStyle={{
+                        fill: "grey",
+                        fontSize: 11,
+                    }}
+                />
+            </BarChart>
 
             <div className="vertical-container secondary justify gap-1">
                 <span className="secondary justify">
                     Die Grafik zeigt die durchschnittlich erzielten Punkte in Abhängigkeit davon, ob mindestens ein Team gespielt hat, das zum ersten Mal bei einer WM dabei ist.
                 </span>
 
-                <button type="button" className="secondary-color" onClick={() => setShowDebutants(v => !v)}
-                    style={{
-                        background: "none",
-                        border: "none",
-                        padding: 0,
-                        cursor: "pointer",
-                        textAlign: "left",
-                        font: "inherit"
-                    }}
-                >
+                <button type="button" className="secondary-color toggle-details-btn" onClick={() => setShowDebutants(v => !v)} >
                     Debüt-Teams {showDebutants ? "▲" : "▼"}
                 </button>
 

@@ -80,4 +80,23 @@ const result = {
     AWAY: 2
 }
 
-export { stageToString, STAGE_ORDER, specialBetTypeLabel, specialBetGroupLabel, SPECIAL_BET_GROUP_ORDER, betGroupKeyToString, result };
+const continentToString = {
+    "SOUTH_AMERICA": "Südamerika",
+    "NORTH_AMERICA": "Nordamerika",
+    "AFRICA": "Afrika",
+    "ASIA": "Asien",
+    "EUROPE": "Europa",
+    "OCEANIA": "Ozeanien"
+}
+
+const continentToShortString = {
+    "SOUTH_AMERICA": "SA",
+    "NORTH_AMERICA": "NA",
+    "AFRICA": "Afrika",
+    "ASIA": "Asien",
+    "EUROPE": "EU",
+    "OCEANIA": "Ozeanien"
+}
+
+
+export { stageToString, STAGE_ORDER, specialBetTypeLabel, specialBetGroupLabel, SPECIAL_BET_GROUP_ORDER, betGroupKeyToString, result, continentToString, continentToShortString };

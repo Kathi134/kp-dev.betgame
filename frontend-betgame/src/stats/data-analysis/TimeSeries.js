@@ -62,11 +62,12 @@ export default function TimeSeries({ bets }) {
         });
     }, [bets, todayStr]);
 
-    return (
-        <div className='card'>
-            <h3>Zeitliche Entwicklung deiner Punkte</h3>
+    return (<>
+        <h2>Zeitliche Entwicklung deiner Punkte</h2>
 
-            <div className='small top-margin line-chart-container'>
+        <div className='card'>
+
+            <div className='small line-chart-container'>
                 <LineChart
                     margin={0}
                     height={250}
@@ -75,7 +76,7 @@ export default function TimeSeries({ bets }) {
                         {
                             scaleType: 'band',
                             dataKey: 'day',
-                            valueFormatter: formatDateWithoutTime
+                            valueFormatter: formatDateWithoutTime,
                         }
                     ]}
                     yAxis={[
@@ -117,5 +118,7 @@ export default function TimeSeries({ bets }) {
                 />
             </div>
         </div>
+    </>
+
     );
 }

@@ -65,9 +65,9 @@ export default function GoalDifferenceMetrics({ betsPerUser }) {
             }));
     }, [userMetrics]);
 
-    return (
+    return (<>
+        <h2>Durchschnittliche Abweichung gefallener Tore</h2>
         <div className="card">
-            <h3>Durchschnittliche Abweichung gefallener Tore</h3>
 
             <div className="top-margin">
                 <BarChart
@@ -99,12 +99,13 @@ export default function GoalDifferenceMetrics({ betsPerUser }) {
                             color: palette[0],
                         },
                     ]}
-                    margin={{ left: -20, right: 15 }}
+                    margin={{ left: -20, right: 15, top: 5 }}
                 />
             </div>
             <span className="small secondary justify ">
                 Die durchschnittliche Abweichung gefallener Tore beschreibt, um wie viele Tore durchschnittlich daneben getippt wird. Eine negative Quote bedeutet, dass die Mannschaften tendenziell unterschätzt werden, eine positive, dass überschätzt wird.
             </span>
         </div>
+    </>
     );
 }

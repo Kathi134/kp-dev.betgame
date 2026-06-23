@@ -15,17 +15,18 @@ export default function DistributionOfPoints({ bets }) {
         ];
     }, [bets])
 
-    return (
+    return (<>
+        <h2>Korrektheits-Verteilung deiner Tipps</h2>
         <div className="card">
-            <h3>Korrektheits-Verteilung deiner Tipps</h3>
             <div className='small top-margin'>
                 <PieChart
                     height={150}
                     width={150}
                     series={[{ data, arcLabel: 'value' }]}
-                    margin={{ right: 5 }}
+                    margin={{ right: 5, top: 0 }}
                 />
             </div>
         </div>
+    </>
     )
 }

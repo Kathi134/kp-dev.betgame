@@ -97,12 +97,11 @@ export default function RankingTimeSeries({ globalBets }) {
         return baseSeries
     }, [userTimeSeries.users, sortedUsers]);
 
-    return (
+    return (<>
+        <h2>Zeitliche Entwicklung des Rankings</h2>
         <div className="card">
 
-            <h3>Zeitliche Entwicklung des Rankings</h3>
-
-            <div className='small top-margin line-chart-container-2'>
+            <div className='small line-chart-container-2'>
                 <LineChart
                     height={450}
                     dataset={userTimeSeries.data}
@@ -126,5 +125,6 @@ export default function RankingTimeSeries({ globalBets }) {
                 />
             </div>
         </div>
+    </>
     )
 }

@@ -29,6 +29,8 @@ export default function MyStats() {
         <DistributionOfPoints bets={bets} />
         <TimeSeries bets={bets} />
 
+        <h2>Korrelationskoeffizienten</h2>
+
         <div className='card'>
             Korrelation "Land x spielt" zu "erzielte Punkte"
             <div className='secondary'>

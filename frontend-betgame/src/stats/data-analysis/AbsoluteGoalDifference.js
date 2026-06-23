@@ -42,9 +42,10 @@ export default function AbsoluteGoalDifference({ betsPerUser }) {
             .map((entry, index) => ({ username: entry.username, color: palette[index % palette.length] }));
     }, [betsPerUser]);
 
-    return (
+    return (<>
+        <h2>Absolute Differenz gefallener Tore</h2>
+
         <div className="card">
-            <h3>Absolute Differenz gefallener Tore</h3>
             <BarChart
                 hideLegend={true}
                 dataset={absoluteDifferences}
@@ -67,11 +68,12 @@ export default function AbsoluteGoalDifference({ betsPerUser }) {
                         label: 'Absolute Fehlersumme',
                     },
                 ]}
-                margin={{ left: -20, right: 15 }}
+                margin={{ left: -20, right: 15, top: 5 }}
             />
             <span className="small secondary justify">
                 Die absolute Fehlersumme beschreibt, um wie viele Tore in Summe über alle Spiele hinweg daneben getippt wurde. Eine niedrige Fehlersumme bedeutet Tipps, die in Toren näher am tatsächlichen Ergebnis liegen.
             </span>
         </div>
+    </>
     );
 }

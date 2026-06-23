@@ -2,6 +2,7 @@ package de.kpdev.backendbetgame.dto
 
 import de.kpdev.backendbetgame.model.MatchBet
 import de.kpdev.backendbetgame.model.MatchDuration
+import java.time.Instant
 import java.util.UUID
 
 
@@ -15,7 +16,9 @@ data class MatchBetDto(
     val predictedAwayGoals: Int,
     val predictedDuration: MatchDuration,
 
-    val awardedPoints: Int?
+    val awardedPoints: Int?,
+
+    val lastUpdate: Instant
 )
 
 fun MatchBet.toDto(): MatchBetDto =
@@ -29,5 +32,7 @@ fun MatchBet.toDto(): MatchBetDto =
         predictedAwayGoals = this.predictedAwayGoals,
         predictedDuration = this.predictedDuration,
 
-        awardedPoints = this.awardedPoints
+        awardedPoints = this.awardedPoints,
+
+        lastUpdate = this.lastUpdate
     )

@@ -8,7 +8,6 @@ import de.kpdev.backendbetgame.model.Match
 import de.kpdev.backendbetgame.model.MatchStatus
 import de.kpdev.backendbetgame.repository.CompetitionRepository
 import de.kpdev.backendbetgame.repository.MatchRepository
-import de.kpdev.backendbetgame.repository.StandingRepository
 import de.kpdev.backendbetgame.repository.TeamRepository
 import de.kpdev.backendbetgame.service.scoring.ScoringEngine
 import org.slf4j.Logger
@@ -35,17 +34,16 @@ class SyncMatchesService(
         val liveMatches = footballClient.fetchLiveMatches()
         if(liveMatches.isEmpty()) {
             logger.info("No live matches to sync.")
-            checkForFinalization()
-            return
+        } else {
+            executeSyncUpdate(liveMatches)
         }
-        executeSyncUpdate(liveMatches)
+        checkForFinalization(liveMatches)
     }
 
-    fun checkForFinalization() {
+    fun checkForFinalization(except: List<MatchResponse>) {
         val fetchedMatchUpdatesForNonFinalizedMatches = matchRepository.findByStatusNotAndIsFinalizedFalse(MatchStatus.SCHEDULED)
-            .map {
-                footballClient.fetchMatch(it.id)
-            }
+            .filter { !except.any { e -> e.id == it.id } }
+            .map { footballClient.fetchMatch(it.id) }
         if(fetchedMatchUpdatesForNonFinalizedMatches.isEmpty()) {
             logger.info("No unfinalized matches to apply scoring for.")
             return

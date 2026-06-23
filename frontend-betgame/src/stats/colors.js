@@ -8,4 +8,6 @@ export const palette = [
     "#e6c1db", // muted red
     "#add4d3", // muted orange
     "#c2c796", // muted green
+
+    "#5a5a5a"
 ];

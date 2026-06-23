@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { formatDateWithoutTime, normalizeDate } from "../../util/date-util";
 import { LineChart } from "@mui/x-charts";
+import { palette } from "../colors";
 
 export default function TimeSeries({ bets }) {
     const todayStr = new Date().toISOString().split('T')[0];
@@ -99,22 +100,22 @@ export default function TimeSeries({ bets }) {
                         {
                             dataKey: 'cumulativePoints',
                             label: 'Gesamtpunkte',
-                            color: "#CD7F32",
+                            color: palette[2],
                             yAxisId: 'absolute',
                         },
                         {
                             dataKey: 'dailyPoints',
                             label: 'Punkte / Tag',
-                            color: "#5a5a5a",
+                            color: palette[7],
                             yAxisId: 'absolute',
                         },
                         {
                             dataKey: 'pointsPerMatch',
-                            color: "#ffd700",
+                            color: palette[0],
                             label: 'Ø-Punkte / Tag',
                             yAxisId: 'relative-per-day',
                         },
-                    ]} // TODO: Punkte pro Spiel am Tag
+                    ]}
                 />
             </div>
         </div>

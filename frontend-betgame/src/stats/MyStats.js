@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react';
 import { fetchMatchBets } from '../api/bet';
 import DistributionOfPoints from './data-analysis/DistributionOfPoints';
 import TimeSeries from './data-analysis/TimeSeries';
+import BetTimeCorrelation from './data-analysis/correlations/BetTimeCorrelation';
+import DebutantCorrelation from './data-analysis/correlations/DebutantCorrelation';
+import ContinentCorrelation from './data-analysis/correlations/ContinentCorrelation';
+import CountryCorrelation from './data-analysis/correlations/CountryCorrelation';
 
 
 export default function MyStats() {
@@ -31,6 +35,11 @@ export default function MyStats() {
 
         <h2>Korrelationskoeffizienten</h2>
 
+        <DebutantCorrelation bets={bets} />
+        <ContinentCorrelation bets={bets} />
+        {/* <CountryCorrelation bets={bets} /> */}
+        {/* <BetTimeCorrelation bets={bets} /> */}
+
         <div className='card'>
             Korrelation "Land x spielt" zu "erzielte Punkte"
             <div className='secondary'>
@@ -58,15 +67,6 @@ export default function MyStats() {
             </div>
         </div>
 
-        <div className='card'>
-            Korrelation
-            "Beteiligtes Land spielt seine 1.WM"
-            zu
-            "erzielte Punkte"
-            <div className='secondary'>
-                Coming soon...
-            </div>
-        </div>
 
     </div>
 }

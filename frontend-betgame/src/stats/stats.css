@@ -33,3 +33,11 @@
 .negative-top-margin {
     margin-top: -1rem;
 }
+
+.debutant-description-container {
+    display: flex;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}

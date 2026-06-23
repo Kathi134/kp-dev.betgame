@@ -1,5 +1,6 @@
 package de.kpdev.backendbetgame.dto
 
+import de.kpdev.backendbetgame.model.Continent
 import de.kpdev.backendbetgame.model.Team
 import java.util.*
 
@@ -10,6 +11,8 @@ data class TeamDto(
     val tla: String?,
     val crestUrl: String?,
     val group: Char?,
+    val continent: Continent?,
+    val isFirstWorldCup: Boolean,
 )
 
 fun Team.toDto(group: Char? = null): TeamDto =
@@ -19,6 +22,8 @@ fun Team.toDto(group: Char? = null): TeamDto =
         shortName = this.shortName,
         tla = this.tla,
         crestUrl = this.crestUrl,
-        group = group
+        group = group,
+        continent = this.continent,
+        isFirstWorldCup = this.isFirstWorldCup,
     )
 

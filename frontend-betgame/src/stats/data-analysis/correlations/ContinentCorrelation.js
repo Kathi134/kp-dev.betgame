@@ -86,14 +86,7 @@ export default function ContinentCorrelation({ bets, globalAvg }) {
                     label: "Ø-Punkte",
                     width: 50,
                 }]}
-                slotProps={{
-                    axisLabel: {
-                        style: {
-                            fill: "grey",
-                            fontSize: 12
-                        },
-                    },
-                }}
+                slotProps={{ axisLabel: { style: { fontSize: 12 }, }, }}
                 xAxis={[{
                     height: 80,
                     scaleType: 'band',

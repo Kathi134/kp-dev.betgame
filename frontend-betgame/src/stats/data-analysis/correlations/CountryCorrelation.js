@@ -121,7 +121,7 @@ export default function CountryCorrelation({ bets }) {
                         data: visibleData.map(x => x.coefficient)
                     }
                 ]}
-                margin={{ left: 0, bottom: 0, right: 15 }}
+                margin={{ left: 0, bottom: 10, right: 15 }}
             >
                 <ChartsReferenceLine x={0} lineStyle={{ stroke: "grey", strokeDasharray: "6 4", }} />
             </BarChart>

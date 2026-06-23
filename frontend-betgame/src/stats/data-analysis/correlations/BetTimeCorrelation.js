@@ -75,15 +75,8 @@ export default function BetRegressionChart({ bets }) {
                             color: palette[1]
                         },
                     ]}
-                    slotProps={{
-                        axisLabel: {
-                            style: {
-                                fill: "grey",
-                                fontSize: 12
-                            },
-                        },
-                    }}
-                    margin={{ left: 0, bottom: 10, right: 15 }}
+                    slotProps={{ axisLabel: { style: { fontSize: 12 }, }, }}
+                    margin={{ left: 0, bottom: 15, right: 15 }}
                 >
                     <RegressionLine seriesId="bets" color={palette[0]} />
                 </ScatterChart>

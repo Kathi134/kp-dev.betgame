@@ -99,7 +99,7 @@ export default function GoalDifferenceMetrics({ betsPerUser }) {
                             color: palette[0],
                         },
                     ]}
-                    margin={{ left: -20, right: 15, top: 5 }}
+                    margin={{ left: -20, right: 15, top: 5, bottom: 10 }}
                 >
                     <ChartsReferenceLine x={0} lineStyle={{ stroke: "grey", strokeDasharray: "6 4", }} />
                 </BarChart>

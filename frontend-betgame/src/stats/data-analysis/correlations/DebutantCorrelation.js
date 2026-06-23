@@ -59,11 +59,7 @@ export default function DebutantCorrelation({ bets, globalAvg }) {
                 height={200}
                 dataset={data}
                 yAxis={[{ label: "Ø-Punkte", width: 50 }]}
-                slotProps={{
-                    axisLabel: {
-                        style: { fill: "grey", fontSize: 12 }
-                    }
-                }}
+                slotProps={{ axisLabel: { style: { fontSize: 12 } } }}
                 xAxis={[{
                     scaleType: 'band',
                     dataKey: 'label',

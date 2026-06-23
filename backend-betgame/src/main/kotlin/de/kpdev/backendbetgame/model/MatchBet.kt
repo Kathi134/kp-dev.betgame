@@ -1,6 +1,8 @@
 package de.kpdev.backendbetgame.model
 
 import jakarta.persistence.*
+import org.hibernate.annotations.ColumnDefault
+import java.time.Instant
 
 @Entity
 class MatchBet(
@@ -21,5 +23,8 @@ class MatchBet(
     @Enumerated(EnumType.STRING)
     var predictedDuration: MatchDuration = MatchDuration.REGULAR,
 
-    var awardedPoints: Int? = null
+    var awardedPoints: Int? = null,
+
+    @ColumnDefault("'2026-06-11 18:00:00.000000 +00:00'")
+    var lastUpdate: Instant = Instant.now(),
 )

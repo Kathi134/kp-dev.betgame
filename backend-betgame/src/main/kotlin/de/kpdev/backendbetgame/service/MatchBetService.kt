@@ -2,13 +2,13 @@ package de.kpdev.backendbetgame.service
 
 import de.kpdev.backendbetgame.dto.*
 import de.kpdev.backendbetgame.model.MatchBet
-import de.kpdev.backendbetgame.model.MatchDuration
 import de.kpdev.backendbetgame.model.MatchStatus
 import de.kpdev.backendbetgame.repository.MatchBetRepository
 import de.kpdev.backendbetgame.repository.MatchRepository
 import de.kpdev.backendbetgame.repository.UserRepository
 import de.kpdev.backendbetgame.security.usercontext.AuthFacade
 import org.springframework.stereotype.Service
+import java.time.Instant
 
 @Service
 class MatchBetService(
@@ -50,6 +50,7 @@ class MatchBetService(
         req.predictedHomeGoals?.let { bet.predictedHomeGoals = it }
         req.predictedAwayGoals?.let { bet.predictedAwayGoals = it }
         req.predictedDuration?.let { bet.predictedDuration = it }
+        bet.lastUpdate = Instant.now()
 
         return matchBetRepository.save(bet).toDto()
     }

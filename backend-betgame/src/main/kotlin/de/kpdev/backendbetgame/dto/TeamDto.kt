@@ -8,15 +8,17 @@ data class TeamDto(
     val name: String,
     val shortName: String?,
     val tla: String?,
-    val crestUrl: String?
+    val crestUrl: String?,
+    val group: Char?,
 )
 
-fun Team.toDto(): TeamDto =
+fun Team.toDto(group: Char? = null): TeamDto =
     TeamDto(
         id = this.id,
         name = this.name,
         shortName = this.shortName,
         tla = this.tla,
-        crestUrl = this.crestUrl
+        crestUrl = this.crestUrl,
+        group = group
     )
 

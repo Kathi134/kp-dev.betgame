@@ -82,6 +82,10 @@
     border-bottom: none;
 }
 
+.standings-table th {
+    text-align: center;
+}
+
 .team-cell {
     display: flex;
     align-items: center;

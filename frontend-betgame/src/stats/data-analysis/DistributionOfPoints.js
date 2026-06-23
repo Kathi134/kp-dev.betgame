@@ -1,5 +1,6 @@
 import { PieChart } from "@mui/x-charts"
 import { useMemo } from "react"
+import { palette } from "../colors"
 
 export default function DistributionOfPoints({ bets }) {
     const data = useMemo(() => {
@@ -8,10 +9,10 @@ export default function DistributionOfPoints({ bets }) {
         const sc1 = bets.filter(x => x.awardedPoints === 1).length
         const sc0 = bets.filter(x => x.awardedPoints === 0).length
         return [
-            { label: 'Exaktes Ergebnis', color: "#ffd700", value: sc3 },
-            { label: 'Torverhältnis', color: "#c0c0c0", value: sc2 },
-            { label: 'Gewinner-Team', color: "#CD7F32", value: sc1 },
-            { label: 'keine Punkte', color: "#5a5a5a", value: sc0 },
+            { label: 'Exaktes Ergebnis', color: palette[0], value: sc3 },
+            { label: 'Torverhältnis', color: palette[1], value: sc2 },
+            { label: 'Gewinner-Team', color: palette[2], value: sc1 },
+            { label: 'keine Punkte', color: palette[7], value: sc0 },
         ];
     }, [bets])
 

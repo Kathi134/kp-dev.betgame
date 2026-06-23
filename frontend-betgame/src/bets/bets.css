@@ -37,6 +37,10 @@
     border: 1px solid var(--warn);
 }
 
+.secondary-color {
+    color: var(--base-text-secondary);
+}
+
 .secondary {
     color: var(--base-text-secondary);
     font-size: small;

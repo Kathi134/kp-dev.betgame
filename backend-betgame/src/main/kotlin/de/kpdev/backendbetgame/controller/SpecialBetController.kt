@@ -21,4 +21,6 @@ class SpecialBetController(
     @PutMapping("{betId}")
     fun update(@RequestBody req: PatchSpecialBetRequest, @PathVariable betId: Long): SpecialBetDto =
         specialBetService.patch(betId, req)
+
+
 }

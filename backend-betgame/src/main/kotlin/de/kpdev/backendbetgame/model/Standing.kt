@@ -20,4 +20,5 @@ class Standing (
     var goalsFor : Int,
     var goalsAgainst : Int,
     var goalDifference : Int
-)
+) {
+}

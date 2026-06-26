@@ -39,6 +39,13 @@ class Match(
     @ColumnDefault("false")
     var isFinalized: Boolean = false,
 ) {
+    fun doesTeamPlay(team: Team): Boolean =
+        homeTeam == team || awayTeam == team
+
+    fun isTop4(): Boolean =
+        stage == CompetitionStage.FINAL || stage == CompetitionStage.THIRD_PLACE
+
+
     override fun toString(): String {
         return "${homeTeam?.name ?: "UNKNOWN"} vs ${awayTeam?.name ?: "UNKNOWN"}"
     }

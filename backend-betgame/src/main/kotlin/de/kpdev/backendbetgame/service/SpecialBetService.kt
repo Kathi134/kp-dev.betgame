@@ -1,9 +1,7 @@
 package de.kpdev.backendbetgame.service
 
 import de.kpdev.backendbetgame.dto.*
-import de.kpdev.backendbetgame.model.CompetitionStage
-import de.kpdev.backendbetgame.model.SpecialBet
-import de.kpdev.backendbetgame.model.Team
+import de.kpdev.backendbetgame.model.*
 import de.kpdev.backendbetgame.repository.SpecialBetDefinitionRepository
 import de.kpdev.backendbetgame.repository.SpecialBetRepository
 import de.kpdev.backendbetgame.repository.TeamRepository
@@ -19,7 +17,8 @@ class SpecialBetService(
     private val specialBetRepository: SpecialBetRepository,
     private val definitionRepository: SpecialBetDefinitionRepository,
     private val teamRepository: TeamRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val standingService: StandingService
 ) {
 
     fun getMyBets(): List<SpecialBetDto> {
@@ -76,4 +75,12 @@ class SpecialBetService(
                     bets = betsForDef.map { it.toDto() }
                 )
             }
+
+    fun getResultForDefinition(definition: SpecialBetDefinition): Pair<Int?, Team?> {
+
+    }
+
+    fun evaluateStandings(standings: List<Standing>) {
+        
+    }
 }

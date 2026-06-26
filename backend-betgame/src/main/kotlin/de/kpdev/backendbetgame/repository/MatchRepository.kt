@@ -11,6 +11,11 @@ interface MatchRepository : JpaRepository<Match, Long> {
 
     fun findByStatus(status: MatchStatus): List<Match>
 
+    fun findByGroup(group: Char): List<Match>
+
+    fun findByStage(stage: CompetitionStage): List<Match>
+
+
     fun findByStatusIn(statuses: List<MatchStatus>): List<Match>
 
     @Query("""

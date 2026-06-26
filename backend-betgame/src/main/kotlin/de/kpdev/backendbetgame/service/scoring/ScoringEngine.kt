@@ -8,7 +8,6 @@ class ScoringEngine(
     private val matchBetScoring: MatchBetScoringService,
     private val specialBetScoring: SpecialBetScoringService,
 ) {
-
     fun processMatchFinished(match: Match) {
         matchBetScoring.scoreMatchBets(match)
         specialBetScoring.scoreIfNeeded(match)

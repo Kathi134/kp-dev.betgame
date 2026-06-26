@@ -2,6 +2,7 @@ package de.kpdev.backendbetgame.service
 
 import de.kpdev.backendbetgame.dto.MatchDto
 import de.kpdev.backendbetgame.dto.toDto
+import de.kpdev.backendbetgame.model.CompetitionStage
 import de.kpdev.backendbetgame.model.MatchStatus
 import de.kpdev.backendbetgame.repository.MatchRepository
 import org.springframework.stereotype.Service
@@ -23,5 +24,9 @@ class MatchService(
     fun getLiveMatches(): List<MatchDto> =
         matchRepository.findByStatusIn(listOf(MatchStatus.LIVE))
             .map { it.toDto() }
+
+    fun getMatchesForFirstKoStage() =
+        matchRepository.findByStage(CompetitionStage.LAST_32)
+
 }
 

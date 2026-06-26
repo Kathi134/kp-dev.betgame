@@ -15,5 +15,11 @@ class SpecialBetDefinition(
     val deadline: Instant,
 
     @Enumerated(EnumType.STRING)
-    val type: SpecialBetType
+    val type: SpecialBetType,
+
+    @ManyToOne
+    var resultTeam: Team?,
+
+    @Enumerated(EnumType.STRING)
+    var resultStage: CompetitionStage,
 ) 

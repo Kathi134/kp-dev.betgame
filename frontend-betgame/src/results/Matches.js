@@ -17,15 +17,13 @@ export default function Matches() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`${API_BASE}/matches`)
-            .then((res) => res.json())
-            .then((data) => {
-                setMatches(data);
-
-                const grouped = groupByStage(data);
-                const firstStage = Object.keys(grouped)[0];
-                setActiveStage(firstStage); // TODO: set default stage to competition status
-
+        Promise.all([
+            fetch(`${API_BASE}/matches`).then(r => r.json()),
+            fetch(`${API_BASE}/competition`).then(r => r.json()),
+        ])
+            .then(([matches, competition]) => {
+                setMatches(matches);
+                setActiveStage(competition.stage);
                 setLoading(false);
             })
             .catch((err) => {

@@ -3,6 +3,7 @@ import { useCallback } from "react";
 import MatchContender from "../results/MatchContender";
 import { calculateTimeLeft, formatDateForTimeOnly } from "../util/date-util";
 import { formatDateWithoutTime } from "../util/date-util";
+import { stageToString } from "../util/enums";
 
 export default function UrgentBets({ data, onBetChange }) {
 
@@ -31,7 +32,10 @@ export default function UrgentBets({ data, onBetChange }) {
 
                         <div className="horizontal-container space-between">
                             <div className="horizontal-container gap-05">
-                                <div className="date">Gruppe {m.group} -</div>
+                                <div className="date">{m.stage === "GROUP_STAGE"
+                                    ? <>Gruppe {m.group} </>
+                                    : <>{stageToString(m.stage)} </>}
+                                    -</div>
                                 <div className="date">{formatDateForTimeOnly(m.deadline)}</div>
                             </div>
                             <div className="date right">noch {calculateTimeLeft(m.deadline)}</div>

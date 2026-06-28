@@ -20,7 +20,9 @@ class SpecialBetScoringService(
         val finalizedDefinitions = mutableSetOf<SpecialBetDefinition>()
 
         // if germany played, check germany exit bet
-        scoreGermanyExitIfNeeded(match)?.let { finalizedDefinitions.add(it) }
+        val germany = teamRepository.findByName("Germany")
+        if(match.doesTeamPlay(germany))
+            scoreGermanyExitIfNeeded(match, germany)?.let { finalizedDefinitions.add(it) }
 
         // if group stage, check group winner bet
         if (match.stage == CompetitionStage.GROUP_STAGE) {
@@ -35,9 +37,9 @@ class SpecialBetScoringService(
     }
 
 
-    fun scoreGermanyExitIfNeeded(match: Match): SpecialBetDefinition? {
-        val germany = teamRepository.findGermany()
-            ?: return null
+    fun scoreGermanyExitIfNeeded(match: Match, germany: Team?): SpecialBetDefinition? {
+        if(germany == null)
+            return null
         val definition = specialBetDefinitionRepository.findByType(SpecialBetType.GERMANY_FINAL_STAGE)
             ?: return null
         val competitionStage = match.competition.getCompetitionStage()

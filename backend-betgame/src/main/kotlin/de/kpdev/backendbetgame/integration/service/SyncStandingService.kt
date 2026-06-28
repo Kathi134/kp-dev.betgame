@@ -4,6 +4,8 @@ import de.kpdev.backendbetgame.integration.FootballDataClient
 import de.kpdev.backendbetgame.integration.dto.toEntity
 import de.kpdev.backendbetgame.repository.StandingRepository
 import de.kpdev.backendbetgame.service.SpecialBetService
+import jakarta.persistence.EntityManager
+import jakarta.persistence.PersistenceContext
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
@@ -11,8 +13,9 @@ import org.springframework.stereotype.Service
 class SyncStandingService(
     private val footballDataClient: FootballDataClient,
     private val standingRepository: StandingRepository,
-    private val specialBetService: SpecialBetService,
 ) {
+    @PersistenceContext
+    lateinit var entityManager: EntityManager
 
     @Transactional
     fun syncStandings() {
@@ -26,9 +29,8 @@ class SyncStandingService(
 
             standingRepository.deleteByGroup(group)
             standingRepository.flush()
-            val standings = standingRepository.saveAll(dto.table.map { it.toEntity(group) })
-
-            specialBetService.evaluateStandings(standings)
+            entityManager.clear()
+            standingRepository.saveAll(dto.table.map { it.toEntity(group) })
         }
     }
 }

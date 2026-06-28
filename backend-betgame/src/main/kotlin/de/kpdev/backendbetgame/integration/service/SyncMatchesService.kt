@@ -10,6 +10,7 @@ import de.kpdev.backendbetgame.repository.CompetitionRepository
 import de.kpdev.backendbetgame.repository.MatchRepository
 import de.kpdev.backendbetgame.repository.TeamRepository
 import de.kpdev.backendbetgame.service.scoring.ScoringEngine
+import jakarta.transaction.Transactional
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -24,6 +25,7 @@ class SyncMatchesService(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(SyncMatchesService::class.java)
 
+    @Transactional
     fun syncMatches() {
         val allMatches = footballClient.fetchWorldCupMatches()
         executeSyncUpdate(allMatches)

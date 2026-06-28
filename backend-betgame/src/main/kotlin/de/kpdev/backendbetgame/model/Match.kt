@@ -42,6 +42,9 @@ class Match(
     fun isTop4(): Boolean =
         stage == CompetitionStage.FINAL || stage == CompetitionStage.THIRD_PLACE
 
+    fun doesTeamPlay(team: Team?): Boolean =
+        team != null && (awayTeam == team || homeTeam == team)
+
 
     override fun toString(): String {
         return "${homeTeam?.name ?: "UNKNOWN"} vs ${awayTeam?.name ?: "UNKNOWN"}"

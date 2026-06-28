@@ -30,8 +30,6 @@ enum class CompetitionStage {
 
     operator fun inc(): CompetitionStage {
         if(this== GROUP_STAGE)
-            return LAST_64
-        if(this == LAST_64)
             return LAST_32
         if(this == LAST_32)
             return LAST_16

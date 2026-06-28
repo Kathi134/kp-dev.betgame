@@ -11,6 +11,7 @@ import de.kpdev.backendbetgame.model.CompetitionStage.FINAL
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
+import jakarta.transaction.Transactional
 import java.time.Instant
 
 @Entity
@@ -37,6 +38,7 @@ class Competition(
         val stages = listOf(GROUP_STAGE, LAST_64, LAST_32, LAST_16, QUARTER_FINALS, SEMI_FINALS, THIRD_PLACE, FINAL )
     }
 
+    @Transactional
     fun getCompetitionStage(): CompetitionStage {
         var lastStage = matches.filter { it.status == MatchStatus.FINISHED }
             .maxBy { it.stage }.stage

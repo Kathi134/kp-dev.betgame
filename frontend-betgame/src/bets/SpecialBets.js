@@ -5,7 +5,6 @@ import { specialBetTypeLabel, specialBetGroupLabel, stageToString } from "../uti
 import "./bets.css";
 import { groupBySpecialBetGroup } from "../util/reformat-api-data";
 import { calculateTimeLeft } from "../util/date-util";
-import MatchContender from "../results/MatchContender";
 
 export default function SpecialBets() {
     const [definitions, setDefinitions] = useState([]);
@@ -90,8 +89,6 @@ export default function SpecialBets() {
     }, [])
 
     const hasBet = useCallback((def) => determineVAlue(def) !== "", [determineVAlue]);
-
-    // const isBlocked = 
 
     if (loading) return <div>Lade Spezialtipps…</div>;
 

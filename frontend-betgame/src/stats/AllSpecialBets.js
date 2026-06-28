@@ -47,6 +47,7 @@ export default function AllSpecialBets() {
                 result[userId].total += bet.awardedPoints ?? 0;
             });
         });
+
         return Object.values(result)
             .sort((a, b) => a.PLACE_4.name.localeCompare(b.PLACE_4.name))
             .sort((a, b) => a.PLACE_3.name.localeCompare(b.PLACE_3.name))
@@ -65,12 +66,12 @@ export default function AllSpecialBets() {
                     <h2>{specialBetGroupLabel[type] ?? type}</h2>
 
                     {type === "PLACE" && (
-                        <div className="card">
-                            Top 4 Platzierungen
+                        <div className="card vertical-container gap-05">
+                            <span>Top 4 Platzierungen</span>
 
-                            <div className="top-margin">
+                            <div>
                                 {placeTable.map((bet) => (
-                                    <div key={bet.id} className="horizontal-container space-between secondary small" >
+                                    <div key={bet.id} className={`horizontal-container space-between small ${bet.username === user?.username ? "" : "secondary"}`} >
                                         <div> {bet.username}</div>
                                         <div className="horizontal-container gap-1 result">
                                             <div className="horizontal-container vertical-center">1. <img src={bet.PLACE_1.crestUrl} alt={bet.PLACE_1.tla} className="flag-img" /></div>
@@ -88,13 +89,29 @@ export default function AllSpecialBets() {
                     )}
 
                     {defs.map(d =>
-                        <div key={d.definition.id} className="card">
+                        <div key={d.definition.id} className="card vertical-container gap-05">
                             {specialBetTypeLabel[d.definition.type]}
 
-                            <div className="vertical-container top-margin">
+                            {(d.definition.resultTeam || d.definition.stage) &&
+                                <div className="vertical-container">
+                                    {d.definition.resultTeam &&
+                                        <div className="horizontal-container gap-1 center" >
+                                            {d.definition.resultTeam.crestUrl && (
+                                                <img src={d.definition.resultTeam.crestUrl} alt={d} className="flag-img" />
+                                            )}
+                                            <div>{d.definition.resultTeam.name}</div>
+                                        </div>
+                                    }
+                                    {d.definition.stage && stageToString(d.definition.stage)}
+                                </div>
+                            }
+
+                            <div className="vertical-container">
                                 {d.bets
+                                    .sort((a, b) => (a.username ?? "").localeCompare(b.username ?? ""))
                                     .sort((a, b) => (a.selectedTeam?.name ?? "").localeCompare(b.selectedTeam?.name ?? ""))
                                     .sort((a, b) => (a.stage ?? "").localeCompare(b.stage ?? ""))
+                                    .sort((a, b) => (b.awardedPoints - a.awardedPoints))
                                     .map((bet) => (
                                         <div key={bet.id} className={`horizontal-container space-between small ${bet.username === user?.username ? "" : "secondary"}`}>
                                             <div className="vertical-container"> {bet.username} </div>
@@ -115,6 +132,5 @@ export default function AllSpecialBets() {
                 </div>
             )}
         </div>
-
     )
 }

@@ -5,6 +5,7 @@ import { specialBetTypeLabel, specialBetGroupLabel, stageToString } from "../uti
 import "./bets.css";
 import { groupBySpecialBetGroup } from "../util/reformat-api-data";
 import { calculateTimeLeft } from "../util/date-util";
+import MatchContender from "../results/MatchContender";
 
 export default function SpecialBets() {
     const [definitions, setDefinitions] = useState([]);
@@ -104,17 +105,51 @@ export default function SpecialBets() {
                         <div key={def.id} className="card gap-05">
                             <div className="horizontal-container space-between">
                                 <div> {specialBetTypeLabel[def.type] ?? def.type}  </div>
-                                <div className="date">noch {calculateTimeLeft(def.deadline)}</div>
+                                <div className="date">{!def.isBlocked && <>noch {calculateTimeLeft(def.deadline)}</>}</div>
                             </div>
 
-                            <select className={`bet-select ${!hasBet(def) && "empty-bet"}`} disabled={def.isBlocked}
-                                value={determineVAlue(def)} onChange={(e) => updateBet(def.id, e.target.value, def.type)}
-                            >
-                                <option className={`bet-select ${!hasBet(def) && "empty-bet"}`} value="">Bitte wählen</option>
-                                {selectionOptions(type, def.type, teams).map(data =>
-                                    <option className={`bet-select ${!hasBet(def) && "empty-bet"}`} key={data.value} value={data.value}> {data.displayValue} </option>
-                                )}
-                            </select>
+                            <div className="horizontal-container center">
+                                {def.resultTeam
+                                    ? <div className="horizontal-container gap-1" >
+                                        {def.resultTeam.crestUrl && (
+                                            <img src={def.resultTeam.crestUrl} alt={def.resultTeam.tla} className="flag-img" />
+                                        )}
+                                        <div>{def.resultTeam.name}</div>
+                                    </div>
+                                    : stageToString(def.resultStage)
+                                }
+                            </div>
+
+                            {!def.isBlocked
+                                ?
+                                <select className={`bet-select ${!hasBet(def) && "empty-bet"}`} disabled={def.isBlocked}
+                                    value={determineVAlue(def)} onChange={(e) => updateBet(def.id, e.target.value, def.type)}>
+                                    <option className={`bet-select ${!hasBet(def) && "empty-bet"}`} value="">Bitte wählen</option>
+                                    {selectionOptions(type, def.type, teams).map(data =>
+                                        <option className={`bet-select ${!hasBet(def) && "empty-bet"}`} key={data.value} value={data.value}> {data.displayValue} </option>
+                                    )}
+                                </select>
+                                :
+                                <div className="horizontal-container space-between secondary small" >
+                                    <div className="vertical-container"> mein Tipp </div>
+                                    <div className="horizontal-container result">
+                                        {def.bet
+                                            ? <span className="">{def.bet.selectedTeam
+                                                ? <div className="horizontal-container gap-1" >
+                                                    {def.bet.selectedTeam.crestUrl && (
+                                                        <img src={def.bet.selectedTeam.crestUrl} alt={def.bet.selectedTeam.tla} className="flag-img" />
+                                                    )}
+                                                    <div>{def.bet.selectedTeam.name}</div>
+                                                </div>
+                                                : stageToString(def.bet.stage)
+                                            }</span>
+                                            : <span>nicht abgegeben.</span>
+                                        }
+                                    </div>
+                                    <div className="vertical-container right">
+                                        ({def.bet?.awardedPoints ?? "-"} Pkt.)
+                                    </div>
+                                </div>}
                         </div>
 
                     )}

@@ -1,6 +1,6 @@
 
 export default function MatchContender({ team, goals }) {
-    if (!team) return <span>Unknown</span>;
+    if (!team) return <span>noch offen</span>;
 
     return (
         <div className='horizontal-container gap-1 vertical-center' >

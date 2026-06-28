@@ -51,8 +51,8 @@ export default function UrgentBets({ data, onBetChange }) {
                                         {m.stage !== "GROUP_STAGE" &&
                                             <select className="bet-select" value={m.bet?.predictedDuration ?? "REGULAR"} onChange={(e) => handleChange(e, m, "predictedDuration")} disabled={m.isBlocked || m.isPast}>
                                                 <option value="REGULAR">90 min</option>
-                                                <option value="OVERTIME">Verlängerung</option>
-                                                <option value="PENALTY">Elfmeter</option>
+                                                <option value="EXTRA_TIME">Verlängerung</option>
+                                                <option value="PENALTY_SHOOTOUT">Elfmeter</option>
                                             </select>
                                         }
                                     </div>

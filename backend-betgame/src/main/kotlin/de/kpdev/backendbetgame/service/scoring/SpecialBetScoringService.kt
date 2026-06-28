@@ -1,99 +1,151 @@
 package de.kpdev.backendbetgame.service.scoring
 
-import de.kpdev.backendbetgame.model.CompetitionStage
-import de.kpdev.backendbetgame.model.Match
+import de.kpdev.backendbetgame.model.*
+import de.kpdev.backendbetgame.repository.SpecialBetDefinitionRepository
+import de.kpdev.backendbetgame.repository.SpecialBetRepository
+import de.kpdev.backendbetgame.repository.TeamRepository
+import de.kpdev.backendbetgame.service.SpecialBetDefinitionService
 import de.kpdev.backendbetgame.service.StandingService
-import de.kpdev.backendbetgame.model.SpecialBetType
-import de.kpdev.backendbetgame.model.Team
-import de.kpdev.backendbetgame.repository.*
-import de.kpdev.backendbetgame.service.MatchService
 import org.springframework.stereotype.Service
 
 @Service
 class SpecialBetScoringService(
     private val specialBetRepository: SpecialBetRepository,
-    private val matchRepository: MatchRepository,
     private val standingService: StandingService,
     private val specialBetDefinitionRepository: SpecialBetDefinitionRepository,
     private val teamRepository: TeamRepository,
-    private val standingRepository: StandingRepository,
-    private val matchService: MatchService,
+    private val specialBetDefinitionService: SpecialBetDefinitionService,
 ) {
-    // TODO: implement bonus system
-    fun scoreIfNeeded(match: Match) {
-        // if germany played and lost, check germany exit bet
+    fun scoreIfNeeded(match: Match): Set<SpecialBetDefinition> {
+        val finalizedDefinitions = mutableSetOf<SpecialBetDefinition>()
+
+        // if germany played, check germany exit bet
+        scoreGermanyExitIfNeeded(match)?.let { finalizedDefinitions.add(it) }
+
+        // if group stage, check group winner bet
+        if (match.stage == CompetitionStage.GROUP_STAGE) {
+            scoreGroupStageIfNeeded(match)?.let { finalizedDefinitions.add(it) }
+        }
+        // if top 4, check top 4 placement bets
+        else if (match.isTop4()) {
+            scoreTop4IfNeeded(match)?.let { finalizedDefinitions.addAll(it) }
+        }
+
+        return finalizedDefinitions
+    }
+
+
+    fun scoreGermanyExitIfNeeded(match: Match): SpecialBetDefinition? {
         val germany = teamRepository.findGermany()
-        if(match.doesTeamPlay(germany)) {
-            scoreGermanyExitIfNeeded(match, germany)
-        }
+            ?: return null
+        val definition = specialBetDefinitionRepository.findByType(SpecialBetType.GERMANY_FINAL_STAGE)
+            ?: return null
+        val competitionStage = match.competition.getCompetitionStage()
 
-        // if group stage, check winner bet
-        if(match.stage == CompetitionStage.GROUP_STAGE) {
-            scoreGroupStageIfNeeded(match)
-        }
-        else if(match.isTop4()) {
-
-        }
-    }
-
-    fun scoreGermanyExitIfNeeded(match: Match, germany: Team) {
-        val group = match.group
-            ?: return
-        val stage = match.stage
-
-        if(match.stage == CompetitionStage.GROUP_STAGE) {
-            val position = standingService.getGermanyPositionIfFinalized(germany, group)
-                ?: return
-            if(position == 4 )
-               scoreGermanyExitForStage(stage)
-            else if(position == 1 || position == 2)
-                return
-            else
-                // TODO check if any game in next stage contains germany
-                return
-        }
-        else {
-            val homeGoals = match.homeGoals
-            val awayGoals = match.awayGoals
-            if (awayGoals == null || homeGoals == null)
-                return
-            val lost = (match.homeTeam == germany && homeGoals < awayGoals ||
-                        match.awayTeam == germany && awayGoals < homeGoals)
-            if(!lost)
-                return
-            scoreGermanyExitForStage(stage)
-        }
-    }
-
-    fun doesGermanyPlayInKo(germany: Team): Boolean? {
-        val koMatches = matchService.getMatchesForFirstKoStage()
-        if(koMatches.any { it.homeTeam == null || it.awayTeam == null })
+        if (competitionStage == CompetitionStage.GROUP_STAGE)
             return null
-        return koMatches.any{ it.doesTeamPlay(germany)}
+
+        val hasGermany = match.competition.doesStageContainTeam(competitionStage, germany)
+        // competition has not yet fully reached the stage || germany is in the stage -> bet is not to be scored yet
+        if (hasGermany == null || hasGermany)
+            return null
+
+        // double check that this is actually the first stage that doesn't contain germany
+        val lastContainedStage = match.competition.getHighestStageContainingTeam(germany)
+
+        definition.resultStage = lastContainedStage
+        specialBetDefinitionRepository.save(definition)
+
+        return scoreBetsForDefinitionOnResult(definition)
     }
 
-    fun scoreGermanyExitForStage(stage: CompetitionStage) {
 
-    }
-
-
-    fun scoreGroupStageIfNeeded(match: Match) {
+    fun scoreGroupStageIfNeeded(match: Match): SpecialBetDefinition? {
         val group = match.group
-            ?: return
+            ?: return null
+        val definition = specialBetDefinitionService.getSpecialBetDefinitionForGroup(group = group)
+            ?: return null
         val leader = standingService.getGroupLeaderIfFinalized(group)
-            ?: return
-        val type = SpecialBetType.valueByGroupIdentifier(group)
-            ?: return
-        val definition = specialBetDefinitionRepository.findByType(type)
-        val bets = specialBetRepository.findByDefinitionId(definition.id)
+            ?: return null
 
-        bets.forEach {
-            if(it.selectedTeam == leader)
-                it.awardedPoints = 5
-            else
-                it.awardedPoints = 0
-        }
-        return
+        definition.resultTeam = leader
+        specialBetDefinitionRepository.save(definition)
+
+        return scoreBetsForDefinitionOnResult(definition)
     }
+
+
+    fun scoreTop4IfNeeded(match: Match): Set<SpecialBetDefinition>? {
+        val homeGoals = match.homeGoals
+        val awayGoals = match.awayGoals
+        if (awayGoals == null || homeGoals == null)
+            return null
+
+        if (match.stage == CompetitionStage.FINAL) {
+            return processPlaceXAndY(SpecialBetType.PLACE_1, SpecialBetType.PLACE_2, match, homeGoals, awayGoals)
+        }
+        if (match.stage == CompetitionStage.THIRD_PLACE) {
+            return processPlaceXAndY(SpecialBetType.PLACE_3, SpecialBetType.PLACE_4, match, homeGoals, awayGoals)
+        }
+        return null
+    }
+
+    fun processPlaceXAndY(
+        winner: SpecialBetType,
+        loser: SpecialBetType,
+        match: Match,
+        homeGoals: Int,
+        awayGoals: Int
+    ): Set<SpecialBetDefinition>? {
+        val winnerDefinition = specialBetDefinitionRepository.findByType(winner)
+            ?: return null
+        val loserDefinition = specialBetDefinitionRepository.findByType(loser)
+            ?: return null
+
+        val winnerTeam = if (homeGoals > awayGoals) match.homeTeam else match.awayTeam
+        winnerDefinition.resultTeam = winnerTeam
+        specialBetDefinitionRepository.save(winnerDefinition)
+        scoreBetsForDefinitionOnResult(winnerDefinition)
+            ?: return null
+
+        val loserTeam = if (winnerTeam == match.homeTeam) match.awayTeam else match.homeTeam
+        loserDefinition.resultTeam = loserTeam
+        specialBetDefinitionRepository.save(loserDefinition)
+        scoreBetsForDefinitionOnResult(loserDefinition)
+            ?: return null
+
+        return setOf(winnerDefinition, loserDefinition)
+    }
+
+
+    fun scoreBetsForDefinitionOnResult(betDefinition: SpecialBetDefinition): SpecialBetDefinition? {
+        var success = true
+        val bets = specialBetRepository.findByDefinitionId(betDefinition.id)
+        bets.forEach {
+            val correctBetAnswer = isBetCorrect(it)
+            if (correctBetAnswer == null)
+                success = false
+            else {
+                if (correctBetAnswer)
+                    it.awardedPoints = 5
+                else
+                    it.awardedPoints = 0
+                specialBetRepository.save(it)
+            }
+        }
+        return if (success) betDefinition else null
+    }
+
+    fun isBetCorrect(bet: SpecialBet): Boolean? =
+        when {
+            bet.definition.resultStage != null
+                -> bet.stage == bet.definition.resultStage
+
+            bet.definition.resultTeam != null
+                -> bet.selectedTeam == bet.definition.resultTeam
+
+            else -> null
+        }
+
 }
 

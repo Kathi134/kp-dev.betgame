@@ -32,7 +32,7 @@ class SyncMatchesService(
 
     fun syncLiveMatches() {
         val liveMatches = footballClient.fetchLiveMatches()
-        if(liveMatches.isEmpty()) {
+        if (liveMatches.isEmpty()) {
             logger.info("No live matches to sync.")
         } else {
             executeSyncUpdate(liveMatches)
@@ -41,10 +41,11 @@ class SyncMatchesService(
     }
 
     fun checkForFinalization(except: List<MatchResponse>) {
-        val fetchedMatchUpdatesForNonFinalizedMatches = matchRepository.findByStatusNotAndIsFinalizedFalse(MatchStatus.SCHEDULED)
-            .filter { !except.any { e -> e.id == it.id } }
-            .map { footballClient.fetchMatch(it.id) }
-        if(fetchedMatchUpdatesForNonFinalizedMatches.isEmpty()) {
+        val fetchedMatchUpdatesForNonFinalizedMatches =
+            matchRepository.findByStatusNotAndIsFinalizedFalse(MatchStatus.SCHEDULED)
+                .filter { !except.any { e -> e.id == it.id } }
+                .map { footballClient.fetchMatch(it.id) }
+        if (fetchedMatchUpdatesForNonFinalizedMatches.isEmpty()) {
             logger.info("No unfinalized matches to apply scoring for.")
             return
         }
@@ -69,9 +70,9 @@ class SyncMatchesService(
                 matchRepository.save(dto.toEntity(competition, homeTeam, awayTeam))
             } else {
                 match.updateFrom(dto)
-                if(match.homeTeam == null)
+                if (match.homeTeam == null)
                     match.homeTeam = homeTeam
-                if(match.awayTeam == null)
+                if (match.awayTeam == null)
                     match.awayTeam = awayTeam
                 if (dto.status == MatchStatus.FINISHED.name) {
                     finalizeMatch(match)
@@ -101,8 +102,12 @@ class SyncMatchesService(
     }
 
     private fun finalizeMatch(match: Match) {
-        scoringEngine.processMatchFinished(match)
-        match.isFinalized = true
+        val matchSuccess = scoringEngine.processMatchFinished(match)
+        match.isFinalized = matchSuccess
+
+        val finalizableDefinitions = scoringEngine.processSpecialBetsOnMatchFinished(match)
+        finalizableDefinitions.forEach { it.isFinalized = true }
+
     }
 
 

@@ -4,6 +4,7 @@ import de.kpdev.backendbetgame.integration.dto.*
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.bodyToMono
 
 @Service
 class FootballDataClient(
@@ -20,7 +21,7 @@ class FootballDataClient(
         return webClient.get()
             .uri("/v4/competitions/$code")
             .retrieve()
-            .bodyToMono(CompetitionResponse::class.java)
+            .bodyToMono<CompetitionResponse>()
             .block()!!
     }
 
@@ -28,7 +29,7 @@ class FootballDataClient(
         return webClient.get()
             .uri("/v4/competitions/$code/teams")
             .retrieve()
-            .bodyToMono(TeamListResponse::class.java)
+            .bodyToMono<TeamListResponse>()
             .block()
             ?.teams
             ?: emptyList()
@@ -38,7 +39,7 @@ class FootballDataClient(
         return webClient.get()
             .uri("/v4/competitions/WC/matches")
             .retrieve()
-            .bodyToMono(MatchListResponse::class.java)
+            .bodyToMono<MatchListResponse>()
             .block()
             ?.matches
             ?: emptyList()
@@ -48,17 +49,17 @@ class FootballDataClient(
         return webClient.get()
             .uri("/v4/competitions/WC/matches?status=LIVE")
             .retrieve()
-            .bodyToMono(MatchListResponse::class.java)
+            .bodyToMono<MatchListResponse>()
             .block()
             ?.matches
             ?: emptyList()
     }
 
-    fun fetchFinishedMatches(): List<MatchResponse>  {
+    fun fetchFinishedMatches(): List<MatchResponse> {
         return webClient.get()
             .uri("/v4/competitions/WC/matches?status=FINISHED")
             .retrieve()
-            .bodyToMono(MatchListResponse::class.java)
+            .bodyToMono<MatchListResponse>()
             .block()
             ?.matches
             ?: emptyList()
@@ -68,7 +69,7 @@ class FootballDataClient(
         return webClient.get()
             .uri("/v4/matches/$id")
             .retrieve()
-            .bodyToMono(MatchResponse::class.java)
+            .bodyToMono<MatchResponse>()
             .block()!!
     }
 
@@ -76,7 +77,7 @@ class FootballDataClient(
         return webClient.get()
             .uri("/v4/competitions/WC/standings")
             .retrieve()
-            .bodyToMono(StandingListResponse::class.java)
+            .bodyToMono<StandingListResponse>()
             .block()
             ?.standings
             ?: emptyList()

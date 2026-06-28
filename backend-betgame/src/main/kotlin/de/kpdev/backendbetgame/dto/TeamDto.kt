@@ -2,7 +2,6 @@ package de.kpdev.backendbetgame.dto
 
 import de.kpdev.backendbetgame.model.Continent
 import de.kpdev.backendbetgame.model.Team
-import java.util.*
 
 data class TeamDto(
     val id: Long,

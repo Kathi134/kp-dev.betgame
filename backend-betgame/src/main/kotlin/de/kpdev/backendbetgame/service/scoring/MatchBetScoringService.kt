@@ -10,18 +10,21 @@ import org.springframework.stereotype.Service
 class MatchBetScoringService(
     private val matchBetRepository: MatchBetRepository
 ) {
-    fun scoreMatchBets(match: Match) {
+    fun scoreMatchBets(match: Match): Boolean {
         val bets = matchBetRepository.findByMatchId(match.id)
-        bets.forEach { bet ->
-            bet.awardedPoints = calculatePoints(bet, match)
+        val success = bets.map { bet ->
+            val pts = calculatePoints(bet, match)
+            bet.awardedPoints = pts
             matchBetRepository.save(bet)
-        }
+            return@map pts != null
+        }.any()
+        return success
     }
 
 
-    private fun calculatePoints(bet: MatchBet, match: Match): Int {
+    private fun calculatePoints(bet: MatchBet, match: Match): Int? {
         if(match.awayGoals == null || match.homeGoals == null)
-            return 0
+            return null
 
         val correctDuration = if ((match.stage != CompetitionStage.GROUP_STAGE)
                 && (bet.predictedDuration == match.duration)) 1 else 0

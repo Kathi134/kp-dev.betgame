@@ -82,8 +82,12 @@ class SyncMatchesService(
     }
 
     private fun finalizeMatch(match: Match) {
-        scoringEngine.processMatchFinished(match)
-        match.isFinalized = true
+        val matchSuccess = scoringEngine.processMatchFinished(match)
+        match.isFinalized = matchSuccess
+
+        val finalizableDefinitions = scoringEngine.processSpecialBetsOnMatchFinished(match)
+        finalizableDefinitions.forEach { it.isFinalized = true }
+
     }
 
 

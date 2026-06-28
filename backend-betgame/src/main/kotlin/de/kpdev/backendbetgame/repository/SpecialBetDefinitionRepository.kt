@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface SpecialBetDefinitionRepository : JpaRepository<SpecialBetDefinition, Long> {
     fun findByCompetitionId(competitionId: Long): List<SpecialBetDefinition>
 
-    fun findByType(type: SpecialBetType): SpecialBetDefinition
+    fun findByType(type: SpecialBetType): SpecialBetDefinition?
 }

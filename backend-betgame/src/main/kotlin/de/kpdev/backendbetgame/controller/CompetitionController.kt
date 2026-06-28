@@ -1,9 +1,9 @@
-package de.kpdev.backendbetgame.controller;
+package de.kpdev.backendbetgame.controller
 
 import de.kpdev.backendbetgame.dto.CompetitionDto
 import de.kpdev.backendbetgame.dto.TeamDto
-import de.kpdev.backendbetgame.service.CompetitionService;
-import org.springframework.web.bind.annotation.*;
+import de.kpdev.backendbetgame.service.CompetitionService
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/competition")

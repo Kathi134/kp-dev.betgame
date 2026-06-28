@@ -20,8 +20,8 @@ class StandingService(
             .map { it.toDto() }
 
     fun isFinalized(group: Char): Boolean {
-        val standings = standingRepository.findByGroup(group);
-        if(standings.any { it.playedGames < GAMES_TO_BE_PLAYED })
+        val standings = standingRepository.findByGroup(group)
+        if (standings.any { it.playedGames < GAMES_TO_BE_PLAYED })
             return false
         // all matches from this group must be finished and finalized
         val matches = matchRepository.findByGroup(group)
@@ -29,19 +29,19 @@ class StandingService(
     }
 
     fun getGroupLeaderIfFinalized(group: Char): Team? {
-        val standings = standingRepository.findByGroup(group);
-        if(!isFinalized(group))
+        val standings = standingRepository.findByGroup(group)
+        if (!isFinalized(group))
             return null
-        return standings.find { it.position == 1}?.team
+        return standings.find { it.position == 1 }?.team
     }
 
     fun getGermanyPositionIfFinalized(germany: Team, group: Char): Int? {
-        if(germany.name != "Germany")
+        if (germany.name != "Germany")
             throw IllegalArgumentException("Team $germany is not team Germany.")
         val groupStandings = standingRepository.findByGroup(group)
-        if(!groupStandings.any { it.team == germany })
+        if (!groupStandings.any { it.team == germany })
             throw IllegalArgumentException("Group $group does not contain team Germany.")
-        if(!isFinalized(group))
+        if (!isFinalized(group))
             return null
         return groupStandings.find { it.team == germany }?.position
     }

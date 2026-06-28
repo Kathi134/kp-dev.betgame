@@ -18,7 +18,6 @@ class SpecialBetService(
     private val definitionRepository: SpecialBetDefinitionRepository,
     private val teamRepository: TeamRepository,
     private val userRepository: UserRepository,
-    private val standingService: StandingService
 ) {
 
     fun getMyBets(): List<SpecialBetDto> {
@@ -29,7 +28,7 @@ class SpecialBetService(
     }
 
     fun createOrUpdate(req: SpecialBetRequest): SpecialBetDto {
-        if(req.selectedTeam == null && req.stage == null)
+        if (req.selectedTeam == null && req.stage == null)
             throw ResponseStatusException(HttpStatus.BAD_REQUEST)
 
         val userId = auth.userId()
@@ -67,7 +66,7 @@ class SpecialBetService(
     }
 
     fun globalSpecialBets(): List<SpecialBetGroupDto> =
-         specialBetRepository.findAll()
+        specialBetRepository.findAll()
             .groupBy { it.definition.id }
             .map { (_, betsForDef) ->
                 SpecialBetGroupDto(
@@ -75,12 +74,4 @@ class SpecialBetService(
                     bets = betsForDef.map { it.toDto() }
                 )
             }
-
-    fun getResultForDefinition(definition: SpecialBetDefinition): Pair<Int?, Team?> {
-
-    }
-
-    fun evaluateStandings(standings: List<Standing>) {
-        
-    }
 }

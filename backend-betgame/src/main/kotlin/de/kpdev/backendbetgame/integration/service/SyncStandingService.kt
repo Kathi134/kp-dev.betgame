@@ -4,7 +4,6 @@ import de.kpdev.backendbetgame.integration.FootballDataClient
 import de.kpdev.backendbetgame.integration.dto.toEntity
 import de.kpdev.backendbetgame.repository.StandingRepository
 import de.kpdev.backendbetgame.service.SpecialBetService
-import de.kpdev.backendbetgame.service.StandingService
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 

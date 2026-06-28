@@ -1,4 +1,4 @@
-package de.kpdev.backendbetgame.service;
+package de.kpdev.backendbetgame.service
 
 import de.kpdev.backendbetgame.dto.CompetitionDto
 import de.kpdev.backendbetgame.dto.TeamDto
@@ -17,7 +17,7 @@ class CompetitionService(
 
     fun getActiveCompetition(): CompetitionDto {
         val comp = competitionRepository.findByActiveTrue()
-                ?: throw RuntimeException("No active competition")
+            ?: throw RuntimeException("No active competition")
 
         return comp.toDto()
     }
@@ -39,4 +39,5 @@ class CompetitionService(
 
         return teamRepository.findAll().map { it.toDto(teamGroupMap[it.id]) }
     }
+
 }

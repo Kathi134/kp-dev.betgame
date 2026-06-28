@@ -2,8 +2,10 @@ package de.kpdev.backendbetgame.controller
 
 import de.kpdev.backendbetgame.dto.MatchDto
 import de.kpdev.backendbetgame.service.MatchService
-import org.springframework.web.bind.annotation.*
-import java.util.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 
 @RestController

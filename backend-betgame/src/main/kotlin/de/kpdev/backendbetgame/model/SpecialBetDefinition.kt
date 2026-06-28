@@ -1,6 +1,7 @@
 package de.kpdev.backendbetgame.model
 
 import jakarta.persistence.*
+import org.hibernate.annotations.ColumnDefault
 import java.time.Instant
 
 @Entity
@@ -18,8 +19,11 @@ class SpecialBetDefinition(
     val type: SpecialBetType,
 
     @ManyToOne
-    var resultTeam: Team?,
+    var resultTeam: Team? = null,
 
     @Enumerated(EnumType.STRING)
-    var resultStage: CompetitionStage,
-) 
+    var resultStage: CompetitionStage? = null,
+
+    @ColumnDefault("false")
+    var isFinalized: Boolean = false,
+)

@@ -1,8 +1,7 @@
 package de.kpdev.backendbetgame.dto
 
 import de.kpdev.backendbetgame.model.User
-import de.kpdev.backendbetgame.model.UserRole
-import java.util.UUID
+import java.util.*
 
 
 data class UserDto(

@@ -20,8 +20,7 @@ class SyncMatchesService(
     private val matchRepository: MatchRepository,
     private val teamRepository: TeamRepository,
     private val competitionRepository: CompetitionRepository,
-    private val scoringEngine: ScoringEngine,
-    private val syncStandingService: SyncStandingService,
+    private val scoringEngine: ScoringEngine
 ) {
     private val logger: Logger = LoggerFactory.getLogger(SyncMatchesService::class.java)
 
@@ -32,7 +31,7 @@ class SyncMatchesService(
 
     fun syncLiveMatches() {
         val liveMatches = footballClient.fetchLiveMatches()
-        if(liveMatches.isEmpty()) {
+        if (liveMatches.isEmpty()) {
             logger.info("No live matches to sync.")
         } else {
             executeSyncUpdate(liveMatches)
@@ -41,10 +40,11 @@ class SyncMatchesService(
     }
 
     fun checkForFinalization(except: List<MatchResponse>) {
-        val fetchedMatchUpdatesForNonFinalizedMatches = matchRepository.findByStatusNotAndIsFinalizedFalse(MatchStatus.SCHEDULED)
-            .filter { !except.any { e -> e.id == it.id } }
-            .map { footballClient.fetchMatch(it.id) }
-        if(fetchedMatchUpdatesForNonFinalizedMatches.isEmpty()) {
+        val fetchedMatchUpdatesForNonFinalizedMatches =
+            matchRepository.findByStatusNotAndIsFinalizedFalse(MatchStatus.SCHEDULED)
+                .filter { !except.any { e -> e.id == it.id } }
+                .map { footballClient.fetchMatch(it.id) }
+        if (fetchedMatchUpdatesForNonFinalizedMatches.isEmpty()) {
             logger.info("No unfinalized matches to apply scoring for.")
             return
         }
@@ -69,9 +69,9 @@ class SyncMatchesService(
                 matchRepository.save(dto.toEntity(competition, homeTeam, awayTeam))
             } else {
                 match.updateFrom(dto)
-                if(match.homeTeam == null)
+                if (match.homeTeam == null)
                     match.homeTeam = homeTeam
-                if(match.awayTeam == null)
+                if (match.awayTeam == null)
                     match.awayTeam = awayTeam
                 if (dto.status == MatchStatus.FINISHED.name) {
                     finalizeMatch(match)
@@ -79,25 +79,6 @@ class SyncMatchesService(
                 matchRepository.save(match)
             }
         }
-    }
-
-    fun safetySync() {
-        val matchResponse = footballClient.fetchWorldCupMatches()
-        matchResponse.forEach { dto ->
-            val match = matchRepository.findById(dto.id).orElse(null)
-                ?: return@forEach
-
-            val beforeStatus = match.status
-            match.updateFrom(dto)
-            matchRepository.save(match)
-            if (beforeStatus != MatchStatus.FINISHED &&
-                match.status == MatchStatus.FINISHED
-            ) {
-                finalizeMatch(match)
-            }
-        }
-
-        syncStandingService.syncStandings()
     }
 
     private fun finalizeMatch(match: Match) {

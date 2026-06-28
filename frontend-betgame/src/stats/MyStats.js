@@ -1,7 +1,7 @@
 
 import { BsQuestionCircle } from "react-icons/bs";
 import { useState, useEffect, useMemo } from 'react';
-import { fetchMatchBets } from '../api/bet';
+import { fetchMatchBets, fetchSpecialBets } from '../api/bet';
 import DistributionOfPoints from './data-analysis/DistributionOfPoints';
 import TimeSeries from './data-analysis/TimeSeries';
 import BetTimeCorrelation from './data-analysis/correlations/BetTimeCorrelation';
@@ -12,13 +12,20 @@ import CountryCorrelation from './data-analysis/correlations/CountryCorrelation'
 
 export default function MyStats() {
     const [bets, setBets] = useState([])
+    const [specialBets, setSpecialBets] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null);
     const [showCorrelationInfo, setShowCorrelationInfo] = useState(false)
 
     useEffect(() => {
-        fetchMatchBets()
-            .then(setBets)
+        Promise.all([
+            fetchMatchBets(),
+            fetchSpecialBets()
+        ])
+            .then(([matchBets, specialBets]) => {
+                setBets(matchBets)
+                setSpecialBets(specialBets)
+            })
             .catch((err) => {
                 console.error(err);
                 setError("Fehler beim Laden der Tipps");
@@ -43,7 +50,7 @@ export default function MyStats() {
     if (error) return <div className="warn">{error}</div>;
 
     return <div>
-        <DistributionOfPoints bets={scoredBets} />
+        <DistributionOfPoints bets={scoredBets} specialBets={specialBets} />
         <TimeSeries bets={scoredBets} />
 
 

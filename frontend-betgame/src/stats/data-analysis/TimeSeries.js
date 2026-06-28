@@ -64,7 +64,7 @@ export default function TimeSeries({ bets }) {
     }, [bets, todayStr]);
 
     return (<>
-        <h2>Zeitliche Entwicklung deiner Punkte</h2>
+        <h2>Zeitliche Entwicklung deiner regulären Punkte</h2>
 
         <div className='card'>
 

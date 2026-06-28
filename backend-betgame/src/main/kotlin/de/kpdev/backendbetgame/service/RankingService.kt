@@ -21,25 +21,39 @@ class RankingService(
         val matchBets = matchBetRepository.findAll()
         val specialBets = specialBetRepository.findAll()
         val numMatchesWithResult = matchRepository.findMatchesWithResult().size
+        val numSpecialBetsWithResult = specialBetRepository.findBySelectedTeamIsNotNullOrStageIsNotNull().size
 
         return users
             .map { user ->
                 val userMatchBets = matchBets.filter { it.user.id == user.id }
                 val userSpecialBets = specialBets.filter { it.user.id == user.id }
 
-                val allPoints = userMatchBets.sumOf { it.awardedPoints ?: 0 } +
-                            userSpecialBets.sumOf { it.awardedPoints ?: 0 }
+                val matchPoints = userMatchBets.sumOf { it.awardedPoints ?: 0 }
+                val matchAvg = if (userMatchBets.isEmpty()) 0.0 else matchPoints.toDouble() / numMatchesWithResult
 
-                val betCount = userMatchBets.size + userSpecialBets.size
+                val specialPoints = userSpecialBets.sumOf { it.awardedPoints ?: 0 }
+                val specialAvg = if (userMatchBets.isEmpty()) 0.0 else specialPoints.toDouble() / numSpecialBetsWithResult
 
-                val avg = if (betCount == 0) 0.0 else allPoints.toDouble() / numMatchesWithResult
+                val allPoints = matchPoints + specialPoints
+                val allBetCount = userMatchBets.size + userSpecialBets.size
+                val allAvg = if (allBetCount == 0) 0.0 else allPoints.toDouble() / allBetCount
+
 
                 BetStatisticDto(
                     userId = user.id.toString(),
                     username = user.username,
+
                     totalPoints = allPoints,
-                    betCount = betCount,
-                    averagePoints = avg
+                    totalBetCount = allBetCount,
+                    totalAveragePoints =  allAvg,
+
+                    matchPoints = matchPoints,
+                    matchBetCount = matchBets.size,
+                    matchAveragePoints = matchAvg,
+
+                    specialPoints = specialPoints,
+                    specialBetCount = specialBets.size,
+                    specialAveragePoints = specialAvg,
                 )
             }
             .sortedByDescending { it.totalPoints }

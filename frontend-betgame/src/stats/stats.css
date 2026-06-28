@@ -49,3 +49,7 @@
     text-align: left;
     font: inherit
 }
+
+.table-item {
+    width: 1.5rem;
+}

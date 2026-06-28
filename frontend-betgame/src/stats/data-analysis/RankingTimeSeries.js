@@ -124,6 +124,7 @@ export default function RankingTimeSeries({ globalBets }) {
 
                 />
             </div>
+            <div className="secondary justify">Das Diagramm beinhaltet nicht die durch Spezialwetten erhaltenen Punkte.</div>
         </div>
     </>
     )

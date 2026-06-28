@@ -14,6 +14,8 @@ interface SpecialBetRepository : JpaRepository<SpecialBet, Long> {
 
     fun findByDefinitionId(definitionId: Long): List<SpecialBet>
 
+    fun findBySelectedTeamIsNotNullOrStageIsNotNull(): List<SpecialBet>
+
     @Query("""
         SELECT COALESCE(SUM(s.awardedPoints), 0)
         FROM SpecialBet s

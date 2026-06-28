@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { fetchGlobalRanking } from "../api/ranking";
 import { useAuth } from "../auth/global/AuthContext";
+import { TbSum, TbMathAvg } from "react-icons/tb";
+import { PiCourtBasketball, PiHashLight } from "react-icons/pi";
+import { FaRegStar } from "react-icons/fa";
 
 export default function Ranking() {
     const [data, setData] = useState([]);
@@ -33,24 +36,45 @@ export default function Ranking() {
                         </div>
 
                         <div className="horizontal-container gap-1 right">
-                            <div className="vertical-container right">
-                                <span className="secondary">Punkte</span>
+
+                            <div className="vertical-container right table-item">
+                                <span className="secondary"><TbSum /></span>
                                 <span className="small">{u.totalPoints}</span>
                             </div>
-
-                            <div className="vertical-container right">
-                                <span className="secondary">Tipps</span>
-                                <span className="small">{u.betCount}</span>
+                            <div className="vertical-container right table-item">
+                                <span className="secondary"><PiCourtBasketball /></span>
+                                <span className="small">{u.matchPoints}</span>
                             </div>
 
-                            <div className="vertical-container right">
-                                <span className="secondary">Ø</span>
-                                <span className="small">{u.averagePoints.toFixed(2)}</span>
+                            <div className="vertical-container right table-item">
+                                <span className="secondary"><TbMathAvg /></span>
+                                <span className="small">{u.matchAveragePoints.toFixed(2)}</span>
                             </div>
+
+                            <div className="vertical-container right table-item">
+                                <span className="secondary"><FaRegStar /></span>
+                                <span className="small">{u.specialPoints}</span>
+                            </div>
+
+                            <div className="vertical-container right table-item">
+                                <span className="secondary"><PiHashLight /></span>
+                                <span className="small">{u.totalBetCount}</span>
+                            </div>
+
+
                         </div>
                     </div>
                 </div>
             ))}
+            <div className="horizontal-container end secondary small">
+                <div className="vertical-container">
+                    <div className="horizontal-container end gap-05 vertical-center"> Summe aller Gesamt-Punkte : <TbSum /></div>
+                    <div className="horizontal-container end gap-05 vertical-center"> Summe aller Punkte aus Spiel-Ergebnis-Tipps : <PiCourtBasketball /></div>
+                    <div className="horizontal-container end gap-05 vertical-center"> durchschnittliche Punkte pro Spiel : <TbMathAvg /></div>
+                    <div className="horizontal-container end gap-05 vertical-center"> Summe aller Punkte aus Spezialwetten : <FaRegStar /></div>
+                    <div className="horizontal-container end gap-05 vertical-center"> Anzahl abgegebener Gesamt-Tipps : <PiHashLight /></div>
+                </div>
+            </div>
         </div >
     );
 }

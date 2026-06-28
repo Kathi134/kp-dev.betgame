@@ -33,19 +33,24 @@ export default function MyStats() {
         return valid.reduce((sum, b) => sum + b.awardedPoints, 0) / valid.length
     }, [bets])
 
+    const scoredBets = useMemo(() => {
+        console.log(bets)
+        return bets.filter(x => x.awardedPoints !== null)
+    }, [bets])
+
 
     if (loading) return <div>Lade Daten...</div>;
     if (error) return <div className="warn">{error}</div>;
 
     return <div>
-        <DistributionOfPoints bets={bets} />
-        <TimeSeries bets={bets} />
+        <DistributionOfPoints bets={scoredBets} />
+        <TimeSeries bets={scoredBets} />
 
 
         <h2>Faktoren für durchschnittlich erzielte Punkte</h2>
 
-        <DebutantCorrelation bets={bets} globalAvg={globalAvg} />
-        <ContinentCorrelation bets={bets} globalAvg={globalAvg} />
+        <DebutantCorrelation bets={scoredBets} globalAvg={globalAvg} />
+        <ContinentCorrelation bets={scoredBets} globalAvg={globalAvg} />
 
 
         <h2>Korrelations-Koeffizienten <span className="cursor float-right right-margin" onClick={() => setShowCorrelationInfo(v => !v)}><BsQuestionCircle /></span></h2>
@@ -63,8 +68,8 @@ export default function MyStats() {
             </div>
         </div>}
 
-        <CountryCorrelation bets={bets} />
-        <BetTimeCorrelation bets={bets} />
+        <CountryCorrelation bets={scoredBets} />
+        <BetTimeCorrelation bets={scoredBets} />
 
     </div>
 }

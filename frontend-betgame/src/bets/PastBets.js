@@ -2,6 +2,7 @@
 import { useMemo } from "react";
 import MatchContender from "../results/MatchContender";
 import { formatDate, formatLastUpdated } from "../util/date-util";
+import { stageToString } from "../util/enums";
 
 export default function PastBets({ data, onBetChange }) {
     const sortedByDate = useMemo(() => data.sort((a, b) => new Date(b.utcDate) - new Date(a.utcDate)), [data]);
@@ -12,7 +13,11 @@ export default function PastBets({ data, onBetChange }) {
 
                 <div className="horizontal-container gap-05 space-between secondary">
                     <div>
-                        <span>Gruppe {m.group} - </span>
+                        <span>{m.stage === "GROUP_STAGE"
+                            ? <>Gruppe {m.group} </>
+                            : <>{stageToString(m.stage)} </>}
+                            -&nbsp;
+                        </span>
                         <span>{formatDate(m.deadline)}</span>
                     </div>
 

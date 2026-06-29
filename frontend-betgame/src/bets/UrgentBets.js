@@ -35,7 +35,8 @@ export default function UrgentBets({ data, onBetChange }) {
                                 <div className="date">{m.stage === "GROUP_STAGE"
                                     ? <>Gruppe {m.group} </>
                                     : <>{stageToString(m.stage)} </>}
-                                    -</div>
+                                    -&nbsp;
+                                </div>
                                 <div className="date">{formatDateForTimeOnly(m.deadline)}</div>
                             </div>
                             <div className="date right">noch {calculateTimeLeft(m.deadline)}</div>

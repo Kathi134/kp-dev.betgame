@@ -3,6 +3,7 @@ import { fetchGlobalMatchBets } from "../api/ranking";
 import RankingTimeSeries from "./data-analysis/RankingTimeSeries";
 import AbsoluteGoalDifference from "./data-analysis/AbsoluteGoalDifference";
 import GoalDifferenceMetrics from "./data-analysis/GoalDifferenceMetrics";
+import MatchDurationComp from "./data-analysis/MatchDurationComp";
 
 
 
@@ -52,6 +53,7 @@ export default function RankingStats() {
     return (<>
         <RankingTimeSeries globalBets={globalBets} />
         <AbsoluteGoalDifference betsPerUser={betsPerUser} />
+        <MatchDurationComp betsPerUser={betsPerUser} />
         <GoalDifferenceMetrics betsPerUser={betsPerUser} />
     </>)
 }

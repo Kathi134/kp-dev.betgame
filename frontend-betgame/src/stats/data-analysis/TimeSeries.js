@@ -89,7 +89,7 @@ export default function TimeSeries({ bets }) {
                         {
                             id: 'relative-per-day',
                             min: 0,
-                            max: 3,
+                            max: 4,
                             position: 'right',
                             valueFormatter: (v) => v.toFixed(1),
                             tickMinStep: 0.5,

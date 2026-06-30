@@ -3,6 +3,8 @@ import { fetchGlobalMatchBets } from "../api/ranking";
 import MatchContender from "../results/MatchContender";
 import { useAuth } from "../auth/global/AuthContext";
 import { formatLastUpdated } from "../util/date-util";
+import Result from "../shared/Result";
+import Duration from "../shared/Duration";
 
 export default function AllBets() {
     const [matches, setMatches] = useState([]);
@@ -29,14 +31,11 @@ export default function AllBets() {
         <div>
             {matchesSorted.map((match) => (
                 <div key={match.match?.id} className="card">
-                    <div className="horizontal-container space-around vertical-center">
-                        <MatchContender team={match.match?.homeTeam} />
-                        <span>{match.match?.homeGoals} : {match.match?.awayGoals}</span>
-                        <MatchContender team={match.match?.awayTeam} />
-                    </div>
-                    {(match.match?.status === "LIVE") && <div className="horiztonal-container center secondary small">
-                        zul. aktualisiert: {formatLastUpdated(match.match?.lastUpdate)}
-                    </div>}
+                    <Result match={match.match} />
+                    {(match.match?.status === "LIVE") &&
+                        <div className="horiztonal-container center secondary small">
+                            zul. aktualisiert: {formatLastUpdated(match.match?.lastUpdate)}
+                        </div>}
 
                     <div className="vertical-container top-margin">
                         {match.bets
@@ -48,6 +47,7 @@ export default function AllBets() {
                                     <div className="horizontal-container result">
                                         {bet.predictedHomeGoals} : {bet.predictedAwayGoals}
                                     </div>
+                                    <Duration duration={bet.predictedDuration} />
                                     <div className="vertical-container right">
                                         ({bet.awardedPoints ?? "-"} Pkt.)
                                     </div>

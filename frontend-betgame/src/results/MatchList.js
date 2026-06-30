@@ -2,6 +2,7 @@ import { formatDate, formatLastUpdated } from "../util/date-util";
 import { useMemo } from "react";
 import MatchContender from "./MatchContender";
 import { useAuth } from "../auth/global/AuthContext";
+import Result from "../shared/Result";
 
 
 export default function MatchList({ data }) {
@@ -19,14 +20,7 @@ export default function MatchList({ data }) {
                     <div className="date"> {formatDate(m.utcDate)} </div>
                 </div>
 
-                <div className="horizontal-container space-around vertical-center">
-                    <MatchContender team={m.homeTeam} />
-                    {hasGoals(m)
-                        ? <span>{m.homeGoals ?? "0"} : {m.awayGoals ?? "0"}</span>
-                        : <span>vs</span>
-                    }
-                    <MatchContender team={m.awayTeam} />
-                </div>
+                <Result match={m} />
 
                 {(m.status === "LIVE" || user.roles.includes("DEBUG") || user.roles.includes("ADMIN")) && <div className="horizontal-container center secondary small">
                     zul. aktualisiert: {formatLastUpdated(m.lastUpdate)}

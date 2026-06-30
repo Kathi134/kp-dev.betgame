@@ -1,0 +1,7 @@
+.absolute {
+    font-size: smaller;
+    position: absolute;
+    left: 57%;
+    transform: translateX(-57%);
+    padding-top: 1%;
+}

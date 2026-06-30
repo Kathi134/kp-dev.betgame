@@ -3,6 +3,8 @@ import { useMemo } from "react";
 import MatchContender from "../results/MatchContender";
 import { formatDate, formatLastUpdated } from "../util/date-util";
 import { stageToString } from "../util/enums";
+import Result from "../shared/Result";
+import Duration from "../shared/Duration";
 
 export default function PastBets({ data, onBetChange }) {
     const sortedByDate = useMemo(() => data.sort((a, b) => new Date(b.utcDate) - new Date(a.utcDate)), [data]);
@@ -26,11 +28,8 @@ export default function PastBets({ data, onBetChange }) {
                     </div>}
                 </div>
 
-                <div className="horizontal-container space-around vertical-center">
-                    <MatchContender team={m.homeTeam} />
-                    <span>{m.homeGoals ?? 0} : {m.awayGoals ?? 0}</span>
-                    <MatchContender team={m.awayTeam} />
-                </div>
+                <Result match={m} />
+
                 <div className="horizontal-container space-between secondary small" >
                     <div className="vertical-container"> mein Tipp </div>
                     <div className="horizontal-container result">
@@ -39,6 +38,9 @@ export default function PastBets({ data, onBetChange }) {
                             : <span>nicht abgegeben.</span>
                         }
                     </div>
+
+                    <Duration duration={m.bet.predictedDuration} />
+
                     <div className="vertical-container right">
                         ({m.bet?.awardedPoints ?? "-"} Pkt.)
                     </div>

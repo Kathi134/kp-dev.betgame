@@ -52,7 +52,7 @@ export default function MatchDurationComp({ betsPerUser }) {
                 series={[
                     {
                         dataKey: 'correctDurations',
-                        label: 'Korrekte Spielzeit',
+                        label: 'Tipps mit korrekter Spielzeit',
                     },
                 ]}
                 margin={{ left: -20, right: 15, top: 5, bottom: 10 }}

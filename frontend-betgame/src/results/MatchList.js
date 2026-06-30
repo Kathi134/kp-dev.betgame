@@ -19,7 +19,7 @@ export default function MatchList({ data }) {
 
                 <Result match={m} />
 
-                {(m.status === "LIVE" || user.roles.includes("DEBUG") || user.roles.includes("ADMIN")) && <div className="horizontal-container center secondary small">
+                {(m.status === "LIVE" || user.roles.includes("DEBUG")) && <div className="horizontal-container center secondary small">
                     zul. aktualisiert: {formatLastUpdated(m.lastUpdate)}
                 </div>}
             </div>

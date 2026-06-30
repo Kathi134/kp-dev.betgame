@@ -5,7 +5,7 @@ import "./shared.css"
 
 export default function Duration({ match = undefined, duration }) {
     const computedDuration = useMemo(() => duration !== undefined ? duration : match?.duration, [match, duration]);
-    const showForStage = useMemo(() => match === undefined ? true : match?.stage !== "GROUP_STAGE")
+    const showForStage = useMemo(() => match === undefined ? true : match?.stage !== "GROUP_STAGE", [match])
 
     if (!showForStage)
         return <></>

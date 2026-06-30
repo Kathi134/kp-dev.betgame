@@ -1,6 +1,5 @@
 
 import { useMemo } from "react";
-import MatchContender from "../results/MatchContender";
 import { formatDate, formatLastUpdated } from "../util/date-util";
 import { stageToString } from "../util/enums";
 import Result from "../shared/Result";

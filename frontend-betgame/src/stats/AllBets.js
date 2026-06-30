@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { fetchGlobalMatchBets } from "../api/ranking";
-import MatchContender from "../results/MatchContender";
 import { useAuth } from "../auth/global/AuthContext";
 import { formatLastUpdated } from "../util/date-util";
 import Result from "../shared/Result";

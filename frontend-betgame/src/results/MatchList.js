@@ -1,6 +1,5 @@
 import { formatDate, formatLastUpdated } from "../util/date-util";
 import { useMemo } from "react";
-import MatchContender from "./MatchContender";
 import { useAuth } from "../auth/global/AuthContext";
 import Result from "../shared/Result";
 
@@ -9,8 +8,6 @@ export default function MatchList({ data }) {
     const { user } = useAuth();
 
     const matchesByDate = useMemo(() => data.sort((a, b) => new Date(a.utcDate) - new Date(b.utcDate)), [data]);
-
-    const hasGoals = (m) => m.status !== "SCHEDULED";
 
     return <>
         {matchesByDate?.map((m) => (

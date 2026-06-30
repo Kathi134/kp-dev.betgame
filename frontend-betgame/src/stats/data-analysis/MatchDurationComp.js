@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { result } from "../../util/enums";
 import { BarChart } from "@mui/x-charts";
 import { palette } from "../colors";
 

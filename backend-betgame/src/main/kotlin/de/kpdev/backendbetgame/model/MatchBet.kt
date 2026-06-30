@@ -24,6 +24,8 @@ class MatchBet(
     var predictedDuration: MatchDuration = MatchDuration.REGULAR,
 
     var awardedPoints: Int? = null,
+    var matchPoints: Int? = null,
+    var extraDurationPoints: Int? = null,
 
     @ColumnDefault("'2026-06-11 18:00:00.000000 +00:00'")
     var lastUpdate: Instant = Instant.now(),

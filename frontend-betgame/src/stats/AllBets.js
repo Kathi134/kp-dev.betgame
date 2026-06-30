@@ -48,8 +48,18 @@ export default function AllBets() {
                                         {bet.predictedHomeGoals} : {bet.predictedAwayGoals}
                                     </div>
                                     <Duration duration={bet.predictedDuration} />
+                                    {/* <div className="vertical-container right">
+                                        ({bet.awardedPoints === undefined ? "-" :
+                                            match.match?.stage === "GROUP_STAGE"
+                                                ? bet.awardedPoints
+                                                : <>{bet.awardedPoints}={bet.matchPoints}+{bet.extraDurationPoints}</>
+                                        } Pkt.)
+                                    </div> */}
                                     <div className="vertical-container right">
-                                        ({bet.awardedPoints ?? "-"} Pkt.)
+                                        (
+                                        {bet.awardedPoints === undefined ? "-" : bet.awardedPoints} Pkt.
+                                        {match.match?.stage !== "GROUP_STAGE" && <>: {bet.matchPoints}+{bet.extraDurationPoints}</>}
+                                        )
                                     </div>
                                 </div>
                             ))}

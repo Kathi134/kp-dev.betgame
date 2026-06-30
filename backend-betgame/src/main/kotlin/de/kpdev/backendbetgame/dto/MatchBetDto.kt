@@ -17,6 +17,8 @@ data class MatchBetDto(
     val predictedDuration: MatchDuration,
 
     val awardedPoints: Int?,
+    val matchPoints: Int?,
+    val extraDurationPoints: Int?,
 
     val lastUpdate: Instant
 )
@@ -33,6 +35,8 @@ fun MatchBet.toDto(): MatchBetDto =
         predictedDuration = this.predictedDuration,
 
         awardedPoints = this.awardedPoints,
+        matchPoints = this.matchPoints,
+        extraDurationPoints = this.extraDurationPoints,
 
         lastUpdate = this.lastUpdate
     )
